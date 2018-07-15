@@ -21,17 +21,13 @@ const styles = {
   viewStyle: {
   justifyContent: 'center',
   alignItems: 'center',
-  height: 60,
-  paddingTop: 10,
+  height: 75,
+  paddingTop: 35,
   marginBottom: 5,
-  shadowColor: '#000',
-  shadowOffset: { width: 0, height: 5},
-  shadowOpacity: 0.5,
-  elevation: 4,
   position: 'relative'
   },
   shadowView: {
-    height: 60,
+    height: 75,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 3},
     shadowOpacity: 0.5,
@@ -49,4 +45,4 @@ const styles = {
 };
 
 // make the component available to other files
-export { Header} ;
+export { Header } ;
