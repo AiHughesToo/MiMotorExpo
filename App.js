@@ -6,6 +6,7 @@ import ReduxThunk from 'redux-thunk';
 import reducers from './src/reducers';
 import { Header, Button, Spinner } from './src/components/common';
 import LoginForm from './src/components/LogonForm';
+import Router from './src/Router';
 
 class App extends Component {
 
@@ -13,11 +14,8 @@ render() {
   const store = createStore(reducers, {}, applyMiddleware(ReduxThunk));
     return (
       <Provider store={store}>
-      <View style={{backgroundColor: '#2d2b39', flex: 1}}>
-      <ImageBackground source={require('./assets/main_background.png')} style={styles.backgroundImage}>
-      <Header headerText="MiMotor" />
-      <LoginForm />
-      </ImageBackground>
+      <View style={{flex: 1}}>
+      <Router />
       </View>
       </Provider>
     );

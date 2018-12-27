@@ -14,6 +14,12 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    "android": {
+          "package": "com.aihughes.mimotor",
+          "config": {
+            "googleMaps": { "apiKey": "AIzaSyBs8G2GE6ZGZ-RyTZVoY5_lQqYyW1W0EyY"}
+          }
+        },
     "updates": {
       "fallbackToCacheTimeout": 0
     },

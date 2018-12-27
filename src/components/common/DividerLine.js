@@ -13,7 +13,7 @@ const styles = {
   divLine: {
     borderColor: '#435b78',
     borderTopWidth: 1.5,
-    paddingBottom: 25,
+    paddingBottom: 15,
     marginTop: 15,
     marginRight: 45,
     marginLeft: 45,

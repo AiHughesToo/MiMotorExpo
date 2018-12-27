@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
-import { View, Text, Image } from 'react-native';
+import { Platform, View, Text, Image, ImageBackground} from 'react-native';
 import { connect } from 'react-redux';
+import { Actions } from 'react-native-router-flux';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { emailChanged, passwordChanged, loginUser } from '../actions';
 import DisplayState from './DisplayState';
 import { Card, CardSection, Input, Button, RedButton, Spinner, DividerLine } from './common';
+import AnimatedPill from './AnimatedPill';
 import { PASSWORD_TEXT, EMAIL_TEXT, LOGIN_TEXT, FORGOT_PASSWORD_TEXT, SIGN_UP_TEXT } from '../LanguageFile.js'
 
 class LoginForm extends Component {
@@ -22,8 +25,7 @@ class LoginForm extends Component {
     this.props.loginUser({ email, password });
   }
   onRedButtonPress() {
-    const { email, password } = this.props;
-    this.props.loginUser({ email, password });
+    Actions.signUp();
   }
 // we need to show the user that we are waiting on the network request
 // render button looks at loading piece of state and shows a spinner if loading is true.
@@ -34,7 +36,6 @@ class LoginForm extends Component {
     }
 
     return(
-
       <Button onPress={this.onButtonPress.bind(this)}>
        {LOGIN_TEXT}
       </Button>
@@ -54,8 +55,15 @@ class LoginForm extends Component {
 // a bit of destructuring for the styles. this makes the variables available below.
   const { logoContainer, forgotPassStyle, logoImage, divLine } = styles;
   return (
-    <View style={{ flex:1, paddingLeft: 15, paddingRight: 15 }}>
-      <View style={logoContainer}>
+<ImageBackground source={require('../../assets/main_background.png')} style={styles.backgroundImage}>
+  <View style={{ flex:1, paddingLeft: 5, paddingRight: 5 }}>
+    <KeyboardAwareScrollView
+      enableOnAndroid
+      enableAutomaticScroll
+      keyboardOpeningTime={0}
+      extraHeight={Platform.select({ android: 250 })}>
+
+    <View style={logoContainer}>
         <Image source={require('../../assets/temp_logo.png')} style={styles.logoImage} />
       </View>
       <Card>
@@ -92,15 +100,20 @@ class LoginForm extends Component {
         </RedButton>
         </CardSection>
       </Card>
+      </KeyboardAwareScrollView>
+
       <DisplayState />
-      </View>
+    </View>
+  </ ImageBackground>
+
     );
   }
 }
+
 const styles = {
   logoContainer: {
-    paddingTop: 30,
-    paddingBottom: 15,
+    paddingTop: 25,
+    paddingBottom: 10,
     justifyContent: 'center',
     alignSelf: 'center'
   },
@@ -113,6 +126,11 @@ const styles = {
   logoImage: {
     width: 100,
     height: 98
+  },
+  backgroundImage: {
+    flex: 1,
+    width: null,
+    height: null
   }
 };
 // maping the state to the properties of this component.
@@ -120,6 +138,7 @@ const mapStateToProps = state => {
  return {
   email: state.auth.email,
   password: state.auth.password,
+  name: state.auth.userName,
   loading: state.auth.loading,
   error: state.auth.error
   };

@@ -1,20 +1,23 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Text } from 'react-native';
+import { View, Text, Image } from 'react-native';
 import { emailChanged, passwordChanged, loginUser } from '../actions';
 import { Card, CardSection, Input, Button } from './common';
 
-class DisplayState extends Component {
+class UserCard extends Component {
 
 render() {
 const { textStyle, displayStyle } = styles;
   return (
     <View style={displayStyle}>
-    <Text style={{ color: '#fff', fontSize: 9, paddingLeft: 10}}>Advertisement</Text>
     <Card>
-    <Text style={textStyle}>Hello {this.props.userName}</Text>
-    <Text style={textStyle}>Token: {this.props.token}</Text>
-    <Text style={textStyle}>User Type: {this.props.user_type}</Text>
+      <CardSection>
+        <Image source={require('../../assets/person.png')} style={styles.userImage} />
+        <View>
+          <Text style={textStyle}>Hello {this.props.userName}</Text>
+          <Text style={textStyle}>Account Type: {this.props.user_type}</Text>
+        </View>
+      </CardSection>
     </Card>
     </View>
   );
@@ -23,16 +26,18 @@ const { textStyle, displayStyle } = styles;
 const styles = {
   textStyle: {
     color: '#fff',
-    fontSize: 10,
+    fontSize: 17,
     padding: 5
   },
   displayStyle: {
-    borderWidth: .5,
-    borderColor: '#aaa',
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 10
+    padding: 5
+  },
+  userImage: {
+    width: 70,
+    height: 70,
+    backgroundColor: '#1b364e',
+    borderRadius: 35,
+    marginRight: 10
   }
 };
 
@@ -44,4 +49,4 @@ const mapStateToProps = state => {
   user_type: state.auth.accountType
   };
 };
-export default connect(mapStateToProps, {}) (DisplayState);
+export default connect(mapStateToProps, {}) (UserCard);
