@@ -1,31 +1,63 @@
 import React, { Component } from 'react';
 import { Platform, View, Text, Image, ImageBackground} from 'react-native';
 import { connect } from 'react-redux';
-import { Constants, Location, Permissions } from 'expo';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { Constants, Location, Permissions, MapView } from 'expo';
 import UserCard from './UserCard';
 import AnimatedPill from './AnimatedPill';
-import { requestRide, clientReady, noteChanged, clientCancel } from '../actions/jobs_actions';
+import { GPS_WARNING_CLIENT, E_GPS_WARNING_CLIENT, CLIENT_READY,
+        E_CLIENT_READY, E_RIDE_INSTRUCTIONS, RIDE_INSTRUCTIONS,
+        READY, E_READY, E_CANCEL, CANCEL, IS_ON_THE_WAY, E_IS_ON_THE_WAY} from '../LanguageFile';
+import { requestRide, clientReady, noteChanged, clientCancel, checkOutstandingJob, rideComplete, clientCheckJobStatus} from '../actions/jobs_actions';
 import { Card, CardSection, InputLarge, Button, RedButton, YellowButton, Spinner, DividerLine } from './common';
 
 class CustomerMain extends Component {
-// we need some local state to set the location of the user.
-state = {
-  location: null,
-  locationErrorMessage: null
-};
-// the user is ready lets set the userStage to 2 on button press
-onYellowButtonPress() {
- this.props.clientReady();
-}
-// let the user cancel a ride request.
-onCancelButtonPress() {
-  console.log('the button was pressed and I called the action.');
- this.props.clientCancel();
-}
-// this is a helper method that calls the action from the input
-onNoteChange(text) {
-  this.props.noteChanged(text);
-}
+  // we need some local state to set the location of the user.
+  state = {
+    location: null,
+    locationErrorMessage: null
+  };
+
+  // check for outstanding jobs and give the user a warning if is one.
+  componentWillMount() {
+    const { token } = this.props;
+    this.props.checkOutstandingJob({ token, userType: 'client' });
+  }
+
+  componentDidMount() {
+   this.interval = setInterval(() => this.check_job_status(), 8000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  };
+
+  check_job_status(){
+    if (this.props.userStage === 3){
+      const jobId = this.props.jobDetail.jobDetail.id;
+      const { token } = this.props;
+      this.props.clientCheckJobStatus({token, jobId});
+    }
+  };
+
+  // the user is ready lets set the userStage to 2 on button press
+  onYellowButtonPress() {
+   this.props.clientReady();
+  };
+  // let the user cancel a ride request.
+  onCancelButtonPress() {
+   this.props.clientCancel();
+  }; 
+  //mark ride complete
+  onRedButtonPress() {
+   const token = this.props.token;
+   const job_id = this.props.jobDetail.jobDetail.id;
+   this.props.rideComplete({ token, job_id, userType: 'customer' });
+  };
+  // this is a helper method that calls the action from the input
+  onNoteChange(text) {
+    this.props.noteChanged(text);
+  };
 
 // get the Location information and send the request for a ride.
  getLocationAsync = async () => {
@@ -54,16 +86,29 @@ onNoteChange(text) {
    const { token, jobNote } = this.props;
    this.props.requestRide({ lat, long, token, jobNote});
   }
-// use state. userReady to display the first step or the second.
+
+  // if there is an old request not marked complete then tell the user
+  renderAlert(){
+    if (this.props.oldJob) {
+      return(
+        <View style={styles.alertBox}>
+          <Text style={styles.alertText}>This is an old request. Remember You must close old requests before making a new one. </ Text>
+        </View>
+      );
+    }
+  }
+
+  // use state. userReady to display the first step or the second.
   renderSection(){
-  const { textStyle, textStyle2, sectionView } = styles;
-// user is ready to request a ride. this is a 2 step process to avoid
-// accidental or butt ride requests.
+  const { mainLangStyleLrg, mainLangStyleSml, englishLangStyle, sectionView } = styles;
+  // user is ready to request a ride. this is a 2 step process to avoid
+  // accidental or butt ride requests.
     if(this.props.userStage == 2){
       return(
       <View style={sectionView}>
         <View>
-          <Text style={textStyle}>Are you ready to request a ride?</ Text>
+          <Text style={mainLangStyleLrg}>{RIDE_INSTRUCTIONS}</ Text>
+          <Text style={englishLangStyle}>{E_RIDE_INSTRUCTIONS}</ Text>
         </View>
         <CardSection>
           <InputLarge
@@ -74,13 +119,18 @@ onNoteChange(text) {
         </CardSection>
         <CardSection>
           <Button onPress={this.onButtonPress.bind(this)}>
-           Lets Go
+           { READY }/{ E_READY }
           </Button>
         </CardSection>
         <View>
-          <Text style={textStyle2}>You must have GPS enabled to use this feature.
-          Remember riders close to you can see your location on a map.</ Text>
+          <Text style={mainLangStyleSml}>{GPS_WARNING_CLIENT}</ Text>
+          <Text style={englishLangStyle}>{E_GPS_WARNING_CLIENT}</ Text>
         </View>
+        <CardSection>
+          <RedButton onPress={this.onCancelButtonPress.bind(this)}>
+           { CANCEL }/{ E_CANCEL }
+          </RedButton>
+        </CardSection>
       </View>
       );
     }
@@ -90,14 +140,14 @@ onNoteChange(text) {
       return(
         <View>
           <View>
-            <Text style={textStyle}>Ride Requested</ Text>
+            <Text style={mainLangStyleLrg}>Ride Requested</ Text>
           </View>
           <View style={{height: 80, marginBottom: 40, marginLeft: 15, marginRight: 15}}>
             <AnimatedPill />
           </ View>
           <CardSection>
-            <RedButton onPress={this.onCancelButtonPress.bind(this)}>
-             CANCEL
+            <RedButton onPress={this.onRedButtonPress.bind(this)}>
+             { CANCEL }/{ E_CANCEL }
             </RedButton>
           </CardSection>
         </View>
@@ -107,21 +157,55 @@ onNoteChange(text) {
 // we need to let the user know who is on the way to pick them up.
 // the user can no longer cancel the job as someone has already commited.
     if(this.props.userStage == 4){
+    const { title, note, rider_name, rider_lat,
+            rider_long, latitude, longitude } = this.props.jobDetail.jobDetail;
       return(
         <View>
-          <Text style={textStyle}>Ride Requested</ Text>
+          <Text style={mainLangStyleLrg}>{rider_name}{IS_ON_THE_WAY}</ Text>
+          <Text style={englishLangStyle}>{rider_name}{E_IS_ON_THE_WAY}</ Text>
+            <MapView
+              style={{ flex: 1, height: 250}}
+              region={{
+              latitude: latitude,
+              longitude: longitude,
+              latitudeDelta: 0.0312,
+              longitudeDelta: 0.0231,
+             }}>
+              <MapView.Marker
+                coordinate={{latitude: rider_lat, longitude: rider_long }}
+                title={'You are here'}
+                description={"hi"}
+                image={require('../../assets/logoMapMarker.png')}
+              />
+              <MapView.Marker
+                coordinate={{latitude: latitude, longitude: longitude }}
+                title={title}
+                description={note}
+                image={require('../../assets/personMapMarker.png')}
+              />
+            </MapView>
+          <CardSection>
+            {this.renderAlert()}
+          </CardSection>
+          <CardSection>
+            <RedButton onPress={this.onRedButtonPress.bind(this)}>
+              Mark Ride Complete
+            </RedButton>
+          </CardSection>
         </View>
       );
     }
+
 // the inital user screen if all the above didn't catch.
     return(
       <View>
         <View>
-          <Text style={textStyle}>Are you ready to request a ride?</ Text>
+          <Text style={mainLangStyleSml}>{CLIENT_READY}</ Text>
+          <Text style={englishLangStyle}>{E_CLIENT_READY}</ Text>
         </View>
         <CardSection>
           <YellowButton onPress={this.onYellowButtonPress.bind(this)}>
-           Ready
+           { READY }/{ E_READY }
           </YellowButton>
         </CardSection>
       </View>
@@ -133,9 +217,15 @@ onNoteChange(text) {
   return (
     <ImageBackground source={require('../../assets/main_background.png')} style={backgroundImage}>
       <View style={{ flex:1, paddingLeft: 15, paddingRight: 15 }}>
-        <UserCard />
-        <DividerLine />
-          {this.renderSection()}
+        <KeyboardAwareScrollView
+          enableOnAndroid
+          enableAutomaticScroll
+          keyboardOpeningTime={0}
+          extraHeight={Platform.select({ android: 250 })}>
+          <UserCard />
+          <DividerLine />
+            {this.renderSection()}
+        </KeyboardAwareScrollView>
       </View>
     </ ImageBackground>
 
@@ -152,7 +242,7 @@ const styles = {
   sectionView: {
     justifyContent: 'center',
   },
-  textStyle: {
+  mainLangStyleLrg: {
     justifyContent: 'center',
     alignSelf: 'center',
     color: '#fff',
@@ -161,27 +251,47 @@ const styles = {
     paddingTop: 10,
     paddingBottom: 10
   },
-  textStyle2: {
+  mainLangStyleSml: {
     justifyContent: 'center',
     alignSelf: 'center',
     color: '#fff',
     fontSize: 15,
     fontWeight: '500',
     paddingTop: 10,
-    paddingBottom: 10
+    paddingBottom: 8
+  },
+  englishLangStyle: {
+    justifyContent: 'center',
+    alignSelf: 'center',
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: '500',
+    paddingTop: 2,
+    paddingBottom: 10,
+    paddingRight: 10,
+    paddingLeft: 10
+  },
+  alertBox: {
+    justifyContent: 'center',
+    alignSelf: 'center',
+    backgroundColor: '#f8cd81',
+    borderRadius: 5,
+    padding: 5,
+    flex: 1,
+  },
+  alertText: {
+    fontSize: 16,
+    alignSelf: 'center',
+    color: 'red',
+    fontWeight: 'bold',
   }
 };
 const mapStateToProps = state => {
- return {
-  user: state.auth.user,
-  token: state.auth.token,
-  loading: state.auth.loading,
-  error: state.auth.error,
-  userStage: state.job.userStage,
-  jobNote: state.job.jobNote,
-  jobId: state.job.jobId,
-  };
+  const { user, token, loading, error } = state.auth;
+  const { userStage, jobNote, jobId, oldJob, jobDetail } = state.job;
+
+return { user, token, loading, error, userStage, jobNote, jobId, oldJob, jobDetail };
 };
 
 
-export default connect(mapStateToProps, { requestRide, clientReady, noteChanged, clientCancel }) (CustomerMain);
+export default connect(mapStateToProps, { requestRide, clientReady, noteChanged, clientCancel, checkOutstandingJob, rideComplete, clientCheckJobStatus }) (CustomerMain);

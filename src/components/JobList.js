@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Platform, FlatList, ScrollView, View, Text, Image, ImageBackground} from 'react-native';
 import { connect } from 'react-redux';
 import { Constants, Location, Permissions, MapView } from 'expo';
-import { requestJobs, notesChanged, rideMethod } from '../actions/jobs_actions';
+import { requestJobs, notesChanged, rideMethod, checkOutstandingJob } from '../actions/jobs_actions';
 import JobListItem from './JobListItem';
 import { Card, CardSection, Button, RedButton, Spinner, DividerLine } from './common';
 
@@ -14,8 +14,18 @@ class JobList extends Component {
   };
 
   componentWillMount() {
+    const { token } = this.props;
+    this.props.checkOutstandingJob({ token, userType: 'rider' });
     this.getLocationAsync();
   }
+
+  componentDidMount() {
+   this.interval = setInterval(() => this.getLocationAsync(), 9000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }; 
 
   // get the Location information and send the request for list of local jobs.
    getLocationAsync = async () => {
@@ -47,11 +57,6 @@ class JobList extends Component {
 
       //setTimeout(() => this.con_log(), 5000);
      }
-
-  con_log() {
-    console.log('hope after the job request returns.');
-    //console.log(this.props.jobsList);
-  }
 
      onButtonPress() {
       this.getLocationAsync();
@@ -115,9 +120,10 @@ class JobList extends Component {
       <View style={{ flex:1, paddingLeft: 15, paddingRight: 15 }}>
         <CardSection>
           <Button onPress={this.onButtonPress.bind(this)}>
-           Get list of jobs
+           Please Wait
           </Button>
         </CardSection>
+        <Spinner />
 
       </View>
     </ ImageBackground>
@@ -138,14 +144,9 @@ const styles = {
 };
 
 const mapStateToProps = (state) => {
- return {
-  user: state.auth.user,
-  token: state.auth.token,
-  loading: state.auth.loading,
-  error: state.auth.error,
-  jobsList: state.job.jobsList,
-  jobDetail: state.job.jobDetail,
-  }
+  const { user, token, loading, error } = state.auth;
+  const { jobsList, jobDetail, oldJob } = state.job;
+ return { user, token, loading, error, jobsList, jobDetail, oldJob }
 }
 
-export default connect(mapStateToProps, { requestJobs, notesChanged, rideMethod })(JobList);
+export default connect(mapStateToProps, { requestJobs, notesChanged, rideMethod, checkOutstandingJob })(JobList);

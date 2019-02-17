@@ -7,7 +7,8 @@ import { EMAIL_CHANGED, PASSWORD_CHANGED, LOGIN_USER,
          REGISTER_USER_FAIL, CLIENT_READY,
          JOB_NOTE_CHANGED, JOB_REQUESTED_SUCCESS,
          CLIENT_CANCEL, JOB_LIST_SUCCESS, JOBS_NOTE_CHANGED,
-         TAKE_JOB_SUCCESS, RIDE_COMPLETE } from './types';
+         TAKE_JOB_SUCCESS, RIDE_COMPLETE, HAS_OLD_JOB,
+         CLIENT_HAS_OLD_JOB, CLIENT_HAS_OPEN_JOB, CLIENT_NOTIFY_OF_RIDER } from './types';
 
 // action for client to set ready to request a ride.
 export const clientReady = () => {
@@ -21,6 +22,7 @@ export const clientCancel = () => {
       type: CLIENT_CANCEL
     };
 };
+
 // this is for the special instructions input on stage 2 of client request job form.
 export const noteChanged = (text) => {
   return {
@@ -28,6 +30,7 @@ export const noteChanged = (text) => {
     payload: text
   };
 };
+
 // testing.
 export const notesChanged = (text) => {
   return {
@@ -35,9 +38,9 @@ export const notesChanged = (text) => {
     payload: text
   };
 };
+
 // this post request creates a new job in the DB.
 export const requestRide = ({ lat, long, token, jobNote }) => {
-       console.log(lat, long, jobNote);
            return (dispatch) => {
          // send the call to make the request for a job
              fetch('https://memotor-dev.herokuapp.com/make/job', {
@@ -57,14 +60,13 @@ export const requestRide = ({ lat, long, token, jobNote }) => {
 const requestRideSuccess = (dispatch, response) => {
   dispatch({
     type: JOB_REQUESTED_SUCCESS,
-    payload: { jobId: response.id }});
+    payload: { jobDetail: response }});
   Keyboard.dismiss();
 
 };
 
 // this post request a list of jobs local to the range.
 export const requestJobs = ({ lat, long, token, range }) => {
-      console.log(lat, long);
     return (dispatch) => {
    // send the call to make the request for a job
        fetch('https://memotor-dev.herokuapp.com/rider_job_list', {
@@ -88,9 +90,9 @@ export const requestJobs = ({ lat, long, token, range }) => {
      };
 
 // rider mark Complete
-export const rideComplete = ({ token, job_id }) => {
+export const rideComplete = ({ token, job_id, userType }) => {
     return (dispatch) => {
-      fetch('https://memotor-dev.herokuapp.com/rider/complete/'+ job_id, {
+      fetch('https://memotor-dev.herokuapp.com/job/complete/'+ job_id, {
         method: 'PUT',
         headers: {
           'Authorization': token,
@@ -99,26 +101,22 @@ export const rideComplete = ({ token, job_id }) => {
         }
       })
       .then((response) => response.json())
-      .then(response => rideCompleteSuccess(dispatch, response));
-    };
+      .then(response => rideCompleteSuccess(dispatch, response, userType));
+    }; 
 };
 
-const rideCompleteSuccess = (dispatch, response) => {
-  console.log(response);
+const rideCompleteSuccess = (dispatch, response, userType) => {
+
   dispatch({
     type: RIDE_COMPLETE});
 
-  if (response.rider_complete) {
-    console.log(this.state);
+  if (userType === 'rider') {
     Actions.jobList();
   }
 };
 
 //take a job
 export const rideMethod = ({token, job_id, lat, long}) => {
-      console.log(token);
-      console.log(job_id);
-      console.log(lat);
     return (dispatch) => {
       fetch('https://memotor-dev.herokuapp.com/take/job/'+ job_id, {
         method: 'PUT',
@@ -135,11 +133,78 @@ export const rideMethod = ({token, job_id, lat, long}) => {
 };
 
 const takeJobSuccess = (dispatch, response) => {
-  console.log(response);
   dispatch({
     type: TAKE_JOB_SUCCESS,
     payload: { jobDetail: response }});
     if (response.taken) {
       Actions.onJob();
     }
+};
+
+export const checkOutstandingJob = ({ token, userType }) => {
+  return (dispatch) => {
+
+    fetch('https://memotor-dev.herokuapp.com/check_open/job', {
+      method: 'GET',
+      headers: {
+        'Authorization': token,
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      }
+    })
+    .then((response) => response.json())
+    .then((response) => checkedJobs(dispatch, response, userType));
+  };
+};
+
+const checkedJobs = (dispatch, response, userType) => {
+  if (!response.message && response.id === undefined ){
+
+  } else {
+    if (!response.rider_complete && response.taken && userType === 'rider') {
+      dispatch({
+        type: HAS_OLD_JOB,
+        payload: { jobDetail: response}});
+        Actions.onJob();
+    } else if (!response.user_complete && userType === 'client') {
+      console.log('user has an outstanding job.');
+      if (response.taken) {
+        dispatch({
+          type: CLIENT_HAS_OLD_JOB,
+          payload: { jobDetail: response}});
+      } else {
+        dispatch({
+          type: CLIENT_HAS_OPEN_JOB,
+          payload: { jobDetail: response}});
+      }
+    }
+  }
+};
+
+// client checks for the rider to take the jobs
+export const clientCheckJobStatus = ({token, jobId}) => {
+  return (dispatch) => {
+    fetch('https://memotor-dev.herokuapp.com/job/'+ jobId, {
+      method: 'GET',
+      headers: {
+        'Authorization': token,
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      }
+    })
+    .then((response) => response.json())
+    .then(response => updateClientJobStatus(dispatch, response));
+  };
+};
+
+const updateClientJobStatus = (dispatch, response) => {
+  if (response.taken){
+    console.log('job taken');
+    dispatch({
+      type: CLIENT_NOTIFY_OF_RIDER,
+      payload: { jobDetail: response}});
+  } else {
+    console.log('job not taken', response);
+  }
+
 };

@@ -112,6 +112,7 @@ const loginUserSuccess = (dispatch, response) => {
                 loading: false }});
     Keyboard.dismiss();
     if (response.user_type == 'rider') {
+      let token = response.token
       Actions.rider();
     }
 // need a function to check for open jobs and an action to set the userStage to level 4

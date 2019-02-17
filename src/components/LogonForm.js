@@ -18,7 +18,7 @@ class LoginForm extends Component {
 // updated as you type.
   onPasswordChange(text) {
   this.props.passwordChanged(text);
-  }
+  } 
 
   onButtonPress() {
     const { email, password } = this.props;

@@ -16,15 +16,39 @@ class JobPage extends Component {
    onRedButtonPress() {
     const token = this.props.token;
     const job_id = this.props.jobDetail.jobDetail.id;
-    this.props.rideComplete({ token, job_id });
+    this.getLocationAsync(token, job_id);
    }
+
+   getLocationAsync = async (token, job_id) => {
+     let { status } = await Permissions.askAsync(Permissions.LOCATION);
+     if (status !== 'granted') {
+       this.setState({
+         errorMessage: 'Permission to access location was denied.',
+       });
+     }
+
+     let location = await Location.getCurrentPositionAsync({enableHighAccuracy: true});
+     const lat = location.coords.latitude;
+     console.log('ending position');
+     console.log(lat);
+     this.props.rideComplete({ token, job_id, userType: 'rider' });
+   };
+
+  renderAlert(){
+    if (this.props.oldJob) {
+      return(
+        <View style={styles.alertBox}>
+          <Text style={styles.alertText}>This is an old Job. Remember You must close old jobs before taking a new one. </ Text>
+        </View>
+      );
+    }
+  }
 
   render() {
 // a bit of destructuring for the styles. this makes the variables available below.
   const { backgroundImage } = styles;
   const jobDetail = this.props.jobDetail.jobDetail;
     if (jobDetail) {
-    console.log(jobDetail);
       return (
         <ImageBackground source={require('../../assets/main_background.png')} style={backgroundImage}>
           <View style={{ flex:1, paddingLeft: 5, paddingRight: 5, paddingBottom:50 }}>
@@ -33,8 +57,8 @@ class JobPage extends Component {
               region={{
               latitude: jobDetail.rider_lat,
               longitude: jobDetail.rider_long,
-              latitudeDelta: 0.0212,
-              longitudeDelta: 0.0131,
+              latitudeDelta: 0.0312,
+              longitudeDelta: 0.0231,
              }}>
               <MapView.Marker
                 coordinate={{latitude: jobDetail.rider_lat, longitude: jobDetail.rider_long }}
@@ -61,6 +85,9 @@ class JobPage extends Component {
                 <Text style={styles.textStyleTwo}>{jobDetail.note}</Text>
                 </View>
             </View>
+            </CardSection>
+            <CardSection>
+              {this.renderAlert()}
             </CardSection>
             <CardSection>
               <RedButton onPress={this.onRedButtonPress.bind(this)}>
@@ -99,6 +126,20 @@ const styles = {
   textStyleTwo: {
     fontSize: 15,
     color: 'white',
+  },
+  alertBox: {
+    justifyContent: 'center',
+    alignSelf: 'center',
+    backgroundColor: '#f8cd81',
+    borderRadius: 5,
+    padding: 5,
+    flex: 1,
+  },
+  alertText: {
+    fontSize: 16,
+    alignSelf: 'center',
+    color: 'red',
+    fontWeight: 'bold',
   }
 };
 
@@ -111,6 +152,7 @@ const mapStateToProps = (state) => {
   loading: state.auth.loading,
   error: state.auth.error,
   jobDetail: state.job.jobDetail,
+  oldJob: state.job.oldJob,
   }
 }
 

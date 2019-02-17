@@ -5,7 +5,7 @@ import { EMAIL_CHANGED, PASSWORD_CHANGED,
         REGISTER_USER, REGISTER_USER_SUCCESS, REGISTER_USER_FAIL } from '../actions/types';
 
 const INITIAL_STATE = {
-email: 'tes@tes.com',
+email: 'test1@test.com',
 password: '12345678',
 token: '',
 user: null,
