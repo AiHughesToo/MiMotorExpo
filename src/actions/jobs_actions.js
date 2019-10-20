@@ -16,6 +16,7 @@ export const clientReady = () => {
       type: CLIENT_READY
     };
 };
+
 // action for client to cancel a ride request.
 export const clientCancel = () => {
     return {
@@ -106,7 +107,6 @@ export const rideComplete = ({ token, job_id, userType }) => {
 };
 
 const rideCompleteSuccess = (dispatch, response, userType) => {
-
   dispatch({
     type: RIDE_COMPLETE});
 
@@ -206,5 +206,4 @@ const updateClientJobStatus = (dispatch, response) => {
   } else {
     console.log('job not taken', response);
   }
-
 };

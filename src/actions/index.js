@@ -30,7 +30,6 @@ export const nameChanged = (text) => {
 // this allows us to call dispatch at a later time when the request completes
 // ie we can dispatch the action after the return from the call.
 export const loginUser = ({ email, password }) => {
-
   if (email == '' || password == '') {
     return { type: LOGIN_BLANK_ERROR, payload: {error: 'email or password is blank.'} };
   }
@@ -91,7 +90,7 @@ const registerUserSuccess = (dispatch, response) => {
   if (response.id) {
     dispatch({
       type: REGISTER_USER_SUCCESS,
-      payload: { user: response}});
+      payload: { user: response }});
     Keyboard.dismiss();
     Actions.login();
   }

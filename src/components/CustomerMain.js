@@ -23,11 +23,13 @@ class CustomerMain extends Component {
     const { token } = this.props;
     this.props.checkOutstandingJob({ token, userType: 'client' });
   }
-
+  
+  // this runs every 8 seconds and checks if a rider has taken the ride request
+  // this.interval is how you fire a method on a timed schedule
   componentDidMount() {
    this.interval = setInterval(() => this.check_job_status(), 8000);
   }
-
+  // required to stop the checking of the job status 
   componentWillUnmount() {
     clearInterval(this.interval);
   };
@@ -44,36 +46,39 @@ class CustomerMain extends Component {
   onYellowButtonPress() {
    this.props.clientReady();
   };
+
   // let the user cancel a ride request.
   onCancelButtonPress() {
    this.props.clientCancel();
   }; 
+
   //mark ride complete
   onRedButtonPress() {
    const token = this.props.token;
    const job_id = this.props.jobDetail.jobDetail.id;
    this.props.rideComplete({ token, job_id, userType: 'customer' });
   };
+
   // this is a helper method that calls the action from the input
   onNoteChange(text) {
     this.props.noteChanged(text);
   };
 
-// get the Location information and send the request for a ride.
- getLocationAsync = async () => {
-   let { status } = await Permissions.askAsync(Permissions.LOCATION);
-   if (status !== 'granted') {
-     this.setState({
-       errorMessage: 'Permission to access location was denied.',
-     });
-   }
+  // get the Location information and send the request for a ride.
+  getLocationAsync = async () => {
+    let { status } = await Permissions.askAsync(Permissions.LOCATION);
+    if (status !== 'granted') {
+      this.setState({
+        errorMessage: 'Permission to access location was denied.',
+      });
+    }
 
-   let location = await Location.getCurrentPositionAsync({enableHighAccuracy: true});
-   this.setState({ location });
-   this.sendRideRequest();
- };
+    let location = await Location.getCurrentPositionAsync({enableHighAccuracy: true});
+    this.setState({ location });
+    this.sendRideRequest();
+  };
 
-// handle the button to make the network call sending lat long and the token.
+ // handle the button to make the network call sending lat long and the token.
  onButtonPress() {
   this.getLocationAsync();
  }
