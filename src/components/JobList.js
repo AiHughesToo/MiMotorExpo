@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
-import { Platform, FlatList, ScrollView, View, Text, Image, ImageBackground} from 'react-native';
+import { FlatList, ScrollView, View, Text, ImageBackground} from 'react-native';
 import { connect } from 'react-redux';
-import { Constants, Location, Permissions, MapView } from 'expo';
+import { Location, Permissions, MapView } from 'expo';
 import { requestJobs, notesChanged, rideMethod, checkOutstandingJob } from '../actions/jobs_actions';
+import { logOutUser } from '../actions/index';
 import JobListItem from './JobListItem';
-import { Card, CardSection, Button, RedButton, Spinner, DividerLine } from './common';
+import { CardSection, Button, Spinner } from './common';
 
 class JobList extends Component {
-  // we need some local state to set the location of the user.
+  
   state = {
     location: null,
     locationErrorMessage: null,
@@ -21,14 +22,21 @@ class JobList extends Component {
 
   componentDidMount() {
    this.interval = setInterval(() => this.getLocationAsync(), 9000);
+   this.intervalTwo = setInterval(() => this.logOut(), 10800000);
   }
 
   componentWillUnmount() {
     clearInterval(this.interval);
-  }; 
+    clearInterval(this.intervalTwo);
+  };
 
+  logOut() {
+    console.log('I ran the logout user');
+    this.props.logOutUser();
+  }
   // get the Location information and send the request for list of local jobs.
    getLocationAsync = async () => {
+     console.log('im still running');
      let { status } = await Permissions.askAsync(Permissions.LOCATION);
      if (status !== 'granted') {
        this.setState({
@@ -54,12 +62,10 @@ class JobList extends Component {
       const { token } = this.props;
       const { jobsList } = this.props.jobsList;
       this.props.requestJobs({ lat, long, token, range});
-
-      //setTimeout(() => this.con_log(), 5000);
      }
 
      onButtonPress() {
-      this.getLocationAsync();
+      this.logOut();
      }
 
      renderRow({ item }) {
@@ -74,7 +80,6 @@ class JobList extends Component {
      }
 
   render() {
-// a bit of destructuring for the styles. this makes the variables available below.
   const { backgroundImage } = styles;
   const jobsList = this.props.jobsList
     if (jobsList.length) {
@@ -106,8 +111,11 @@ class JobList extends Component {
               />
             </ScrollView>
             <CardSection>
+            <Text style={styles.textStyle}>This list updates every 10 seconds. New jobs will appear and job taken by other rides will be removed. </Text>;
+            </CardSection>
+            <CardSection>
               <Button onPress={this.onButtonPress.bind(this)}>
-               Refresh Job List
+              Cerrar sesión
               </Button>
             </CardSection>
           </View>
@@ -120,7 +128,7 @@ class JobList extends Component {
       <View style={{ flex:1, paddingLeft: 15, paddingRight: 15 }}>
         <CardSection>
           <Button onPress={this.onButtonPress.bind(this)}>
-           Please Wait
+          Por favor espera
           </Button>
         </CardSection>
         <Spinner />
@@ -137,6 +145,11 @@ const styles = {
     width: null,
     height: null
   },
+  textStyle: {
+    fontSize: 15,
+    color: 'white',
+    fontWeight: 'bold',
+  },
   jobsListStyle: {
     flex: 1,
     backgroundColor: 'white'
@@ -149,4 +162,4 @@ const mapStateToProps = (state) => {
  return { user, token, loading, error, jobsList, jobDetail, oldJob }
 }
 
-export default connect(mapStateToProps, { requestJobs, notesChanged, rideMethod, checkOutstandingJob })(JobList);
+export default connect(mapStateToProps, { requestJobs, notesChanged, rideMethod, checkOutstandingJob, logOutUser })(JobList);

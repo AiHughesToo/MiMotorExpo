@@ -2,14 +2,15 @@ import React, { Component } from 'react';
 import { Platform, View, Text, Image, ImageBackground} from 'react-native';
 import { connect } from 'react-redux';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { Constants, Location, Permissions, MapView } from 'expo';
+import { Location, Permissions, MapView, AdMobInterstitial } from 'expo';
 import UserCard from './UserCard';
 import AnimatedPill from './AnimatedPill';
 import { GPS_WARNING_CLIENT, E_GPS_WARNING_CLIENT, CLIENT_READY,
         E_CLIENT_READY, E_RIDE_INSTRUCTIONS, RIDE_INSTRUCTIONS,
         READY, E_READY, E_CANCEL, CANCEL, IS_ON_THE_WAY, E_IS_ON_THE_WAY} from '../LanguageFile';
 import { requestRide, clientReady, noteChanged, clientCancel, checkOutstandingJob, rideComplete, clientCheckJobStatus} from '../actions/jobs_actions';
-import { Card, CardSection, InputLarge, Button, RedButton, YellowButton, Spinner, DividerLine } from './common';
+import { CardSection, InputLarge, Button, RedButton, YellowButton, DividerLine } from './common';
+
 
 class CustomerMain extends Component {
   // we need some local state to set the location of the user.
@@ -28,11 +29,38 @@ class CustomerMain extends Component {
   // this.interval is how you fire a method on a timed schedule
   componentDidMount() {
    this.interval = setInterval(() => this.check_job_status(), 8000);
+   AdMobInterstitial.addEventListener("interstitialDidLoad", () =>
+      console.log("interstitialDidLoad")
+    );
+    AdMobInterstitial.addEventListener("interstitialDidFailToLoad", () =>{
+      console.log("interstitialDidFailToLoad")
+    }
+    );
+    AdMobInterstitial.addEventListener("interstitialDidOpen", () =>
+      console.log("interstitialDidOpen")
+    );
+    AdMobInterstitial.addEventListener("interstitialDidClose", () => {
+      console.log("interstitialDidClose");
+      this.completeJob();
+    }
+      
+    );
+    AdMobInterstitial.addEventListener("interstitialWillLeaveApplication", () =>
+      console.log("interstitialWillLeaveApplication")
+    );
   }
   // required to stop the checking of the job status 
   componentWillUnmount() {
+    AdMobInterstitial.removeAllListeners();
     clearInterval(this.interval);
   };
+
+  showInterstitial = async () => {
+    AdMobInterstitial.setAdUnitID('ca-app-pub-3940256099942544/1033173712'); // Test ID, Replace with your-admob-unit-id
+    AdMobInterstitial.setTestDeviceID('EMULATOR');
+    await AdMobInterstitial.requestAdAsync();
+    await AdMobInterstitial.showAdAsync();
+  }
 
   check_job_status(){
     if (this.props.userStage === 3){
@@ -51,13 +79,17 @@ class CustomerMain extends Component {
   onCancelButtonPress() {
    this.props.clientCancel();
   }; 
-
+  
   //mark ride complete
   onRedButtonPress() {
-   const token = this.props.token;
-   const job_id = this.props.jobDetail.jobDetail.id;
-   this.props.rideComplete({ token, job_id, userType: 'customer' });
+    this.showInterstitial();
   };
+
+  completeJob() {
+    const token = this.props.token;
+    const job_id = this.props.jobDetail.jobDetail.id;
+    this.props.rideComplete({ token, job_id, userType: 'customer' });
+  }
 
   // this is a helper method that calls the action from the input
   onNoteChange(text) {
