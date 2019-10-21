@@ -1,25 +1,62 @@
 import React, { Component } from 'react';
-import { Platform, FlatList, ScrollView, View, Text, Image, ImageBackground} from 'react-native';
+import { View, Text, Image, ImageBackground} from 'react-native';
 import { connect } from 'react-redux';
-import { Constants, Location, Permissions, MapView } from 'expo';
+import { Location, Permissions, MapView, AdMobInterstitial } from 'expo';
 import { requestJobs, notesChanged, rideComplete } from '../actions/jobs_actions';
-import JobListItem from './JobListItem';
-import { Card, CardSection, Button, RedButton, Spinner, DividerLine } from './common';
+import { MARK_JOB_COMPLETE, JOB_PAGE_INSTRUCTIONS, CLIENT_NAME, RIDER_OLD_JOB_WARNING } from '../LanguageFile';
+import { Card, CardSection, Button, RedButton } from './common';
 
 class JobPage extends Component {
-  // we need some local state to set the location of the user.
+
   state = {
     location: null,
     locationErrorMessage: null,
   };
 
-   onRedButtonPress() {
+  componentDidMount() {
+    AdMobInterstitial.addEventListener("interstitialDidLoad", () =>
+      console.log("interstitialDidLoad")
+    );
+    AdMobInterstitial.addEventListener("interstitialDidFailToLoad", () =>{
+      console.log("interstitialDidFailToLoad")
+    }
+    );
+    AdMobInterstitial.addEventListener("interstitialDidOpen", () =>
+      console.log("interstitialDidOpen")
+    );
+    AdMobInterstitial.addEventListener("interstitialDidClose", () => {
+      console.log("interstitialDidClose");
+      this.completeJob();
+    }
+      
+    );
+    AdMobInterstitial.addEventListener("interstitialWillLeaveApplication", () =>
+      console.log("interstitialWillLeaveApplication")
+    );
+  }
+
+  componentWillUnmount() {
+    AdMobInterstitial.removeAllListeners();
+  }
+
+  onRedButtonPress() {
+    this.showInterstitial();
+  }
+
+  completeJob() {
     const token = this.props.token;
     const job_id = this.props.jobDetail.jobDetail.id;
     this.getLocationAsync(token, job_id);
-   }
+  }
 
-   getLocationAsync = async (token, job_id) => {
+  showInterstitial = async () => {
+    AdMobInterstitial.setAdUnitID('ca-app-pub-3940256099942544/1033173712'); // Test ID, Replace with your-admob-unit-id
+    AdMobInterstitial.setTestDeviceID('EMULATOR');
+    await AdMobInterstitial.requestAdAsync();
+    await AdMobInterstitial.showAdAsync();
+  }
+
+  getLocationAsync = async (token, job_id) => {
      let { status } = await Permissions.askAsync(Permissions.LOCATION);
      if (status !== 'granted') {
        this.setState({
@@ -30,22 +67,21 @@ class JobPage extends Component {
      let location = await Location.getCurrentPositionAsync({enableHighAccuracy: true});
      const lat = location.coords.latitude;
      console.log('ending position');
-     console.log(lat);
-     this.props.rideComplete({ token, job_id, userType: 'rider' });
-   };
+     const { accountType } = this.props;
+     this.props.rideComplete({ token, job_id, userType: accountType });
+  };
 
   renderAlert(){
     if (this.props.oldJob) {
       return(
         <View style={styles.alertBox}>
-          <Text style={styles.alertText}>This is an old Job. Remember You must close old jobs before taking a new one. </ Text>
+          <Text style={styles.alertText}>{RIDER_OLD_JOB_WARNING}</ Text>
         </View>
       );
     }
   }
 
   render() {
-// a bit of destructuring for the styles. this makes the variables available below.
   const { backgroundImage } = styles;
   const jobDetail = this.props.jobDetail.jobDetail;
     if (jobDetail) {
@@ -62,8 +98,8 @@ class JobPage extends Component {
              }}>
               <MapView.Marker
                 coordinate={{latitude: jobDetail.rider_lat, longitude: jobDetail.rider_long }}
-                title={'You are here'}
-                description={"hi"}
+                title={'Tu es aqui'}
+                description={"Hola"}
                 image={require('../../assets/logoMapMarker.png')}
               />
               <MapView.Marker
@@ -77,11 +113,11 @@ class JobPage extends Component {
             <CardSection style={styles.jobsDetailStyle}>
             <View style={styles.jobsDetailStyle}>
                 <View style={{paddingBottom: 5, flexDirection: 'row'}}>
-                <Text style={styles.textStyle}>Pasenger Name: </Text>
+                <Text style={styles.textStyle}>{CLIENT_NAME} </Text>
                 <Text style={styles.textStyleTwo}>{jobDetail.title}</Text>
                 </View>
                 <View>
-                <Text style={styles.textStyle}>Job Notes:</Text>
+                <Text style={styles.textStyle}>{JOB_PAGE_INSTRUCTIONS}</Text>
                 <Text style={styles.textStyleTwo}>{jobDetail.note}</Text>
                 </View>
             </View>
@@ -91,7 +127,7 @@ class JobPage extends Component {
             </CardSection>
             <CardSection>
               <RedButton onPress={this.onRedButtonPress.bind(this)}>
-                Mark Job Complete
+                {MARK_JOB_COMPLETE}
               </RedButton>
             </CardSection>
           </View>
@@ -144,13 +180,12 @@ const styles = {
 };
 
 const mapStateToProps = (state) => {
- console.log('maping state');
- console.log(state.job.jobsList);
  return {
   user: state.auth.user,
   token: state.auth.token,
   loading: state.auth.loading,
   error: state.auth.error,
+  accountType: state.auth.accountType,
   jobDetail: state.job.jobDetail,
   oldJob: state.job.oldJob,
   }

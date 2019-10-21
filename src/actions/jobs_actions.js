@@ -31,31 +31,30 @@ export const noteChanged = (text) => {
   };
 };
 
-// testing.
-export const notesChanged = (text) => {
-  return {
-    type: JOBS_NOTE_CHANGED,
-    payload: text
-  };
-};
+// export const notesChanged = (text) => {
+//   return {
+//     type: JOBS_NOTE_CHANGED,
+//     payload: text
+//   };
+// };
 
 // this post request creates a new job in the DB.
 export const requestRide = ({ lat, long, token, jobNote }) => {
-           return (dispatch) => {
-         // send the call to make the request for a job
-             fetch('https://memotor-dev.herokuapp.com/make/job', {
-               method: 'POST',
-               headers: {
-                 'Authorization': token,
-                 'Accept': 'application/json',
-                 'Content-Type': 'application/json',
-               },
-               body: JSON.stringify({ 'latitude': lat, 'longitude': long, 'note': jobNote })
-             })
-             .then((response) => response.json())
-             .then(response => requestRideSuccess(dispatch, response));
-           };
-         };
+  return (dispatch) => {
+  // send the call to make the request for a job
+    fetch('https://memotor-dev.herokuapp.com/make/job', {
+      method: 'POST',
+      headers: {
+        'Authorization': token,
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ 'latitude': lat, 'longitude': long, 'note': jobNote })
+    })
+    .then((response) => response.json())
+    .then(response => requestRideSuccess(dispatch, response));
+  };
+};
 
 const requestRideSuccess = (dispatch, response) => {
   dispatch({
@@ -102,17 +101,16 @@ export const rideComplete = ({ token, job_id, userType }) => {
       })
       .then((response) => response.json())
       .then(response => rideCompleteSuccess(dispatch, response, userType));
-    }; 
+    };
 };
 
 const rideCompleteSuccess = (dispatch, response, userType) => {
-
   dispatch({
     type: RIDE_COMPLETE});
 
   if (userType === 'rider') {
-    Actions.jobList();
-  }
+      Actions.jobList();
+    }
 };
 
 //take a job

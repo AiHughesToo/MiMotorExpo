@@ -2,10 +2,10 @@ import { EMAIL_CHANGED, PASSWORD_CHANGED,
         LOGIN_USER, LOGIN_USER_SUCCESS,
         LOGIN_BLANK_ERROR, LOGIN_USER_FAIL,
         SELECT_MOTOR, SELECT_CLIENT, NAME_CHANGED,
-        REGISTER_USER, REGISTER_USER_SUCCESS, REGISTER_USER_FAIL } from '../actions/types';
+        REGISTER_USER_SUCCESS, REGISTER_USER_FAIL, LOG_OUT } from '../actions/types';
 
 const INITIAL_STATE = {
-email: 'test1@test.com',
+email: 'test@test.com',
 password: '12345678',
 token: '',
 user: null,
@@ -18,7 +18,6 @@ userMessage: ''
 };
 
 export default (state = INITIAL_STATE, action) => {
-  console.log(action);
   switch (action.type) {
     case EMAIL_CHANGED:
       return { ...state, email: action.payload };
@@ -40,6 +39,7 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, accountType: 'client' };
     case LOGIN_USER_SUCCESS:
       return { ...state,
+        user: action.payoad,
         token: action.payload.token,
         userName: action.payload.userName,
         loading: action.payload.loading,
@@ -47,6 +47,8 @@ export default (state = INITIAL_STATE, action) => {
         password: ''};
     case REGISTER_USER_SUCCESS:
       return { ...state, loading: false, password: '', user: action.payload.user};
+    case LOG_OUT:
+        return { INITIAL_STATE };
     default:
       return state;
   }

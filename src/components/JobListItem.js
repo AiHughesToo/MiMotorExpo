@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { View, Text, Image, TouchableHighlight, StyleSheet} from 'react-native';
 import { Card, CardSection, TakeButton, RedButton, Spinner, DividerLine } from './common';
 import { takeJob, rideMethod } from '../actions/jobs_actions';
+import { TAKE_JOB } from '../LanguageFile';
 import { Location } from 'expo';
 
 export class JobListItem extends Component {
@@ -27,7 +28,7 @@ export class JobListItem extends Component {
                       </View>
                       <View style={styles.buttonView}>
                       <TakeButton onPress={this.onButtonPress.bind(this)}>
-                       Take it!
+                       {TAKE_JOB}
                       </TakeButton>
                       </View>
                 </View>

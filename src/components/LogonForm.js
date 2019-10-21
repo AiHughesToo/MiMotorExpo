@@ -4,10 +4,9 @@ import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { emailChanged, passwordChanged, loginUser } from '../actions';
-import DisplayState from './DisplayState';
 import { Card, CardSection, Input, Button, RedButton, Spinner, DividerLine } from './common';
-import AnimatedPill from './AnimatedPill';
 import { PASSWORD_TEXT, EMAIL_TEXT, LOGIN_TEXT, FORGOT_PASSWORD_TEXT, SIGN_UP_TEXT } from '../LanguageFile.js'
+import { AdMobBanner, AdMobInterstitial } from "expo";
 
 class LoginForm extends Component {
 // this is a helper method that calls the action from the input
@@ -23,9 +22,15 @@ class LoginForm extends Component {
   onButtonPress() {
     const { email, password } = this.props;
     this.props.loginUser({ email, password });
-  }
+  } 
+  
   onRedButtonPress() {
     Actions.signUp();
+  }
+
+  bannerError() {
+    console.log("An error");
+    return;
   }
 // we need to show the user that we are waiting on the network request
 // render button looks at loading piece of state and shows a spinner if loading is true.
@@ -102,7 +107,14 @@ class LoginForm extends Component {
       </Card>
       </KeyboardAwareScrollView>
 
-      <DisplayState />
+      <AdMobBanner
+          style={styles.bottomBanner}
+          bannerSize="fullBanner"
+          adUnitID="ca-app-pub-3940256099942544/6300978111"
+          // Test ID, Replace with your-admob-unit-id
+          testDeviceID="EMULATOR"
+          didFailToReceiveAdWithError={this.bannerError}
+        />
     </View>
   </ ImageBackground>
 
@@ -126,6 +138,10 @@ const styles = {
   logoImage: {
     width: 100,
     height: 98
+  },
+  bottomBanner: {
+    position: "absolute",
+    bottom: 0
   },
   backgroundImage: {
     flex: 1,

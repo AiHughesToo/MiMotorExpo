@@ -11,6 +11,16 @@ export const RIDE_INSTRUCTIONS = 'Introduzca cualquier instrucción especial o i
 export const READY = 'Listo';
 export const CANCEL = 'Cancelar';
 export const IS_ON_THE_WAY = ' está en el camino';
+export const MARK_JOB_COMPLETE = 'Trabajo Completo';
+export const JOB_PAGE_INSTRUCTIONS = 'Instrucciones:';
+export const CLIENT_NAME = 'Nombre del cliente:';
+export const RIDER_OLD_JOB_WARNING = 'Este es un viejo trabajo. Recuerde que debe completar los trabajos anteriores antes de tomar uno nuevo.';
+export const MAIN_TITLE = 'MiMotor';
+export const REGISTER = 'Registro';
+export const WORKING = 'Trabajando';
+export const JOB_LIST = 'Lista de trabajos';
+export const TAKE_JOB = 'Tómalo';
+
 // english
 export const E_EMAIL_TEXT = 'Email';
 export const E_PASSWORD_TEXT = 'Password';
@@ -24,3 +34,6 @@ export const E_RIDE_INSTRUCTIONS = 'Enter any special instructions or directions
 export const E_READY = 'Ready';
 export const E_CANCEL = 'Cancel';
 export const E_IS_ON_THE_WAY = ' is on the way';
+export const E_MAIN_TITLE = 'MiMotor';
+export const E_REGISTER = 'Register';
+export const E_JOB_LIST = 'Job List';
