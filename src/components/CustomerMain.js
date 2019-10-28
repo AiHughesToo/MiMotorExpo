@@ -2,7 +2,10 @@ import React, { Component } from 'react';
 import { Platform, View, Text, Image, ImageBackground} from 'react-native';
 import { connect } from 'react-redux';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { Location, Permissions, MapView, AdMobInterstitial } from 'expo';
+import { AdMobInterstitial } from 'expo-ads-admob';
+import MapView from 'react-native-maps';
+import * as Permissions from 'expo-permissions';
+import * as Location from 'expo-location';
 import UserCard from './UserCard';
 import AnimatedPill from './AnimatedPill';
 import { GPS_WARNING_CLIENT, E_GPS_WARNING_CLIENT, CLIENT_READY,

@@ -68,7 +68,6 @@ const requestRideSuccess = (dispatch, response) => {
 // this post request a list of jobs local to the range.
 export const requestJobs = ({ lat, long, token, range }) => {
     return (dispatch) => {
-   // send the call to make the request for a job
        fetch('https://memotor-dev.herokuapp.com/rider_job_list', {
          method: 'POST',
          headers: {
@@ -84,6 +83,7 @@ export const requestJobs = ({ lat, long, token, range }) => {
     };
 
      const requestJobsSuccess = (dispatch, response) => {
+       console.log(response);
        dispatch({
          type: JOB_LIST_SUCCESS,
          payload: { jobsList: response }});

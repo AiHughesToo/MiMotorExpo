@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { FlatList, ScrollView, View, Text, ImageBackground} from 'react-native';
 import { connect } from 'react-redux';
-import { Location, Permissions, MapView } from 'expo';
+import MapView from 'react-native-maps';
+import * as Permissions from 'expo-permissions';
+import * as Location from 'expo-location'; 
 import { requestJobs, notesChanged, rideMethod, checkOutstandingJob } from '../actions/jobs_actions';
 import { logOutUser } from '../actions/index';
 import JobListItem from './JobListItem';
@@ -22,7 +24,7 @@ class JobList extends Component {
 
   componentDidMount() {
    this.interval = setInterval(() => this.getLocationAsync(), 9000);
-   this.intervalTwo = setInterval(() => this.logOut(), 10800000);
+   //this.intervalTwo = setInterval(() => this.logOut(), 10800000);
   }
 
   componentWillUnmount() {
@@ -31,9 +33,9 @@ class JobList extends Component {
   };
 
   logOut() {
-    console.log('I ran the logout user');
     this.props.logOutUser();
   }
+
   // get the Location information and send the request for list of local jobs.
    getLocationAsync = async () => {
      console.log('im still running');
@@ -45,7 +47,7 @@ class JobList extends Component {
      }
 
      let location = await Location.getCurrentPositionAsync({enableHighAccuracy: true});
-     this.setState({ location});
+     this.setState({ location });
      this.sendJobRequest();
    };
 
@@ -61,7 +63,8 @@ class JobList extends Component {
       range = 5
       const { token } = this.props;
       const { jobsList } = this.props.jobsList;
-      this.props.requestJobs({ lat, long, token, range});
+      this.props.requestJobs({ lat, long, token, range });
+      console.log(this.props.jobsList);
      }
 
      onButtonPress() {
@@ -80,14 +83,12 @@ class JobList extends Component {
      }
 
   render() {
-  const { backgroundImage } = styles;
-  const jobsList = this.props.jobsList
+    const { backgroundImage } = styles;
+    const jobsList = this.props.jobsList
     if (jobsList.length) {
       return (
         <ImageBackground source={require('../../assets/main_background.png')} style={backgroundImage}>
           <View style={{ flex:1, paddingLeft: 5, paddingRight: 5, paddingBottom: 20 }}>
-            <CardSection>
-            </CardSection>
             <MapView
               style={{ marginBottom: 5, height: 175}}
               region={{
@@ -99,7 +100,7 @@ class JobList extends Component {
               <MapView.Marker
                 coordinate={{latitude: this.state.location.coords.latitude, longitude: this.state.location.coords.longitude }}
                 title={'You are here'}
-                description={"hi"}
+                description={'hi'}
                 image={require('../../assets/logoMapMarker.png')}
               />
             </MapView>
@@ -111,11 +112,11 @@ class JobList extends Component {
               />
             </ScrollView>
             <CardSection>
-            <Text style={styles.textStyle}>This list updates every 10 seconds. New jobs will appear and job taken by other rides will be removed. </Text>;
+            <Text style={styles.textStyle}>This list updates every 10 seconds. New jobs will appear and job taken by other rides will be removed. </Text>
             </CardSection>
             <CardSection>
               <Button onPress={this.onButtonPress.bind(this)}>
-              Cerrar sesión
+                <Text>Cerrar sesión</Text>
               </Button>
             </CardSection>
           </View>
@@ -128,7 +129,7 @@ class JobList extends Component {
       <View style={{ flex:1, paddingLeft: 15, paddingRight: 15 }}>
         <CardSection>
           <Button onPress={this.onButtonPress.bind(this)}>
-          Por favor espera
+          <Text>Por favor espera</Text>
           </Button>
         </CardSection>
         <Spinner />

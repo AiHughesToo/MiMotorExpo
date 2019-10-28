@@ -4,16 +4,14 @@ import { View, Text } from 'react-native';
 
 // the functional component change the name to the file name
 const CardSection = (props) => {
-// must return some form of JSX
+  console.log(props.children);
   return (
      <View style={styles.containerStyle}>
-     {props.children}
+       {props.children}
      </View>
   );
 
 };
-
-// styling goes here
 const styles = {
   containerStyle: {
     padding: 5,
@@ -24,5 +22,5 @@ const styles = {
 };
 
 // normally written export default CardSection;  but when using an index.js file
-// in a directory wen need to have a key value pair but es6 allows us to use just value if both are the same.
+// in a directory we need to have a key value pair but es6 allows us to use just value if both are the same.
 export  { CardSection };

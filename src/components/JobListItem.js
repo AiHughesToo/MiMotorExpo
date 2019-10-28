@@ -4,12 +4,11 @@ import { View, Text, Image, TouchableHighlight, StyleSheet} from 'react-native';
 import { Card, CardSection, TakeButton, RedButton, Spinner, DividerLine } from './common';
 import { takeJob, rideMethod } from '../actions/jobs_actions';
 import { TAKE_JOB } from '../LanguageFile';
-import { Location } from 'expo';
+import * as Location from 'expo-location';
 
 export class JobListItem extends Component {
 
   onButtonPress() {
-    console.log(this.props);
     this.props.rideMethod({ job_id: this.props.data.id, lat: this.props.data.rider_lat,
             long: this.props.data.rider_long, token: this.props.data.token });
   }
@@ -28,7 +27,7 @@ export class JobListItem extends Component {
                       </View>
                       <View style={styles.buttonView}>
                       <TakeButton onPress={this.onButtonPress.bind(this)}>
-                       {TAKE_JOB}
+                         <Text>{TAKE_JOB}</Text>
                       </TakeButton>
                       </View>
                 </View>

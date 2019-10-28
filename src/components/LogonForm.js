@@ -6,7 +6,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { emailChanged, passwordChanged, loginUser } from '../actions';
 import { Card, CardSection, Input, Button, RedButton, Spinner, DividerLine } from './common';
 import { PASSWORD_TEXT, EMAIL_TEXT, LOGIN_TEXT, FORGOT_PASSWORD_TEXT, SIGN_UP_TEXT } from '../LanguageFile.js'
-import { AdMobBanner, AdMobInterstitial } from "expo";
+import { AdMobBanner, AdMobInterstitial } from 'expo-ads-admob';
 
 class LoginForm extends Component {
 // this is a helper method that calls the action from the input
