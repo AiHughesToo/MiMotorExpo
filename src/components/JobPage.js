@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, Image, ImageBackground} from 'react-native';
+import { View, Text, ImageBackground} from 'react-native';
 import { connect } from 'react-redux';
 import { AdMobInterstitial } from 'expo-ads-admob';
 import MapView from 'react-native-maps';
@@ -7,7 +7,8 @@ import * as Permissions from 'expo-permissions';
 import * as Location from 'expo-location';
 import { requestJobs, notesChanged, rideComplete } from '../actions/jobs_actions';
 import { MARK_JOB_COMPLETE, JOB_PAGE_INSTRUCTIONS, CLIENT_NAME, RIDER_OLD_JOB_WARNING } from '../LanguageFile';
-import { Card, CardSection, Button, RedButton } from './common';
+import { styles } from './styles/styles';
+import { CardSection, RedButton } from './common';
 
 class JobPage extends Component {
 
@@ -22,6 +23,7 @@ class JobPage extends Component {
     );
     AdMobInterstitial.addEventListener("interstitialDidFailToLoad", () =>{
       console.log("interstitialDidFailToLoad")
+      this.completeJob();
     }
     );
     AdMobInterstitial.addEventListener("interstitialDidOpen", () =>
@@ -29,6 +31,7 @@ class JobPage extends Component {
     );
     AdMobInterstitial.addEventListener("interstitialDidClose", () => {
       console.log("interstitialDidClose");
+      console.log('**************************************');
       this.completeJob();
     }
       
@@ -85,7 +88,7 @@ class JobPage extends Component {
   }
 
   render() {
-  const { backgroundImage } = styles;
+  const { backgroundImage, textStyle, textStyleTwo } = styles;
   const jobDetail = this.props.jobDetail.jobDetail;
     if (jobDetail) {
       return (
@@ -116,12 +119,12 @@ class JobPage extends Component {
             <CardSection style={styles.jobsDetailStyle}>
             <View style={styles.jobsDetailStyle}>
                 <View style={{paddingBottom: 5, flexDirection: 'row'}}>
-                <Text style={styles.textStyle}>{CLIENT_NAME} </Text>
-                <Text style={styles.textStyleTwo}>{jobDetail.title}</Text>
+                <Text style={textStyle}>{CLIENT_NAME} </Text>
+                <Text style={textStyleTwo}>{jobDetail.title}</Text>
                 </View>
                 <View>
-                <Text style={styles.textStyle}>{JOB_PAGE_INSTRUCTIONS}</Text>
-                <Text style={styles.textStyleTwo}>{jobDetail.note}</Text>
+                <Text style={textStyle}>{JOB_PAGE_INSTRUCTIONS}</Text>
+                <Text style={textStyleTwo}>{jobDetail.note}</Text>
                 </View>
             </View>
             </CardSection>
@@ -146,41 +149,6 @@ class JobPage extends Component {
     );
   }
 }
-
-const styles = {
-  backgroundImage: {
-    flex: 1,
-    width: null,
-    height: null
-  },
-  jobsDetailStyle: {
-    flex: 1,
-    paddingBottom: 20,
-  },
-  textStyle: {
-    fontSize: 15,
-    color: 'white',
-    fontWeight: 'bold',
-  },
-  textStyleTwo: {
-    fontSize: 15,
-    color: 'white',
-  },
-  alertBox: {
-    justifyContent: 'center',
-    alignSelf: 'center',
-    backgroundColor: '#f8cd81',
-    borderRadius: 5,
-    padding: 5,
-    flex: 1,
-  },
-  alertText: {
-    fontSize: 16,
-    alignSelf: 'center',
-    color: 'red',
-    fontWeight: 'bold',
-  }
-};
 
 const mapStateToProps = (state) => {
  return {

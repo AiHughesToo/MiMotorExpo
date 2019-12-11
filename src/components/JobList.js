@@ -7,6 +7,7 @@ import * as Location from 'expo-location';
 import { requestJobs, notesChanged, rideMethod, checkOutstandingJob } from '../actions/jobs_actions';
 import { logOutUser } from '../actions/index';
 import JobListItem from './JobListItem';
+import { styles } from './styles/styles';
 import { CardSection, Button, Spinner } from './common';
 
 class JobList extends Component {
@@ -17,22 +18,27 @@ class JobList extends Component {
   };
 
   componentWillMount() {
-    const { token } = this.props;
-    this.props.checkOutstandingJob({ token, userType: 'rider' });
-    this.getLocationAsync();
+    // const { token } = this.props;
+    // this.props.checkOutstandingJob({ token, userType: 'rider' });
+    // this.getLocationAsync();
   }
 
   componentDidMount() {
+   const { token } = this.props;
+   this.props.checkOutstandingJob({ token, userType: 'rider' });
+   this.getLocationAsync();
    this.interval = setInterval(() => this.getLocationAsync(), 9000);
    //this.intervalTwo = setInterval(() => this.logOut(), 10800000);
   }
 
   componentWillUnmount() {
     clearInterval(this.interval);
-    clearInterval(this.intervalTwo);
+    //clearInterval(this.intervalTwo);
   };
+  
 
   logOut() {
+    clearInterval(this.interval);
     this.props.logOutUser();
   }
 
@@ -40,6 +46,7 @@ class JobList extends Component {
    getLocationAsync = async () => {
      console.log('im still running');
      let { status } = await Permissions.askAsync(Permissions.LOCATION);
+     console.log(status);
      if (status !== 'granted') {
        this.setState({
          errorMessage: 'Permission to access location was denied.',
@@ -48,6 +55,7 @@ class JobList extends Component {
 
      let location = await Location.getCurrentPositionAsync({enableHighAccuracy: true});
      this.setState({ location });
+     console.log(location);
      this.sendJobRequest();
    };
 
@@ -140,22 +148,22 @@ class JobList extends Component {
   }
 }
 
-const styles = {
-  backgroundImage: {
-    flex: 1,
-    width: null,
-    height: null
-  },
-  textStyle: {
-    fontSize: 15,
-    color: 'white',
-    fontWeight: 'bold',
-  },
-  jobsListStyle: {
-    flex: 1,
-    backgroundColor: 'white'
-  }
-};
+// const styles = {
+//   // backgroundImage: {
+//   //   flex: 1,
+//   //   width: null,
+//   //   height: null
+//   // },
+//   // textStyle: {
+//   //   fontSize: 15,
+//   //   color: 'white',
+//   //   fontWeight: 'bold',
+//   // },
+//   // jobsListStyle: {
+//   //   flex: 1,
+//   //   backgroundColor: 'white'
+//   // }
+// };
 
 const mapStateToProps = (state) => {
   const { user, token, loading, error } = state.auth;

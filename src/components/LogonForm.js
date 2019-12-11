@@ -5,11 +5,11 @@ import { Actions } from 'react-native-router-flux';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { emailChanged, passwordChanged, loginUser } from '../actions';
 import { Card, CardSection, Input, Button, RedButton, Spinner, DividerLine } from './common';
+import { styles } from './styles/styles';
 import { PASSWORD_TEXT, EMAIL_TEXT, LOGIN_TEXT, FORGOT_PASSWORD_TEXT, SIGN_UP_TEXT } from '../LanguageFile.js'
-import { AdMobBanner, AdMobInterstitial } from 'expo-ads-admob';
+import { AdMobBanner } from 'expo-ads-admob';
 
 class LoginForm extends Component {
-// this is a helper method that calls the action from the input
   onEmailChange(text) {
   this.props.emailChanged(text);
   }
@@ -44,7 +44,7 @@ class LoginForm extends Component {
       <Button onPress={this.onButtonPress.bind(this)}>
        {LOGIN_TEXT}
       </Button>
-    );
+    ); 
 
   }
 
@@ -122,33 +122,6 @@ class LoginForm extends Component {
   }
 }
 
-const styles = {
-  logoContainer: {
-    paddingTop: 25,
-    paddingBottom: 10,
-    justifyContent: 'center',
-    alignSelf: 'center'
-  },
-  forgotPassStyle: {
-    color: '#fff',
-    alignSelf: 'center',
-    paddingTop: 10,
-    fontSize: 17
-  },
-  logoImage: {
-    width: 100,
-    height: 98
-  },
-  bottomBanner: {
-    position: "absolute",
-    bottom: 0
-  },
-  backgroundImage: {
-    flex: 1,
-    width: null,
-    height: null
-  }
-};
 // maping the state to the properties of this component.
 const mapStateToProps = state => {
  return {

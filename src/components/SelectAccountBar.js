@@ -18,36 +18,36 @@ class SelectAccountBar extends Component {
     this.props.selectMotor();
   }
 
-    renderClientImage() {
-      if (this.props.accountType == 'client') {
-      return ( <Image source={require('../../assets/person.png')} style={styles.logoImage} />
-      );
-      }
-      return ( <Image source={require('../../assets/person_gray.png')} style={styles.logoImage} />);
+  renderClientImage() {
+    if (this.props.accountType == 'client') {
+    return ( <Image source={require('../../assets/person.png')} style={styles.logoImage} />
+    );
     }
+    return ( <Image source={require('../../assets/person_gray.png')} style={styles.logoImage} />);
+  }
 
-    onSelectClient() {
-      this.props.selectClient();
-    }
+  onSelectClient() {
+    this.props.selectClient();
+  }
 
   render() {
-const { barStyle, buttonViewStyle, textStyle } = styles;
-  return (
-      <View style={ barStyle }>
-      <TouchableWithoutFeedback onPress={this.onSelectMotor.bind(this)}>
-        <View style={ buttonViewStyle }>
-          {this.renderMotorImage()}
-          <Text style={ textStyle }> Motorista </ Text>
+    const { barStyle, buttonViewStyle, textStyle } = styles;
+    return (
+        <View style={ barStyle }>
+        <TouchableWithoutFeedback onPress={this.onSelectMotor.bind(this)}>
+          <View style={ buttonViewStyle }>
+            {this.renderMotorImage()}
+            <Text style={ textStyle }> Motorista </ Text>
+          </View>
+        </ TouchableWithoutFeedback>
+        <TouchableWithoutFeedback onPress={this.onSelectClient.bind(this)}>
+          <View style={ buttonViewStyle }>
+            {this.renderClientImage()}
+            <Text style={ textStyle }> Client </ Text>
+          </View>
+        </ TouchableWithoutFeedback>
         </View>
-      </ TouchableWithoutFeedback>
-      <TouchableWithoutFeedback onPress={this.onSelectClient.bind(this)}>
-        <View style={ buttonViewStyle }>
-          {this.renderClientImage()}
-          <Text style={ textStyle }> Client </ Text>
-        </View>
-      </ TouchableWithoutFeedback>
-      </View>
-    );
+      );
   }
   }
 

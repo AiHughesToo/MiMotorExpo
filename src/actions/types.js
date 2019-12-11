@@ -23,3 +23,5 @@ export const CLIENT_HAS_OLD_JOB = 'client_has_old_job';
 export const CLIENT_HAS_OPEN_JOB = 'client_has_open_job';
 export const CLIENT_NOTIFY_OF_RIDER = 'client_notify_of_rider';
 export const LOG_OUT = 'log_out';
+export const VIN_CHANGED = 'vin_changed';
+export const RIDER_REQUIREMENTS = 'rider_requirements';

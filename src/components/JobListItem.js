@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, Image, TouchableHighlight, StyleSheet} from 'react-native';
-import { Card, CardSection, TakeButton, RedButton, Spinner, DividerLine } from './common';
-import { takeJob, rideMethod } from '../actions/jobs_actions';
+import { View, Text, TouchableHighlight } from 'react-native';
+import { TakeButton } from './common';
+import { styles } from './styles/styles';
+import { rideMethod } from '../actions/jobs_actions';
 import { TAKE_JOB } from '../LanguageFile';
-import * as Location from 'expo-location';
 
 export class JobListItem extends Component {
 
@@ -36,36 +36,36 @@ export class JobListItem extends Component {
     }
 }
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        flexDirection: 'row',
-        paddingLeft: 10,
-        borderTopLeftRadius: 15,
-        borderBottomLeftRadius: 15,
-        borderWidth: 0.3,
-        marginBottom: 2,
-        borderColor: '#ccc',
-    },
-    title: {
-        color: '#fff',
-        fontSize: 18
-    },
-    nameText: {
-      color: '#fff',
-      fontSize: 18
-    },
-    nameView: {
-      justifyContent: 'flex-start',
-      alignItems: 'flex-start',
-      paddingLeft: 5,
-      flex: 1,
-    },
-    buttonView: {
-      justifyContent: 'center',
-      alignItems: 'center',
-    }
-});
+// const styles = StyleSheet.create({
+//     container: {
+//         flex: 1,
+//         flexDirection: 'row',
+//         paddingLeft: 10,
+//         borderTopLeftRadius: 15,
+//         borderBottomLeftRadius: 15,
+//         borderWidth: 0.3,
+//         marginBottom: 2,
+//         borderColor: '#ccc',
+//     },
+//     title: {
+//         color: '#fff',
+//         fontSize: 18
+//     },
+//     nameText: {
+//       color: '#fff',
+//       fontSize: 18
+//     },
+//     nameView: {
+//       justifyContent: 'flex-start',
+//       alignItems: 'flex-start',
+//       paddingLeft: 5,
+//       flex: 1,
+//     },
+//     buttonView: {
+//       justifyContent: 'center',
+//       alignItems: 'center',
+//     }
+// });
 
 const mapStateToProps = (state) => {
  return {

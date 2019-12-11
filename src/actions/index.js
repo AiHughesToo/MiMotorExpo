@@ -3,7 +3,7 @@ import { Actions } from 'react-native-router-flux';
 import { EMAIL_CHANGED, PASSWORD_CHANGED, LOGIN_USER,
          LOGIN_USER_SUCCESS, LOGIN_BLANK_ERROR,
          LOGIN_USER_FAIL, SELECT_MOTOR, SELECT_CLIENT,
-         NAME_CHANGED, REGISTER_USER_SUCCESS, REGISTER_USER_FAIL, LOG_OUT } from './types';
+         NAME_CHANGED, REGISTER_USER_SUCCESS, REGISTER_USER_FAIL, LOG_OUT, VIN_CHANGED, RIDER_REQUIREMENTS } from './types';
 
 // this is an action creator
 export const emailChanged = (text) => {
@@ -16,6 +16,17 @@ export const emailChanged = (text) => {
 export const passwordChanged = (text) => {
   return {
     type: PASSWORD_CHANGED,
+    payload: text
+ };
+};
+
+export const riderRequirements = (value) => {
+  return (dispatch) => { dispatch({ type: RIDER_REQUIREMENTS, payload: value })};
+};
+
+export const vinChanged = (text) => {
+  return {
+    type: VIN_CHANGED,
     payload: text
  };
 };
@@ -33,7 +44,7 @@ export const loginUser = ({ email, password }) => {
   }
   return (dispatch) => {
 // we dispatch this to set the loading spinner
-    dispatch({ type: LOGIN_USER });
+    dispatch({ type: LOGIN_USER }); 
 
     fetch('https://memotor-dev.herokuapp.com/user/login', {
       method: 'POST',

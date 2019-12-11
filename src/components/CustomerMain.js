@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Platform, View, Text, Image, ImageBackground} from 'react-native';
+import { Platform, View, Text, Image, ImageBackground } from 'react-native';
 import { connect } from 'react-redux';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { AdMobInterstitial } from 'expo-ads-admob';
@@ -10,16 +10,18 @@ import UserCard from './UserCard';
 import AnimatedPill from './AnimatedPill';
 import { GPS_WARNING_CLIENT, E_GPS_WARNING_CLIENT, CLIENT_READY,
         E_CLIENT_READY, E_RIDE_INSTRUCTIONS, RIDE_INSTRUCTIONS,
-        READY, E_READY, E_CANCEL, CANCEL, IS_ON_THE_WAY, E_IS_ON_THE_WAY} from '../LanguageFile';
-import { requestRide, clientReady, noteChanged, clientCancel, checkOutstandingJob, rideComplete, clientCheckJobStatus} from '../actions/jobs_actions';
-import { CardSection, InputLarge, Button, RedButton, YellowButton, DividerLine } from './common';
-
+        READY, E_READY, E_CANCEL, CANCEL, IS_ON_THE_WAY, E_IS_ON_THE_WAY } from '../LanguageFile';
+import { requestRide, clientReady, noteChanged, clientCancel, checkOutstandingJob, 
+         rideComplete, clientCheckJobStatus } from '../actions/jobs_actions';
+import { styles } from './styles/styles';
+import { CardSection, InputLarge, Button, RedButton, YellowButton, DividerLine, Spinner } from './common';
 
 class CustomerMain extends Component {
   // we need some local state to set the location of the user.
   state = {
     location: null,
-    locationErrorMessage: null
+    locationErrorMessage: null,
+    processing: false
   };
 
   // check for outstanding jobs and give the user a warning if is one.
@@ -44,6 +46,7 @@ class CustomerMain extends Component {
     );
     AdMobInterstitial.addEventListener("interstitialDidClose", () => {
       console.log("interstitialDidClose");
+      this.setState({ processing: false });
       this.completeJob();
     }
       
@@ -113,19 +116,20 @@ class CustomerMain extends Component {
     this.sendRideRequest();
   };
 
- // handle the button to make the network call sending lat long and the token.
- onButtonPress() {
-  this.getLocationAsync();
- }
-// send the lat, long and note off to the backend.
- sendRideRequest() {
-   lat = JSON.stringify(this.state.location.coords.latitude);
-   long = JSON.stringify(this.state.location.coords.longitude);
-   lat = parseFloat(lat, 10);
-   long = parseFloat(long, 10);
-   const { token, jobNote } = this.props;
-   this.props.requestRide({ lat, long, token, jobNote});
+  // handle the button to make the network call sending lat long and the token.
+  onButtonPress() {
+    this.setState({ processing: true });
+    this.getLocationAsync();
   }
+  // send the lat, long and note off to the backend.
+  sendRideRequest() {
+    lat = JSON.stringify(this.state.location.coords.latitude);
+    long = JSON.stringify(this.state.location.coords.longitude);
+    lat = parseFloat(lat, 10);
+    long = parseFloat(long, 10);
+    const { token, jobNote } = this.props;
+    this.props.requestRide({ lat, long, token, jobNote});
+    }
 
   // if there is an old request not marked complete then tell the user
   renderAlert(){
@@ -134,6 +138,36 @@ class CustomerMain extends Component {
         <View style={styles.alertBox}>
           <Text style={styles.alertText}>This is an old request. Remember You must close old requests before making a new one. </ Text>
         </View>
+      );
+    }
+  }
+
+  renderMainButton(){
+    const { mainLangStyleSml, englishLangStyle, sectionView } = styles;
+    if (this.state.processing) {
+      return (
+        <CardSection style={sectionView}>
+          <Spinner />
+        </CardSection>
+      )
+    } else {
+      return(
+      <View>
+        <CardSection>
+        <Button onPress={this.onButtonPress.bind(this)}>
+             { READY }/{ E_READY }
+        </Button>
+        </CardSection>
+        <View>
+         <Text style={mainLangStyleSml}>{GPS_WARNING_CLIENT}</ Text>
+         <Text style={englishLangStyle}>{E_GPS_WARNING_CLIENT}</ Text>
+       </View>
+       <CardSection>
+         <RedButton onPress={this.onCancelButtonPress.bind(this)}>
+          { CANCEL }/{ E_CANCEL }
+         </RedButton>
+       </CardSection>
+      </View>
       );
     }
   }
@@ -157,20 +191,7 @@ class CustomerMain extends Component {
             value={this.props.jobNote}
           />
         </CardSection>
-        <CardSection>
-          <Button onPress={this.onButtonPress.bind(this)}>
-           { READY }/{ E_READY }
-          </Button>
-        </CardSection>
-        <View>
-          <Text style={mainLangStyleSml}>{GPS_WARNING_CLIENT}</ Text>
-          <Text style={englishLangStyle}>{E_GPS_WARNING_CLIENT}</ Text>
-        </View>
-        <CardSection>
-          <RedButton onPress={this.onCancelButtonPress.bind(this)}>
-           { CANCEL }/{ E_CANCEL }
-          </RedButton>
-        </CardSection>
+          {this.renderMainButton()}
       </View>
       );
     }
@@ -273,59 +294,6 @@ class CustomerMain extends Component {
   }
 }
 
-const styles = {
-  backgroundImage: {
-    flex: 1,
-    width: null,
-    height: null
-  },
-  sectionView: {
-    justifyContent: 'center',
-  },
-  mainLangStyleLrg: {
-    justifyContent: 'center',
-    alignSelf: 'center',
-    color: '#fff',
-    fontSize: 20,
-    fontWeight: '600',
-    paddingTop: 10,
-    paddingBottom: 10
-  },
-  mainLangStyleSml: {
-    justifyContent: 'center',
-    alignSelf: 'center',
-    color: '#fff',
-    fontSize: 15,
-    fontWeight: '500',
-    paddingTop: 10,
-    paddingBottom: 8
-  },
-  englishLangStyle: {
-    justifyContent: 'center',
-    alignSelf: 'center',
-    color: '#fff',
-    fontSize: 12,
-    fontWeight: '500',
-    paddingTop: 2,
-    paddingBottom: 10,
-    paddingRight: 10,
-    paddingLeft: 10
-  },
-  alertBox: {
-    justifyContent: 'center',
-    alignSelf: 'center',
-    backgroundColor: '#f8cd81',
-    borderRadius: 5,
-    padding: 5,
-    flex: 1,
-  },
-  alertText: {
-    fontSize: 16,
-    alignSelf: 'center',
-    color: 'red',
-    fontWeight: 'bold',
-  }
-};
 const mapStateToProps = state => {
   const { user, token, loading, error } = state.auth;
   const { userStage, jobNote, jobId, oldJob, jobDetail } = state.job;
