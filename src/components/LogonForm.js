@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { Platform, View, Text, Image, ImageBackground} from 'react-native';
+import { Platform, View, Text, Image, ImageBackground, KeyboardAwareScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+//import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { emailChanged, passwordChanged, loginUser } from '../actions';
 import { Card, CardSection, Input, Button, RedButton, Spinner, DividerLine } from './common';
 import { PASSWORD_TEXT, EMAIL_TEXT, LOGIN_TEXT, FORGOT_PASSWORD_TEXT, SIGN_UP_TEXT } from '../LanguageFile.js'
-import { AdMobBanner, AdMobInterstitial } from "expo";
+import * as AdMobBanner from "expo-ads-admob";
 
 class LoginForm extends Component {
 // this is a helper method that calls the action from the input
@@ -62,6 +62,7 @@ class LoginForm extends Component {
   return (
 <ImageBackground source={require('../../assets/main_background.png')} style={styles.backgroundImage}>
   <View style={{ flex:1, paddingLeft: 5, paddingRight: 5 }}>
+
     <KeyboardAwareScrollView
       enableOnAndroid
       enableAutomaticScroll
@@ -107,14 +108,7 @@ class LoginForm extends Component {
       </Card>
       </KeyboardAwareScrollView>
 
-      <AdMobBanner
-          style={styles.bottomBanner}
-          bannerSize="fullBanner"
-          adUnitID="ca-app-pub-3940256099942544/6300978111"
-          // Test ID, Replace with your-admob-unit-id
-          testDeviceID="EMULATOR"
-          didFailToReceiveAdWithError={this.bannerError}
-        />
+        
     </View>
   </ ImageBackground>
 

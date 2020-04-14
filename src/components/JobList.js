@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { FlatList, ScrollView, View, Text, ImageBackground} from 'react-native';
 import { connect } from 'react-redux';
-import { Location, Permissions, MapView } from 'expo';
+import { MapView } from 'expo';
+import * as Permissions from 'expo-permissions';
+import * as Location from 'expo-location';
 import { requestJobs, notesChanged, rideMethod, checkOutstandingJob } from '../actions/jobs_actions';
 import { logOutUser } from '../actions/index';
 import JobListItem from './JobListItem';
