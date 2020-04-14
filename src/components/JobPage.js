@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, Image, ImageBackground} from 'react-native';
+import { View, Text, ImageBackground} from 'react-native';
 import { connect } from 'react-redux';
 import { Location, Permissions, MapView, AdMobInterstitial } from 'expo';
 import { requestJobs, notesChanged, rideComplete } from '../actions/jobs_actions';

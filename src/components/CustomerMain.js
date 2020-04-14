@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Platform, View, Text, Image, ImageBackground} from 'react-native';
+import { Platform, View, Text, ImageBackground} from 'react-native';
 import { connect } from 'react-redux';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Location, Permissions, MapView, AdMobInterstitial } from 'expo';

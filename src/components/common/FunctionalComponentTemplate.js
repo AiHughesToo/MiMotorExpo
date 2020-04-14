@@ -1,6 +1,6 @@
 // basic import lines to setup the react frameworks.
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View } from 'react-native';
 
 // the functional component change the name to the file name
 const FunctionalComponentTemplate = () => {

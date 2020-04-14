@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, Image, ImageBackground, TouchableWithoutFeedback } from 'react-native';
+import { View, Text, Image, TouchableWithoutFeedback } from 'react-native';
 import { connect } from 'react-redux';
 import { selectMotor, selectClient } from '../actions';
 import { Card, CardSection, Input, Button, RedButton, Spinner, DividerLine } from './common';
