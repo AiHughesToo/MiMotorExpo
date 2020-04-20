@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Platform, View, Text, Image, ImageBackground, KeyboardAwareScrollView } from 'react-native';
+import { Platform, View, Text, Image, ImageBackground } from 'react-native';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
-//import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { emailChanged, passwordChanged, loginUser } from '../actions';
 import { Card, CardSection, Input, Button, RedButton, Spinner, DividerLine } from './common';
 import { PASSWORD_TEXT, EMAIL_TEXT, LOGIN_TEXT, FORGOT_PASSWORD_TEXT, SIGN_UP_TEXT } from '../LanguageFile.js'
@@ -57,10 +57,9 @@ class LoginForm extends Component {
   }
 
   render() {
-// a bit of destructuring for the styles. this makes the variables available below.
   const { logoContainer, forgotPassStyle, logoImage, divLine } = styles;
   return (
-<ImageBackground source={require('../../assets/main_background.png')} style={styles.backgroundImage}>
+  <ImageBackground source={require('../../assets/main_background.png')} style={styles.backgroundImage}>
   <View style={{ flex:1, paddingLeft: 5, paddingRight: 5 }}>
 
     <KeyboardAwareScrollView

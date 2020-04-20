@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { Platform, View, Text, ImageBackground } from 'react-native';
+import { Platform, View, Text, ImageBackground, KeyboardAwareScrollView } from 'react-native';
 import { connect } from 'react-redux';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+//import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { selectMotor, registerUser, emailChanged, passwordChanged, nameChanged} from '../actions';
 import { Card, CardSection, Input, Button, RedButton, Spinner, DividerLine } from './common';
 import { PASSWORD_TEXT, NAME_TEXT, EMAIL_TEXT, LOGIN_TEXT, SIGN_UP_TEXT } from '../LanguageFile.js'

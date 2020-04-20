@@ -90,21 +90,7 @@ class JobList extends Component {
           <View style={{ flex:1, paddingLeft: 5, paddingRight: 5, paddingBottom: 20 }}>
             <CardSection>
             </CardSection>
-            <MapView
-              style={{ marginBottom: 5, height: 175}}
-              region={{
-              latitude: this.state.location.coords.latitude,
-              longitude: long,
-              latitudeDelta: 0.0162,
-              longitudeDelta: 0.0081,
-             }}>
-              <MapView.Marker
-                coordinate={{latitude: this.state.location.coords.latitude, longitude: this.state.location.coords.longitude }}
-                title={'You are here'}
-                description={"hi"}
-                image={require('../../assets/logoMapMarker.png')}
-              />
-            </MapView>
+   
             <ScrollView>
               <FlatList
                 data={this.props.jobsList}

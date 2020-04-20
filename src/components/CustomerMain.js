@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Platform, View, Text, ImageBackground, KeyboardAwareScrollView} from 'react-native';
+import { Platform, View, Text, ImageBackground } from 'react-native';
 import { connect } from 'react-redux';
-//import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { MapView } from 'expo';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+//import { MapView } from 'expo';
+import { MapView } from 'react-native-maps';
 import * as Permissions from 'expo-permissions';
 import * as Location from 'expo-location';
 import * as AdMobInterstitial from 'expo-ads-admob'
@@ -32,38 +33,38 @@ class CustomerMain extends Component {
   // this.interval is how you fire a method on a timed schedule
   componentDidMount() {
    this.interval = setInterval(() => this.check_job_status(), 8000);
-   AdMobInterstitial.addEventListener("interstitialDidLoad", () =>
-      console.log("interstitialDidLoad")
-    );
-    AdMobInterstitial.addEventListener("interstitialDidFailToLoad", () =>{
-      console.log("interstitialDidFailToLoad")
-    }
-    );
-    AdMobInterstitial.addEventListener("interstitialDidOpen", () =>
-      console.log("interstitialDidOpen")
-    );
-    AdMobInterstitial.addEventListener("interstitialDidClose", () => {
-      console.log("interstitialDidClose");
-      this.completeJob();
-    }
+  //  AdMobInterstitial.addEventListener("interstitialDidLoad", () =>
+  //     console.log("interstitialDidLoad")
+  //   );
+  //   AdMobInterstitial.addEventListener("interstitialDidFailToLoad", () =>{
+  //     console.log("interstitialDidFailToLoad")
+  //   }
+  //   );
+  //   AdMobInterstitial.addEventListener("interstitialDidOpen", () =>
+  //     console.log("interstitialDidOpen")
+  //   );
+  //   AdMobInterstitial.addEventListener("interstitialDidClose", () => {
+  //     console.log("interstitialDidClose");
+  //     this.completeJob();
+  //   }
       
-    );
-    AdMobInterstitial.addEventListener("interstitialWillLeaveApplication", () =>
-      console.log("interstitialWillLeaveApplication")
-    );
+  //   );
+  //   AdMobInterstitial.addEventListener("interstitialWillLeaveApplication", () =>
+  //     console.log("interstitialWillLeaveApplication")
+  //   );
   }
   // required to stop the checking of the job status 
   componentWillUnmount() {
-    AdMobInterstitial.removeAllListeners();
-    clearInterval(this.interval);
+    // AdMobInterstitial.removeAllListeners();
+    // clearInterval(this.interval);
   };
 
-  showInterstitial = async () => {
-    AdMobInterstitial.setAdUnitID('ca-app-pub-3940256099942544/1033173712'); // Test ID, Replace with your-admob-unit-id
-    AdMobInterstitial.setTestDeviceID('EMULATOR');
-    await AdMobInterstitial.requestAdAsync();
-    await AdMobInterstitial.showAdAsync();
-  }
+  // showInterstitial = async () => {
+  //   AdMobInterstitial.setAdUnitID('ca-app-pub-3940256099942544/1033173712'); // Test ID, Replace with your-admob-unit-id
+  //   AdMobInterstitial.setTestDeviceID('EMULATOR');
+  //   await AdMobInterstitial.requestAdAsync();
+  //   await AdMobInterstitial.showAdAsync();
+  // }
 
   check_job_status(){
     if (this.props.userStage === 3){
@@ -80,12 +81,14 @@ class CustomerMain extends Component {
 
   // let the user cancel a ride request.
   onCancelButtonPress() {
+   this.completeJob();
    this.props.clientCancel();
   }; 
   
   //mark ride complete
   onRedButtonPress() {
-    this.showInterstitial();
+    // this.showInterstitial();
+    this.props.clientCancel();
   };
 
   completeJob() {
@@ -101,6 +104,8 @@ class CustomerMain extends Component {
 
   // get the Location information and send the request for a ride.
   getLocationAsync = async () => {
+    console.log("im getting the location");
+    
     let { status } = await Permissions.askAsync(Permissions.LOCATION);
     if (status !== 'granted') {
       this.setState({
@@ -110,6 +115,7 @@ class CustomerMain extends Component {
 
     let location = await Location.getCurrentPositionAsync({enableHighAccuracy: true});
     this.setState({ location });
+    console.log(JSON.stringify(this.state.location.coords.latitude));
     this.sendRideRequest();
   };
 
@@ -203,27 +209,7 @@ class CustomerMain extends Component {
         <View>
           <Text style={mainLangStyleLrg}>{rider_name}{IS_ON_THE_WAY}</ Text>
           <Text style={englishLangStyle}>{rider_name}{E_IS_ON_THE_WAY}</ Text>
-            <MapView
-              style={{ flex: 1, height: 250}}
-              region={{
-              latitude: latitude,
-              longitude: longitude,
-              latitudeDelta: 0.0312,
-              longitudeDelta: 0.0231,
-             }}>
-              <MapView.Marker
-                coordinate={{latitude: rider_lat, longitude: rider_long }}
-                title={'You are here'}
-                description={"hi"}
-                image={require('../../assets/logoMapMarker.png')}
-              />
-              <MapView.Marker
-                coordinate={{latitude: latitude, longitude: longitude }}
-                title={title}
-                description={note}
-                image={require('../../assets/personMapMarker.png')}
-              />
-            </MapView>
+            
           <CardSection>
             {this.renderAlert()}
           </CardSection>
