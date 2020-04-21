@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { Platform, View, Text, ImageBackground } from 'react-native';
 import { connect } from 'react-redux';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-//import { MapView } from 'expo';
-import { MapView } from 'react-native-maps';
+import MapView from 'react-native-maps';
+import { Marker }  from 'react-native-maps';
 import * as Permissions from 'expo-permissions';
 import * as Location from 'expo-location';
 import * as AdMobInterstitial from 'expo-ads-admob'
@@ -88,6 +88,7 @@ class CustomerMain extends Component {
   //mark ride complete
   onRedButtonPress() {
     // this.showInterstitial();
+    this.completeJob();
     this.props.clientCancel();
   };
 
@@ -205,11 +206,28 @@ class CustomerMain extends Component {
     if(this.props.userStage == 4){
     const { title, note, rider_name, rider_lat,
             rider_long, latitude, longitude } = this.props.jobDetail.jobDetail;
+    console.log(rider_long);
       return(
         <View>
           <Text style={mainLangStyleLrg}>{rider_name}{IS_ON_THE_WAY}</ Text>
           <Text style={englishLangStyle}>{rider_name}{E_IS_ON_THE_WAY}</ Text>
-            
+          <MapView
+            style={{ marginBottom: 5, height: 275}}
+            initialRegion={{
+              latitude: latitude,
+              longitude: longitude,
+              latitudeDelta: 0.0125,
+              longitudeDelta: 0.0081,
+            }} >
+              <Marker
+                coordinate={{ latitude: latitude, longitude: longitude }}
+                image={require('../../assets/personMapMarker.png')}
+              />
+              <Marker
+                coordinate={{ latitude: rider_lat, longitude: rider_long }}
+                image={require('../../assets/logoMapMarker.png')}
+              />
+            </MapView>
           <CardSection>
             {this.renderAlert()}
           </CardSection>

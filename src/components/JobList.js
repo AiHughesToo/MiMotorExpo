@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { FlatList, ScrollView, View, Text, ImageBackground} from 'react-native';
 import { connect } from 'react-redux';
-import { MapView } from 'expo';
+import MapView from 'react-native-maps';
 import * as Permissions from 'expo-permissions';
 import * as Location from 'expo-location';
 import { requestJobs, notesChanged, rideMethod, checkOutstandingJob } from '../actions/jobs_actions';
@@ -90,7 +90,14 @@ class JobList extends Component {
           <View style={{ flex:1, paddingLeft: 5, paddingRight: 5, paddingBottom: 20 }}>
             <CardSection>
             </CardSection>
-   
+           
+            <MapView
+            initialRegion={{
+              latitude: this.state.location.coords.latitude,
+              longitude: long,
+              latitudeDelta: 0.0922,
+              longitudeDelta: 0.0421,
+            }} />
             <ScrollView>
               <FlatList
                 data={this.props.jobsList}
