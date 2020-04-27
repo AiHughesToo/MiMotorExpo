@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { FlatList, ScrollView, View, Text, ImageBackground} from 'react-native';
 import { connect } from 'react-redux';
 import MapView from 'react-native-maps';
+import { Marker }  from 'react-native-maps';
 import * as Permissions from 'expo-permissions';
 import * as Location from 'expo-location';
 import { requestJobs, notesChanged, rideMethod, checkOutstandingJob } from '../actions/jobs_actions';
@@ -93,12 +94,17 @@ class JobList extends Component {
             <MapView
               style={{ marginBottom: 5, height: 275}}
               initialRegion={{
-                latitude: this.state.location.coords.latitude,
+                latitude: lat,
                 longitude: long,
                 latitudeDelta: 0.0125,
                 longitudeDelta: 0.0081,
-              }} 
-            />    
+              }}  
+              >
+              <Marker
+                coordinate={{ latitude: lat, longitude: long }}
+                image={require('../../assets/logoMapMarker.png')}
+              />
+            </MapView>  
             <ScrollView>
               <FlatList
                 data={this.props.jobsList}
@@ -121,11 +127,28 @@ class JobList extends Component {
 
   return (
     <ImageBackground source={require('../../assets/main_background.png')} style={backgroundImage}>
-      <View style={{ flex:1, paddingLeft: 15, paddingRight: 15 }}>
+      <View style={{ flex:1, paddingLeft: 15, paddingRight: 15, paddingTop: 10 }}>
+      <MapView
+              style={{ marginBottom: 5, height: 175}}
+              initialRegion={{
+                latitude: lat,
+                longitude: long,
+                latitudeDelta: 0.0125,
+                longitudeDelta: 0.0081,
+              }}  
+              >
+              <Marker
+                coordinate={{ latitude: lat, longitude: long }}
+                image={require('../../assets/logoMapMarker.png')}
+              />
+            </MapView>  
         <CardSection>
           <Button onPress={this.onButtonPress.bind(this)}>
           Por favor espera
           </Button>
+        </CardSection>
+        <CardSection>
+          <Text style={styles.textStyle}>Right now we are not seeing any jobs this list updates every 10 seconds. Remember you need signal for this list to update.</Text>
         </CardSection>
         <Spinner />
 
@@ -142,7 +165,7 @@ const styles = {
     height: null
   },
   textStyle: {
-    fontSize: 15,
+    fontSize: 12,
     color: 'white',
     fontWeight: 'bold',
   },

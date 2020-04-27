@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, ImageBackground} from 'react-native';
 import { connect } from 'react-redux';
 import MapView from 'react-native-maps';
+import { Marker }  from 'react-native-maps';
 import * as Permissions from 'expo-permissions';
 import * as Location from 'expo-location';
 //import { Location, Permissions, MapView, AdMobInterstitial } from 'expo';
@@ -70,9 +71,10 @@ class JobPage extends Component {
 
      let location = await Location.getCurrentPositionAsync({enableHighAccuracy: true});
      const lat = location.coords.latitude;
+     const long = location.coords.longitude;
      console.log('ending position');
      const { accountType } = this.props;
-     this.props.rideComplete({ token, job_id, userType: accountType });
+     this.props.rideComplete({ token, job_id, userType: accountType, rider_lat: lat, rider_long: long });
   };
 
   renderAlert(){
@@ -96,12 +98,22 @@ class JobPage extends Component {
             <MapView
               style={{ marginBottom: 5, height: 275}}
               initialRegion={{
-                latitude: jobDetail.rider_lat,
-                longitude: jobDetail.rider_long,
+                latitude: jobDetail.latitude,
+                longitude: jobDetail.longitude,
                 latitudeDelta: 0.0125,
                 longitudeDelta: 0.0081,
               }} 
-            />   
+              >
+              <Marker
+                coordinate={{ latitude: jobDetail.latitude, longitude: jobDetail.longitude }}
+                image={require('../../assets/personMapMarker.png')}
+              />
+              <Marker
+                coordinate={{ latitude: jobDetail.rider_lat, longitude: jobDetail.rider_long }}
+                image={require('../../assets/logoMapMarker.png')}
+              />
+            </MapView>
+
             <CardSection style={styles.jobsDetailStyle}>
             <View style={styles.jobsDetailStyle}>
                 <View style={{paddingBottom: 5, flexDirection: 'row'}}>
@@ -116,6 +128,9 @@ class JobPage extends Component {
             </CardSection>
             <CardSection>
               {this.renderAlert()}
+            </CardSection>
+            <CardSection>
+              <Text style={styles.textStyleTwo}>Once you have taken your client to the destination mark the job complete. The destination is used to calculate your stats.</Text>
             </CardSection>
             <CardSection>
               <RedButton onPress={this.onRedButtonPress.bind(this)}>

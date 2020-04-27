@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Platform, View, Text, ImageBackground } from 'react-native';
 import { connect } from 'react-redux';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { selectMotor, registerUser, emailChanged, passwordChanged, nameChanged} from '../actions';
+import { selectMotor, registerUser, emailChanged, passwordChanged, nameChanged, vinChanged} from '../actions';
 import { Card, CardSection, Input, Button, RedButton, Spinner, DividerLine } from './common';
 import { PASSWORD_TEXT, NAME_TEXT, EMAIL_TEXT, LOGIN_TEXT, SIGN_UP_TEXT } from '../LanguageFile.js'
 import SelectAccountBar from './SelectAccountBar'
@@ -20,6 +20,10 @@ class SignUp extends Component {
     this.props.passwordChanged(text);
   }
 
+  onVinChange(text) {
+    this.props.vinChanged(text);
+  }
+
   onButtonPress() {
       const { email, password, accountType, name } = this.props;
       this.props.registerUser({ email, password, accountType, name });
@@ -30,12 +34,41 @@ class SignUp extends Component {
         return(
           <Text style={{alignSelf: 'center', color: '#f00f00', fontSize: 20}}>{this.props.error}</Text>
         );
-      }
+    }
   }
+ 
+  renderFields() {
+    if (this.props.accountType == "rider") {
+      return(
+        <Card>
+        <CardSection>
+
+          <Input
+            label="vin #"
+            placeholder="VIN"
+            onChangeText={this.onVinChange.bind(this)}
+            value={this.props.vin}
+          />
+        </CardSection>
+
+       <CardSection >
+        <Input
+          label="plate #"
+          placeholder="Plate"
+          onChangeText={this.onVinChange.bind(this)}
+          value={this.props.vin}
+        />
+       </CardSection>
+       </Card>
+      );
+    }
+  }
+
   renderForm() {
     if (this.props.accountType) {
       return(
         <Card>
+          <Card>
         <CardSection>
           <Input
             label={NAME_TEXT}
@@ -45,15 +78,15 @@ class SignUp extends Component {
           />
         </CardSection>
 
-          <CardSection>
-            <Input
-              label={EMAIL_TEXT}
-              placeholder="email@gmail.com"
-              keyboardType='email-address'
-              onChangeText={this.onEmailChange.bind(this)}
-              value={this.props.email}
-            />
-          </CardSection>
+        <CardSection>
+          <Input
+            label={EMAIL_TEXT}
+            placeholder="email@gmail.com"
+            keyboardType='email-address'
+            onChangeText={this.onEmailChange.bind(this)}
+            value={this.props.email}
+          />
+        </CardSection>
 
           <CardSection>
             <Input
@@ -61,9 +94,14 @@ class SignUp extends Component {
              placeholder={PASSWORD_TEXT}
              onChangeText={this.onPasswordChange.bind(this)}
              value={this.props.password}
-            />
+           />
           </CardSection>
-            {this.renderError()}
+          </Card>
+
+          {this.renderFields()}
+          
+          {this.renderError()}
+
           <CardSection>
             {this.renderButton()}
           </CardSection>
@@ -85,7 +123,7 @@ class SignUp extends Component {
 
   }
   render() {
-  // a bit of destructuring for the styles. this makes the variables available below.
+  
   const { backgroundImage, sectionTitleTextStyle } = styles;
   return (
     <ImageBackground source={require('../../assets/main_background.png')} style={backgroundImage}>
@@ -129,6 +167,7 @@ class SignUp extends Component {
    return {
     accountType: state.auth.accountType,
     email: state.auth.email,
+    vin: state.auth.vin,
     name: state.auth.userName,
     password: state.auth.password,
     loading: state.auth.loading,
@@ -136,4 +175,4 @@ class SignUp extends Component {
     };
   };
 
-export default connect(mapStateToProps, { emailChanged, passwordChanged, registerUser, nameChanged }) (SignUp);
+export default connect(mapStateToProps, { emailChanged, passwordChanged, registerUser, nameChanged, vinChanged }) (SignUp);

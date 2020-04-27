@@ -82,8 +82,9 @@ export const requestJobs = ({ lat, long, token, range }) => {
          payload: { jobsList: response }});
      };
 
-// rider mark Complete
-export const rideComplete = ({ token, job_id, userType }) => {
+// client mark Complete
+export const rideComplete = ({ token, job_id, userType, rider_lat = 0.00, rider_long = 0.00 }) => {
+  console.log("rider lat is: " + rider_lat);
     return (dispatch) => {
       fetch('https://memotor-dev.herokuapp.com/job/complete/'+ job_id, {
         method: 'PUT',
@@ -91,17 +92,19 @@ export const rideComplete = ({ token, job_id, userType }) => {
           'Authorization': token,
           'Accept': 'application/json',
           'Content-Type': 'application/json',
-        }
+        },
+        body: JSON.stringify({ 'rider_lat': rider_lat, 'rider_long': rider_long })
       })
       .then((response) => response.json())
       .then(response => rideCompleteSuccess(dispatch, response, userType));
     };
 };
 
+
 const rideCompleteSuccess = (dispatch, response, userType) => {
   dispatch({
     type: RIDE_COMPLETE}); 
-
+    console.log(response.rider_complete);
   if (userType === 'rider') {
       Actions.rider();
     }

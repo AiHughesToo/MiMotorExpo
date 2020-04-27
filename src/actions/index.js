@@ -3,7 +3,7 @@ import { Actions } from 'react-native-router-flux';
 import { EMAIL_CHANGED, PASSWORD_CHANGED, LOGIN_USER,
          LOGIN_USER_SUCCESS, LOGIN_BLANK_ERROR,
          LOGIN_USER_FAIL, SELECT_MOTOR, SELECT_CLIENT,
-         NAME_CHANGED, REGISTER_USER_SUCCESS, REGISTER_USER_FAIL, LOG_OUT } from './types';
+         NAME_CHANGED, REGISTER_USER_SUCCESS, REGISTER_USER_FAIL, LOG_OUT, VIN_CHANGED} from './types';
 
 // this is an action creator
 export const emailChanged = (text) => {
@@ -12,6 +12,13 @@ export const emailChanged = (text) => {
     payload: text
   };
 };
+
+export const vinChanged = (text) => {
+  return {
+    type: VIN_CHANGED,
+    payload: text
+  }
+}
 
 export const passwordChanged = (text) => {
   return {
