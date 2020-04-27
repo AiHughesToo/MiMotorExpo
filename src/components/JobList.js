@@ -90,14 +90,15 @@ class JobList extends Component {
           <View style={{ flex:1, paddingLeft: 5, paddingRight: 5, paddingBottom: 20 }}>
             <CardSection>
             </CardSection>
-           
             <MapView
-            initialRegion={{
-              latitude: this.state.location.coords.latitude,
-              longitude: long,
-              latitudeDelta: 0.0922,
-              longitudeDelta: 0.0421,
-            }} />
+              style={{ marginBottom: 5, height: 275}}
+              initialRegion={{
+                latitude: this.state.location.coords.latitude,
+                longitude: long,
+                latitudeDelta: 0.0125,
+                longitudeDelta: 0.0081,
+              }} 
+            />    
             <ScrollView>
               <FlatList
                 data={this.props.jobsList}
@@ -106,7 +107,7 @@ class JobList extends Component {
               />
             </ScrollView>
             <CardSection>
-            <Text style={styles.textStyle}>This list updates every 10 seconds. New jobs will appear and job taken by other rides will be removed. </Text>;
+            <Text style={styles.textStyle}>This list updates every 10 seconds. New jobs will appear and job taken by other rides will be removed. </Text>
             </CardSection>
             <CardSection>
               <Button onPress={this.onButtonPress.bind(this)}>

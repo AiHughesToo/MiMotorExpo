@@ -32,13 +32,6 @@ export const noteChanged = (text) => {
   };
 };
 
-// export const notesChanged = (text) => {
-//   return {
-//     type: JOBS_NOTE_CHANGED,
-//     payload: text
-//   };
-// };
-
 // this post request creates a new job in the DB.
 export const requestRide = ({ lat, long, token, jobNote }) => {
   return (dispatch) => {
@@ -107,10 +100,10 @@ export const rideComplete = ({ token, job_id, userType }) => {
 
 const rideCompleteSuccess = (dispatch, response, userType) => {
   dispatch({
-    type: RIDE_COMPLETE});
+    type: RIDE_COMPLETE}); 
 
   if (userType === 'rider') {
-      Actions.jobList();
+      Actions.rider();
     }
 };
 
@@ -135,8 +128,10 @@ const takeJobSuccess = (dispatch, response) => {
   dispatch({
     type: TAKE_JOB_SUCCESS,
     payload: { jobDetail: response }});
+    console.log("take job success");
+    console.log(response.taken);
     if (response.taken) {
-      Actions.onJob();
+      Actions.jobMap();
     }
 };
 
@@ -164,7 +159,7 @@ const checkedJobs = (dispatch, response, userType) => {
       dispatch({
         type: HAS_OLD_JOB,
         payload: { jobDetail: response}});
-        Actions.onJob();
+        Actions.jobMap();
     } else if (!response.user_complete && userType === 'client') {
       console.log('user has an outstanding job.');
       if (response.taken) {

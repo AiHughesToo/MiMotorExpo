@@ -206,7 +206,6 @@ class CustomerMain extends Component {
     if(this.props.userStage == 4){
     const { title, note, rider_name, rider_lat,
             rider_long, latitude, longitude } = this.props.jobDetail.jobDetail;
-    console.log(rider_long);
       return(
         <View>
           <Text style={mainLangStyleLrg}>{rider_name}{IS_ON_THE_WAY}</ Text>

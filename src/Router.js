@@ -17,7 +17,7 @@ const { headerColor, headerText } = styles;
           <Scene key='signUp' component={SignUp} title={REGISTER} />
         </Scene>
         <Scene key='rider'>
-          <Scene key='jobList' component={JobList} title={JOB_LIST} />
+          <Scene key='jobList' component={JobList} title={JOB_LIST} /> 
         </Scene>
         <Scene key='jobMap'>
           <Scene key='onJob' component={JobPage} title={WORKING} />

@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import { View, Text, ImageBackground} from 'react-native';
 import { connect } from 'react-redux';
-import { Location, Permissions, MapView, AdMobInterstitial } from 'expo';
+import MapView from 'react-native-maps';
+import * as Permissions from 'expo-permissions';
+import * as Location from 'expo-location';
+//import { Location, Permissions, MapView, AdMobInterstitial } from 'expo';
 import { requestJobs, notesChanged, rideComplete } from '../actions/jobs_actions';
 import { MARK_JOB_COMPLETE, JOB_PAGE_INSTRUCTIONS, CLIENT_NAME, RIDER_OLD_JOB_WARNING } from '../LanguageFile';
 import { Card, CardSection, Button, RedButton } from './common';
@@ -14,29 +17,29 @@ class JobPage extends Component {
   };
 
   componentDidMount() {
-    AdMobInterstitial.addEventListener("interstitialDidLoad", () =>
-      console.log("interstitialDidLoad")
-    );
-    AdMobInterstitial.addEventListener("interstitialDidFailToLoad", () =>{
-      console.log("interstitialDidFailToLoad")
-    }
-    );
-    AdMobInterstitial.addEventListener("interstitialDidOpen", () =>
-      console.log("interstitialDidOpen")
-    );
-    AdMobInterstitial.addEventListener("interstitialDidClose", () => {
-      console.log("interstitialDidClose");
-      this.completeJob();
-    }
+    // AdMobInterstitial.addEventListener("interstitialDidLoad", () =>
+    //   console.log("interstitialDidLoad")
+    // );
+    // AdMobInterstitial.addEventListener("interstitialDidFailToLoad", () =>{
+    //   console.log("interstitialDidFailToLoad")
+    // }
+    // );
+    // AdMobInterstitial.addEventListener("interstitialDidOpen", () =>
+    //   console.log("interstitialDidOpen")
+    // );
+    // AdMobInterstitial.addEventListener("interstitialDidClose", () => {
+    //   console.log("interstitialDidClose");
+    //   this.completeJob();
+    // }
       
-    );
-    AdMobInterstitial.addEventListener("interstitialWillLeaveApplication", () =>
-      console.log("interstitialWillLeaveApplication")
-    );
+    // );
+    // AdMobInterstitial.addEventListener("interstitialWillLeaveApplication", () =>
+    //   console.log("interstitialWillLeaveApplication")
+    // );
   }
 
   componentWillUnmount() {
-    AdMobInterstitial.removeAllListeners();
+    // AdMobInterstitial.removeAllListeners();
   }
 
   onRedButtonPress() {
@@ -50,10 +53,11 @@ class JobPage extends Component {
   }
 
   showInterstitial = async () => {
-    AdMobInterstitial.setAdUnitID('ca-app-pub-3940256099942544/1033173712'); // Test ID, Replace with your-admob-unit-id
-    AdMobInterstitial.setTestDeviceID('EMULATOR');
-    await AdMobInterstitial.requestAdAsync();
-    await AdMobInterstitial.showAdAsync();
+    // AdMobInterstitial.setAdUnitID('ca-app-pub-3940256099942544/1033173712'); // Test ID, Replace with your-admob-unit-id
+    // AdMobInterstitial.setTestDeviceID('EMULATOR');
+    // await AdMobInterstitial.requestAdAsync();
+    // await AdMobInterstitial.showAdAsync();
+    this.completeJob();
   }
 
   getLocationAsync = async (token, job_id) => {
@@ -88,28 +92,16 @@ class JobPage extends Component {
       return (
         <ImageBackground source={require('../../assets/main_background.png')} style={backgroundImage}>
           <View style={{ flex:1, paddingLeft: 5, paddingRight: 5, paddingBottom:50 }}>
+         
             <MapView
-              style={{ flex: 1 }}
-              region={{
-              latitude: jobDetail.rider_lat,
-              longitude: jobDetail.rider_long,
-              latitudeDelta: 0.0312,
-              longitudeDelta: 0.0231,
-             }}>
-              <MapView.Marker
-                coordinate={{latitude: jobDetail.rider_lat, longitude: jobDetail.rider_long }}
-                title={'Tu es aqui'}
-                description={"Hola"}
-                image={require('../../assets/logoMapMarker.png')}
-              />
-              <MapView.Marker
-                coordinate={{latitude: jobDetail.latitude, longitude: jobDetail.longitude }}
-                title={jobDetail.title}
-                description={jobDetail.note}
-                image={require('../../assets/personMapMarker.png')}
-              />
-
-            </MapView>
+              style={{ marginBottom: 5, height: 275}}
+              initialRegion={{
+                latitude: jobDetail.rider_lat,
+                longitude: jobDetail.rider_long,
+                latitudeDelta: 0.0125,
+                longitudeDelta: 0.0081,
+              }} 
+            />   
             <CardSection style={styles.jobsDetailStyle}>
             <View style={styles.jobsDetailStyle}>
                 <View style={{paddingBottom: 5, flexDirection: 'row'}}>
