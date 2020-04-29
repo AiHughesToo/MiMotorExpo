@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { Platform, View, Text, ImageBackground } from 'react-native';
 import { connect } from 'react-redux';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { selectMotor, registerUser, emailChanged, passwordChanged, nameChanged, vinChanged} from '../actions';
+import { selectMotor, registerUser, emailChanged, passwordChanged, nameChanged, vinChanged, plateChanged, bikeTypeChanged} from '../actions';
 import { Card, CardSection, Input, Button, RedButton, Spinner, DividerLine } from './common';
-import { PASSWORD_TEXT, NAME_TEXT, EMAIL_TEXT, LOGIN_TEXT, SIGN_UP_TEXT } from '../LanguageFile.js'
+import { PASSWORD_TEXT, NAME_TEXT, EMAIL_TEXT, LOGIN_TEXT, SIGN_UP_TEXT, VIN_NUM, VEHICLE_TYPE, PLATE_NUM } from '../LanguageFile.js'
 import SelectAccountBar from './SelectAccountBar'
 
 class SignUp extends Component {
@@ -24,9 +24,17 @@ class SignUp extends Component {
     this.props.vinChanged(text);
   }
 
+  onPlateChange(text) {
+    this.props.plateChanged(text);
+  }
+
+  onBikeTypeChange(text) {
+    this.props.bikeTypeChanged(text);
+  }
+
   onButtonPress() {
-      const { email, password, accountType, name } = this.props;
-      this.props.registerUser({ email, password, accountType, name });
+      const { email, password, accountType, name, vin, plate, bikeType } = this.props;
+      this.props.registerUser({ email, password, accountType, name, vin, plate, bikeType });
   }
 
   renderError() {
@@ -42,9 +50,8 @@ class SignUp extends Component {
       return(
         <Card>
         <CardSection>
-
           <Input
-            label="vin #"
+            label={VIN_NUM}
             placeholder="VIN"
             onChangeText={this.onVinChange.bind(this)}
             value={this.props.vin}
@@ -53,12 +60,22 @@ class SignUp extends Component {
 
        <CardSection >
         <Input
-          label="plate #"
+          label={PLATE_NUM}
           placeholder="Plate"
-          onChangeText={this.onVinChange.bind(this)}
-          value={this.props.vin}
+          onChangeText={this.onPlateChange.bind(this)}
+          value={this.props.plate}
         />
        </CardSection>
+
+       <CardSection >
+        <Input
+          label={VEHICLE_TYPE}
+          placeholder="Bike Type"
+          onChangeText={this.onBikeTypeChange.bind(this)}
+          value={this.props.bikeType}
+        />
+       </CardSection>
+  
        </Card>
       );
     }
@@ -168,6 +185,8 @@ class SignUp extends Component {
     accountType: state.auth.accountType,
     email: state.auth.email,
     vin: state.auth.vin,
+    plate: state.auth.plate,
+    bikeType: state.auth.bikeType,
     name: state.auth.userName,
     password: state.auth.password,
     loading: state.auth.loading,
@@ -175,4 +194,4 @@ class SignUp extends Component {
     };
   };
 
-export default connect(mapStateToProps, { emailChanged, passwordChanged, registerUser, nameChanged, vinChanged }) (SignUp);
+export default connect(mapStateToProps, { emailChanged, passwordChanged, registerUser, nameChanged, vinChanged, plateChanged, bikeTypeChanged }) (SignUp);

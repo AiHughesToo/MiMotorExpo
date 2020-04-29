@@ -3,7 +3,8 @@ import { Actions } from 'react-native-router-flux';
 import { EMAIL_CHANGED, PASSWORD_CHANGED, LOGIN_USER,
          LOGIN_USER_SUCCESS, LOGIN_BLANK_ERROR,
          LOGIN_USER_FAIL, SELECT_MOTOR, SELECT_CLIENT,
-         NAME_CHANGED, REGISTER_USER_SUCCESS, REGISTER_USER_FAIL, LOG_OUT, VIN_CHANGED} from './types';
+         NAME_CHANGED, REGISTER_USER_SUCCESS, REGISTER_USER_FAIL, 
+         LOG_OUT, VIN_CHANGED, PLATE_CHANGED, BIKETYPE_CHANGED } from './types';
 
 // this is an action creator
 export const emailChanged = (text) => {
@@ -16,6 +17,19 @@ export const emailChanged = (text) => {
 export const vinChanged = (text) => {
   return {
     type: VIN_CHANGED,
+    payload: text
+  }
+}
+export const plateChanged = (text) => {
+  return {
+    type: PLATE_CHANGED,
+    payload: text
+  }
+}
+
+export const bikeTypeChanged = (text) => {
+  return {
+    type: BIKETYPE_CHANGED,
     payload: text
   }
 }
@@ -71,10 +85,18 @@ export const selectClient = () => {
   };
 };
 
-export const registerUser = ({ email, password, name, accountType }) => {
+// refactor this to only have 1 if statement. 
+export const registerUser = ({ email, password, name, accountType, vin, plate, bikeType}) => {
   if (email == '' || password == '' || name == '' || accountType == '') {
     return { type: LOGIN_BLANK_ERROR, payload: {error: 'All fileds are required.'} };
+  } 
+  
+  if (accountType == 'rider') {
+    if (vin == '' || bikeType == ''){
+      return { type: LOGIN_BLANK_ERROR, payload: {error: 'All fileds are required.'} };
+    }
   }
+
   return (dispatch) => {
   // we dispatch this to set the loading spinner
     dispatch({ type: LOGIN_USER });
@@ -85,7 +107,7 @@ export const registerUser = ({ email, password, name, accountType }) => {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ 'email': email, 'password': password , name: name, account_type: accountType })
+      body: JSON.stringify({ 'email': email, 'password': password , name: name, account_type: accountType, vin_number: vin, plate_number: plate, bike_type: bikeType })
     })
     .then((response) => response.json())
     .then(response => registerUserSuccess(dispatch, response));

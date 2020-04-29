@@ -2,12 +2,14 @@ import { EMAIL_CHANGED, PASSWORD_CHANGED,
         LOGIN_USER, LOGIN_USER_SUCCESS,
         LOGIN_BLANK_ERROR, LOGIN_USER_FAIL,
         SELECT_MOTOR, SELECT_CLIENT, NAME_CHANGED,
-        REGISTER_USER_SUCCESS, REGISTER_USER_FAIL, LOG_OUT, VIN_CHANGED } from '../actions/types';
+        REGISTER_USER_SUCCESS, REGISTER_USER_FAIL, LOG_OUT, VIN_CHANGED, PLATE_CHANGED, BIKETYPE_CHANGED } from '../actions/types';
 
 const INITIAL_STATE = {
 email: 'test@test.com',
 password: '12345678',
 vin: '',
+plate: '',
+bikeType: '',
 token: '',
 user: null,
 token: '',
@@ -26,6 +28,10 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, userName: action.payload };
     case VIN_CHANGED:
       return { ...state, vin: action.payload };
+    case PLATE_CHANGED:
+      return { ...state, plate: action.payload };
+    case BIKETYPE_CHANGED:
+      return { ...state, bikeType: action.payload };
     case PASSWORD_CHANGED:
       return { ...state, password: action.payload };
     case LOGIN_BLANK_ERROR:
