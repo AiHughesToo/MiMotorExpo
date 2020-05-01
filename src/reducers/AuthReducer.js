@@ -5,7 +5,7 @@ import { EMAIL_CHANGED, PASSWORD_CHANGED,
         REGISTER_USER_SUCCESS, REGISTER_USER_FAIL, LOG_OUT, VIN_CHANGED, PLATE_CHANGED, BIKETYPE_CHANGED } from '../actions/types';
 
 const INITIAL_STATE = {
-email: 'test@test.com',
+email: 'r@r.com',
 password: '12345678',
 vin: '',
 plate: '',

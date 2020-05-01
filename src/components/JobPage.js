@@ -6,6 +6,7 @@ import { Marker }  from 'react-native-maps';
 import * as Permissions from 'expo-permissions';
 import * as Location from 'expo-location';
 //import { Location, Permissions, MapView, AdMobInterstitial } from 'expo';
+import { AdMobInterstitial } from 'expo-ads-admob';
 import { requestJobs, notesChanged, rideComplete } from '../actions/jobs_actions';
 import { MARK_JOB_COMPLETE, JOB_PAGE_INSTRUCTIONS, CLIENT_NAME, RIDER_OLD_JOB_WARNING } from '../LanguageFile';
 import { Card, CardSection, Button, RedButton } from './common';
@@ -28,19 +29,18 @@ class JobPage extends Component {
     // AdMobInterstitial.addEventListener("interstitialDidOpen", () =>
     //   console.log("interstitialDidOpen")
     // );
-    // AdMobInterstitial.addEventListener("interstitialDidClose", () => {
-    //   console.log("interstitialDidClose");
-    //   this.completeJob();
-    // }
-      
-    // );
+
+    AdMobInterstitial.addEventListener("interstitialDidClose", () => {
+      console.log("interstitialDidClose");
+      this.completeJob();
+     });
     // AdMobInterstitial.addEventListener("interstitialWillLeaveApplication", () =>
     //   console.log("interstitialWillLeaveApplication")
     // );
   }
 
   componentWillUnmount() {
-    // AdMobInterstitial.removeAllListeners();
+     AdMobInterstitial.removeAllListeners();
   }
 
   onRedButtonPress() {
@@ -54,11 +54,11 @@ class JobPage extends Component {
   }
 
   showInterstitial = async () => {
-    // AdMobInterstitial.setAdUnitID('ca-app-pub-3940256099942544/1033173712'); // Test ID, Replace with your-admob-unit-id
-    // AdMobInterstitial.setTestDeviceID('EMULATOR');
-    // await AdMobInterstitial.requestAdAsync();
-    // await AdMobInterstitial.showAdAsync();
-    this.completeJob();
+    AdMobInterstitial.setAdUnitID('ca-app-pub-3940256099942544/1033173712'); // Test ID, Replace with your-admob-unit-id
+    AdMobInterstitial.setTestDeviceID('EMULATOR');
+    await AdMobInterstitial.requestAdAsync();
+    await AdMobInterstitial.showAdAsync();
+    //this.completeJob();
   }
 
   getLocationAsync = async (token, job_id) => {

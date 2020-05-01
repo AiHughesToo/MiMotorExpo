@@ -5,6 +5,7 @@ import MapView from 'react-native-maps';
 import { Marker }  from 'react-native-maps';
 import * as Permissions from 'expo-permissions';
 import * as Location from 'expo-location';
+import { AdMobBanner } from "expo-ads-admob";
 import { requestJobs, notesChanged, rideMethod, checkOutstandingJob } from '../actions/jobs_actions';
 import { logOutUser } from '../actions/index';
 import JobListItem from './JobListItem';
@@ -15,6 +16,8 @@ class JobList extends Component {
   state = {
     location: null,
     locationErrorMessage: null,
+    lat: null,
+    long: null,
   };
 
   componentWillMount() {
@@ -34,12 +37,10 @@ class JobList extends Component {
   };
 
   logOut() {
-    console.log('I ran the logout user');
     this.props.logOutUser();
   }
   // get the Location information and send the request for list of local jobs.
    getLocationAsync = async () => {
-     console.log('im still running');
      let { status } = await Permissions.askAsync(Permissions.LOCATION);
      if (status !== 'granted') {
        this.setState({
@@ -48,7 +49,7 @@ class JobList extends Component {
      }
 
      let location = await Location.getCurrentPositionAsync({enableHighAccuracy: true});
-     this.setState({ location});
+     this.setState({location});
      this.sendJobRequest();
    };
 
@@ -61,6 +62,8 @@ class JobList extends Component {
       long = JSON.stringify(this.state.location.coords.longitude);
       lat = parseFloat(lat, 10);
       long = parseFloat(long, 10);
+      this.setState({lat, long})
+      console.log(this.state.lat);
       range = 5
       const { token } = this.props;
       const { jobsList } = this.props.jobsList;
@@ -80,6 +83,29 @@ class JobList extends Component {
           data={item}
          />
        );
+     }
+
+     renderMap() {
+       if(!this.state.lat) {
+         console.log("lat not set");
+       } else {
+         return (
+           <MapView
+              style={{ marginBottom: 5, height: 175}}
+              initialRegion={{
+                latitude: lat,
+                longitude: long,
+                latitudeDelta: 0.0125,
+                longitudeDelta: 0.0081,
+              }}  
+              >
+              <Marker
+                coordinate={{ latitude: lat, longitude: long }}
+                image={require('../../assets/logoMapMarker.png')}
+              />
+           </MapView>  
+         )
+       }
      }
 
   render() {
@@ -128,20 +154,7 @@ class JobList extends Component {
   return (
     <ImageBackground source={require('../../assets/main_background.png')} style={backgroundImage}>
       <View style={{ flex:1, paddingLeft: 15, paddingRight: 15, paddingTop: 10 }}>
-      <MapView
-              style={{ marginBottom: 5, height: 175}}
-              initialRegion={{
-                latitude: lat,
-                longitude: long,
-                latitudeDelta: 0.0125,
-                longitudeDelta: 0.0081,
-              }}  
-              >
-              <Marker
-                coordinate={{ latitude: lat, longitude: long }}
-                image={require('../../assets/logoMapMarker.png')}
-              />
-            </MapView>  
+        {this.renderMap()}
         <CardSection>
           <Button onPress={this.onButtonPress.bind(this)}>
           Por favor espera
@@ -153,6 +166,13 @@ class JobList extends Component {
         <Spinner />
 
       </View>
+      <CardSection>
+        <AdMobBanner
+          bannerSize="fullBanner"
+          adUnitID="ca-app-pub-3940256099942544/6300978111" 
+          servePersonalizedAds // true or false
+          onDidFailToReceiveAdWithError={this.bannerError} />
+      </CardSection>
     </ ImageBackground>
     );
   }

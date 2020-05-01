@@ -6,7 +6,7 @@ import MapView from 'react-native-maps';
 import { Marker }  from 'react-native-maps';
 import * as Permissions from 'expo-permissions';
 import * as Location from 'expo-location';
-import * as AdMobInterstitial from 'expo-ads-admob'
+import { AdMobInterstitial }from 'expo-ads-admob';
 import UserCard from './UserCard';
 import AnimatedPill from './AnimatedPill';
 import { GPS_WARNING_CLIENT, E_GPS_WARNING_CLIENT, CLIENT_READY,
@@ -43,12 +43,10 @@ class CustomerMain extends Component {
   //   AdMobInterstitial.addEventListener("interstitialDidOpen", () =>
   //     console.log("interstitialDidOpen")
   //   );
-  //   AdMobInterstitial.addEventListener("interstitialDidClose", () => {
-  //     console.log("interstitialDidClose");
-  //     this.completeJob();
-  //   }
-      
-  //   );
+    AdMobInterstitial.addEventListener("interstitialDidClose", () => {
+      console.log("interstitialDidClose");
+      this.completeJob();
+    });
   //   AdMobInterstitial.addEventListener("interstitialWillLeaveApplication", () =>
   //     console.log("interstitialWillLeaveApplication")
   //   );
@@ -59,12 +57,12 @@ class CustomerMain extends Component {
     // clearInterval(this.interval);
   };
 
-  // showInterstitial = async () => {
-  //   AdMobInterstitial.setAdUnitID('ca-app-pub-3940256099942544/1033173712'); // Test ID, Replace with your-admob-unit-id
-  //   AdMobInterstitial.setTestDeviceID('EMULATOR');
-  //   await AdMobInterstitial.requestAdAsync();
-  //   await AdMobInterstitial.showAdAsync();
-  // }
+  showInterstitial = async () => {
+    AdMobInterstitial.setAdUnitID('ca-app-pub-3940256099942544/1033173712'); // Test ID, Replace with your-admob-unit-id
+    AdMobInterstitial.setTestDeviceID('EMULATOR');
+    await AdMobInterstitial.requestAdAsync();
+    await AdMobInterstitial.showAdAsync();
+  }
 
   check_job_status(){
     if (this.props.userStage === 3){
@@ -87,9 +85,9 @@ class CustomerMain extends Component {
   
   //mark ride complete
   onRedButtonPress() {
-    // this.showInterstitial();
-    this.completeJob();
-    this.props.clientCancel();
+     this.showInterstitial();
+    // this.completeJob();
+    // this.props.clientCancel();
   };
 
   completeJob() {

@@ -6,7 +6,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { emailChanged, passwordChanged, loginUser } from '../actions';
 import { Card, CardSection, Input, Button, RedButton, Spinner, DividerLine } from './common';
 import { PASSWORD_TEXT, EMAIL_TEXT, LOGIN_TEXT, FORGOT_PASSWORD_TEXT, SIGN_UP_TEXT } from '../LanguageFile.js'
-import * as AdMobBanner from "expo-ads-admob";
+import { AdMobBanner } from "expo-ads-admob";
 
 class LoginForm extends Component {
 // this is a helper method that calls the action from the input
@@ -60,7 +60,7 @@ class LoginForm extends Component {
   const { logoContainer, forgotPassStyle, logoImage, divLine } = styles;
   return (
   <ImageBackground source={require('../../assets/main_background.png')} style={styles.backgroundImage}>
-  <View style={{ flex:1, paddingLeft: 5, paddingRight: 5 }}>
+    <View style={{ flex:1, paddingLeft: 5, paddingRight: 5 }}>
 
     <KeyboardAwareScrollView
       enableOnAndroid
@@ -106,8 +106,14 @@ class LoginForm extends Component {
         </CardSection>
       </Card>
       </KeyboardAwareScrollView>
-
-        
+      <CardSection>
+        <AdMobBanner
+          bannerSize="fullBanner"
+          adUnitID="ca-app-pub-3940256099942544/6300978111" 
+          servePersonalizedAds // true or false
+          onDidFailToReceiveAdWithError={this.bannerError} />
+      </CardSection>
+      
     </View>
   </ ImageBackground>
 
