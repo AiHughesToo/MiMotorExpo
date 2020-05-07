@@ -44,7 +44,7 @@ class CustomerMain extends Component {
   //     console.log("interstitialDidOpen")
   //   );
     AdMobInterstitial.addEventListener("interstitialDidClose", () => {
-      console.log("interstitialDidClose");
+      
       this.completeJob();
     });
   //   AdMobInterstitial.addEventListener("interstitialWillLeaveApplication", () =>
@@ -53,8 +53,8 @@ class CustomerMain extends Component {
   }
   // required to stop the checking of the job status 
   componentWillUnmount() {
-    // AdMobInterstitial.removeAllListeners();
-    // clearInterval(this.interval);
+    AdMobInterstitial.removeAllListeners();
+    clearInterval(this.interval);
   };
 
   showInterstitial = async () => {
@@ -86,8 +86,6 @@ class CustomerMain extends Component {
   //mark ride complete
   onRedButtonPress() {
      this.showInterstitial();
-    // this.completeJob();
-    // this.props.clientCancel();
   };
 
   completeJob() {
@@ -254,7 +252,7 @@ class CustomerMain extends Component {
   }
 
   render() {
-  const { backgroundImage, textStyle } = styles;
+  const { backgroundImage } = styles;
   return (
     <ImageBackground source={require('../../assets/main_background.png')} style={backgroundImage}>
       <View style={{ flex:1, paddingLeft: 15, paddingRight: 15 }}>
@@ -268,7 +266,7 @@ class CustomerMain extends Component {
             {this.renderSection()}
         </KeyboardAwareScrollView>
       </View>
-    </ ImageBackground>
+    </ImageBackground>
 
     );
   }

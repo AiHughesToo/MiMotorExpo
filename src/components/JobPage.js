@@ -5,11 +5,10 @@ import MapView from 'react-native-maps';
 import { Marker }  from 'react-native-maps';
 import * as Permissions from 'expo-permissions';
 import * as Location from 'expo-location';
-//import { Location, Permissions, MapView, AdMobInterstitial } from 'expo';
 import { AdMobInterstitial } from 'expo-ads-admob';
 import { requestJobs, notesChanged, rideComplete } from '../actions/jobs_actions';
 import { MARK_JOB_COMPLETE, JOB_PAGE_INSTRUCTIONS, CLIENT_NAME, RIDER_OLD_JOB_WARNING } from '../LanguageFile';
-import { Card, CardSection, Button, RedButton } from './common';
+import { CardSection, RedButton } from './common';
 
 class JobPage extends Component {
 

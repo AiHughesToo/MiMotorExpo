@@ -16,7 +16,7 @@ class LoginForm extends Component {
 // this helper method calls the action and keeps the state and value of the Input
 // updated as you type.
   onPasswordChange(text) {
-  this.props.passwordChanged(text);
+  this.props.passwordChanged(text);   
   } 
 
   onButtonPress() {
@@ -26,6 +26,10 @@ class LoginForm extends Component {
   
   onRedButtonPress() {
     Actions.signUp();
+  }
+
+  onResetLinkPress() {
+    Actions.resetPassword();
   }
 
   bannerError() {
@@ -96,7 +100,7 @@ class LoginForm extends Component {
           {this.renderButton()}
         </CardSection>
         <View>
-          <Text style={forgotPassStyle}> {FORGOT_PASSWORD_TEXT} </Text>
+          <Text style={forgotPassStyle} onPress={this.onResetLinkPress.bind(this)}> {FORGOT_PASSWORD_TEXT} </Text>
         </View>
         <DividerLine />
         <CardSection>
