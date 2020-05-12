@@ -2,7 +2,9 @@ import { EMAIL_CHANGED, PASSWORD_CHANGED,
         LOGIN_USER, LOGIN_USER_SUCCESS,
         LOGIN_BLANK_ERROR, LOGIN_USER_FAIL,
         SELECT_MOTOR, SELECT_CLIENT, NAME_CHANGED,
-        REGISTER_USER_SUCCESS, REGISTER_USER_FAIL, LOG_OUT, VIN_CHANGED, PLATE_CHANGED, BIKETYPE_CHANGED } from '../actions/types';
+        REGISTER_USER_SUCCESS, REGISTER_USER_FAIL, 
+        LOG_OUT, VIN_CHANGED, PLATE_CHANGED, BIKETYPE_CHANGED,
+        REQUEST_PW_SUCCESS } from '../actions/types';
 
 const INITIAL_STATE = {
 email: 'r@r.com',
@@ -17,7 +19,8 @@ loading: false,
 error: '',
 accountType: '',
 userName: '',
-userMessage: ''
+userMessage: '',
+requestSuccess: false,
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -58,6 +61,8 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, loading: false, password: '', user: action.payload.user};
     case LOG_OUT:
         return { INITIAL_STATE };
+    case REQUEST_PW_SUCCESS:
+      return { ...state, loading: false, requestSuccess: action.payload.requestSuccess };
     default:
       return state;
   }

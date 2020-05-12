@@ -4,7 +4,7 @@ import { EMAIL_CHANGED, PASSWORD_CHANGED, LOGIN_USER,
          LOGIN_USER_SUCCESS, LOGIN_BLANK_ERROR,
          LOGIN_USER_FAIL, SELECT_MOTOR, SELECT_CLIENT,
          NAME_CHANGED, REGISTER_USER_SUCCESS, REGISTER_USER_FAIL, 
-         LOG_OUT, VIN_CHANGED, PLATE_CHANGED, BIKETYPE_CHANGED } from './types';
+         LOG_OUT, VIN_CHANGED, PLATE_CHANGED, BIKETYPE_CHANGED, REQUEST_PW_SUCCESS } from './types';
 
 // this is an action creator
 export const emailChanged = (text) => {
@@ -129,6 +129,41 @@ const registerUserSuccess = (dispatch, response) => {
   }
 
 };
+
+export const requestPWToken = ({ email }) => {
+  if (email == '') {
+    return { type: LOGIN_BLANK_ERROR, payload: {error: 'email or password is blank.'} };
+  }
+  return (dispatch) => {
+// we dispatch this to set the loading spinner
+    dispatch({ type: LOGIN_USER });
+
+    fetch('https://memotor-dev.herokuapp.com/reset_password', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ 'email': email })
+    })
+    .then((response) => response.json())
+    .then(response => requestPWSuccess(dispatch, response));
+  };
+};
+
+const requestPWSuccess = (dispatch, response) => {
+  if (response.errors) {
+    dispatch({
+      type: REQUEST_PW_SUCCESS,
+      payload: { loading: false, requestSuccess: false}});
+  } else {
+    dispatch({
+      type: REQUEST_PW_SUCCESS,
+      payload: { loading: false, requestSuccess: true}});
+    Keyboard.dismiss();
+  }
+};
+
 const loginUserSuccess = (dispatch, response) => {
 
   if (response.errors) {
