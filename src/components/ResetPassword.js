@@ -6,17 +6,15 @@ import { emailChanged, passwordChanged, loginUser } from '../actions';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import UserCard from './UserCard';
 import AnimatedPill from './AnimatedPill';
-import { GPS_WARNING_CLIENT, E_GPS_WARNING_CLIENT, CLIENT_READY,
-        E_CLIENT_READY, E_RIDE_INSTRUCTIONS, RIDE_INSTRUCTIONS,
-        READY, E_READY, E_CANCEL, CANCEL, IS_ON_THE_WAY, E_IS_ON_THE_WAY} from '../LanguageFile';
+import { READY, E_READY } from '../LanguageFile';
 import { requestRide, clientReady, noteChanged, clientCancel, checkOutstandingJob, rideComplete, clientCheckJobStatus} from '../actions/jobs_actions';
-import { CardSection, InputLarge, Button, RedButton, YellowButton, DividerLine } from './common';
+import { CardSection, InputLarge, Button, CButton, DividerLine } from './common';
 
 class ResetPassword extends Component { 
 
   // some state will be needed here
 
-  onYellowButtonPress() {
+  onCButtonPress() {
     Actions.auth();
   }
 
@@ -28,9 +26,7 @@ class ResetPassword extends Component {
       <ImageBackground source={require('../../assets/main_background.png')} style={backgroundImage}>
         <View style={{ flex:1, paddingLeft: 15, paddingRight: 15 }}>
           <CardSection>
-          <YellowButton onPress={this.onYellowButtonPress.bind(this)}>
-           { READY }/{ E_READY }
-          </YellowButton>
+            <CButton onPress={this.onCButtonPress.bind(this)} bgColor='#fcdfcd' text={{primary: READY, secondary: E_READY }} />
           </CardSection>
         </View>
       </ ImageBackground>

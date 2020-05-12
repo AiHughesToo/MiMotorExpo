@@ -13,7 +13,7 @@ import { GPS_WARNING_CLIENT, E_GPS_WARNING_CLIENT, CLIENT_READY,
         E_CLIENT_READY, E_RIDE_INSTRUCTIONS, RIDE_INSTRUCTIONS,
         READY, E_READY, E_CANCEL, CANCEL, IS_ON_THE_WAY, E_IS_ON_THE_WAY} from '../LanguageFile';
 import { requestRide, clientReady, noteChanged, clientCancel, checkOutstandingJob, rideComplete, clientCheckJobStatus} from '../actions/jobs_actions';
-import { CardSection, InputLarge, Button, RedButton, YellowButton, DividerLine } from './common';
+import { CardSection, InputLarge, Button, RedButton, YellowButton, CButton, DividerLine } from './common';
 
 
 class CustomerMain extends Component {
@@ -243,9 +243,7 @@ class CustomerMain extends Component {
           <Text style={englishLangStyle}>{E_CLIENT_READY}</ Text>
         </View>
         <CardSection>
-          <YellowButton onPress={this.onYellowButtonPress.bind(this)}>
-           { READY }/{ E_READY }
-          </YellowButton>
+         <CButton onPress={this.onYellowButtonPress.bind(this)} bgColor='#f8cd81' text={{primary: READY, secondary: E_READY }} /> 
         </CardSection>
       </View>
     );
