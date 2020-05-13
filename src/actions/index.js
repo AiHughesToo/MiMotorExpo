@@ -4,7 +4,7 @@ import { EMAIL_CHANGED, PASSWORD_CHANGED, LOGIN_USER,
          LOGIN_USER_SUCCESS, LOGIN_BLANK_ERROR,
          LOGIN_USER_FAIL, SELECT_MOTOR, SELECT_CLIENT,
          NAME_CHANGED, REGISTER_USER_SUCCESS, REGISTER_USER_FAIL, 
-         LOG_OUT, VIN_CHANGED, PLATE_CHANGED, BIKETYPE_CHANGED, REQUEST_PW_SUCCESS } from './types';
+         LOG_OUT, VIN_CHANGED, PLATE_CHANGED, BIKETYPE_CHANGED, REQUEST_PW_SUCCESS, CODE_CHANGED } from './types';
 
 // this is an action creator
 export const emailChanged = (text) => {
@@ -13,7 +13,12 @@ export const emailChanged = (text) => {
     payload: text
   };
 };
-
+export const codeChanged = (text) => {
+  return {
+    type: CODE_CHANGED,
+    payload: text
+  };
+};
 export const vinChanged = (text) => {
   return {
     type: VIN_CHANGED,
@@ -128,6 +133,37 @@ const registerUserSuccess = (dispatch, response) => {
     Actions.login();
   }
 
+};
+
+export const resetPW = ({ password, code }) => {
+  if (code == '' || password == '') {
+    return { type: LOGIN_BLANK_ERROR, payload: {error: 'code or password is blank.'} };
+  }
+  return (dispatch) => {
+// we dispatch this to set the loading spinner
+    dispatch({ type: LOGIN_USER });
+
+    fetch('https://memotor-dev.herokuapp.com/set_pass', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ 'token': code, 'password': password })
+    })
+    .then((response) => response.json())
+    .then(response => resetPWSuccess(dispatch, response));
+  };
+};
+
+const resetPWSuccess = (dispatch, response) => {
+  if (response.errors) {
+    dispatch({
+      type: REQUEST_PW_SUCCESS,
+      payload: { loading: false, requestSuccess: false}});
+  } else {
+    Actions.login();
+  }
 };
 
 export const requestPWToken = ({ email }) => {

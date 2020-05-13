@@ -4,11 +4,12 @@ import { EMAIL_CHANGED, PASSWORD_CHANGED,
         SELECT_MOTOR, SELECT_CLIENT, NAME_CHANGED,
         REGISTER_USER_SUCCESS, REGISTER_USER_FAIL, 
         LOG_OUT, VIN_CHANGED, PLATE_CHANGED, BIKETYPE_CHANGED,
-        REQUEST_PW_SUCCESS } from '../actions/types';
+        REQUEST_PW_SUCCESS, CODE_CHANGED } from '../actions/types';
 
 const INITIAL_STATE = {
 email: 'r@r.com',
 password: '12345678',
+resetCode: '',
 vin: '',
 plate: '',
 bikeType: '',
@@ -27,6 +28,8 @@ export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case EMAIL_CHANGED:
       return { ...state, email: action.payload };
+    case CODE_CHANGED:
+      return { ...state, resetCode: action.payload };
     case NAME_CHANGED:
       return { ...state, userName: action.payload };
     case VIN_CHANGED:

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Platform, View, Text, ImageBackground } from 'react-native';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
-import { emailChanged, passwordChanged, loginUser, requestPWToken } from '../actions';
+import { emailChanged, passwordChanged, loginUser, requestPWToken, codeChanged, resetPW } from '../actions';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import AnimatedPill from './AnimatedPill';
 import { READY, E_READY,  PASSWORD_TEXT, EMAIL_TEXT } from '../LanguageFile';
@@ -11,11 +11,14 @@ import { Card, CardSection, InputLarge, Input, CButton, DividerLine } from './co
 
 class ResetPassword extends Component { 
 
-  // some state will be needed here
-
   onCButtonPress() {
     const { email } = this.props;
     this.props.requestPWToken({ email });
+  }
+
+  onSubmitPasswordPress() {
+    const { password, code } = this.props;
+    this.props.resetPW({ password, code });
   }
 
   onEmailChange(text) {
@@ -26,14 +29,44 @@ class ResetPassword extends Component {
     this.props.passwordChanged(text);   
   } 
 
+  onCodeChange(text) {
+    this.props.codeChanged(text);
+  }
+
   renderSection() {
     if(this.props.requestSuccess){
       return (
-        <CardSection>
-            <CButton onPress={this.onCButtonPress.bind(this)} bgColor='#f8cd81' text={{primary: READY, secondary: E_READY }} />
+        <Card>
+          <CardSection>
+            <Text style={TextStyles.primaryLangStyleLrg}>Check your email and paste the code in the field below and create a new password.</Text>
           </CardSection>
+          <CardSection>
+            <Input
+                label={EMAIL_TEXT}
+                placeholder="CODE"
+                keyboardType='email-address'
+                onChangeText={this.onCodeChange.bind(this)}
+                value={this.props.code}
+            />
+          </CardSection>
+          <DividerLine/>
+          <CardSection>
+            <Input
+              secureTextEntry
+              label={PASSWORD_TEXT}
+              placeholder="password"
+              onChangeText={this.onPasswordChange.bind(this)}
+              value={this.props.password}
+            />
+          </CardSection>
+
+          <CardSection>
+            <CButton onPress={this.onSubmitPasswordPress.bind(this)} bgColor='#f8cd81' text={{primary: READY, secondary: E_READY }} />
+          </CardSection>
+          </Card>
       );
     } else {
+      
       return (
         <Card>
           <CardSection>
@@ -77,10 +110,11 @@ const mapStateToProps = state => {
   return {
    email: state.auth.email,
    password: state.auth.password,
+   code: state.auth.resetCode,
    loading: state.auth.loading,
    error: state.auth.error,
    requestSuccess: state.auth.requestSuccess
    };
  };
  // use this to connect the action to the component. it gives us this.props. in the component
- export default  connect(mapStateToProps, { emailChanged, passwordChanged, loginUser, requestPWToken}) (ResetPassword);
+ export default  connect(mapStateToProps, { emailChanged, passwordChanged, loginUser, requestPWToken, codeChanged, resetPW }) (ResetPassword);
