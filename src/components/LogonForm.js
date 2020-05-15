@@ -4,17 +4,17 @@ import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { emailChanged, passwordChanged, loginUser } from '../actions';
+import i18n from 'i18n-js';
 import { Card, CardSection, BannerAdSection, Input, Button, RedButton, Spinner, DividerLine } from './common';
 import { PASSWORD_TEXT, EMAIL_TEXT, LOGIN_TEXT, FORGOT_PASSWORD_TEXT, SIGN_UP_TEXT } from '../LanguageFile.js'
 import { AdMobBanner } from "expo-ads-admob";
 
 class LoginForm extends Component {
-// this is a helper method that calls the action from the input
+
   onEmailChange(text) {
   this.props.emailChanged(text);
   }
-// this helper method calls the action and keeps the state and value of the Input
-// updated as you type.
+
   onPasswordChange(text) {
   this.props.passwordChanged(text);   
   } 
@@ -36,9 +36,7 @@ class LoginForm extends Component {
     console.log("An error");
     return;
   }
-// we need to show the user that we are waiting on the network request
-// render button looks at loading piece of state and shows a spinner if loading is true.
-// else it returns the login button.
+
   renderButton() {
     if (this.props.loading) {
       return <Spinner />;
@@ -84,6 +82,9 @@ class LoginForm extends Component {
             onChangeText={this.onEmailChange.bind(this)}
             value={this.props.email}
           />
+        </CardSection>
+        <CardSection>
+          <Text>{i18n.t('ready')}</Text>
         </CardSection>
 
         <CardSection>
