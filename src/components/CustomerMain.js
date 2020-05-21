@@ -13,7 +13,7 @@ import { GPS_WARNING_CLIENT, E_GPS_WARNING_CLIENT, CLIENT_READY,
         E_CLIENT_READY, E_RIDE_INSTRUCTIONS, RIDE_INSTRUCTIONS,
         READY, E_READY, E_CANCEL, CANCEL, IS_ON_THE_WAY, E_IS_ON_THE_WAY} from '../LanguageFile';
 import { requestRide, clientReady, noteChanged, clientCancel, checkOutstandingJob, rideComplete, clientCheckJobStatus} from '../actions/jobs_actions';
-import { CardSection, InputLarge, Button, RedButton, YellowButton, CButton, DividerLine } from './common';
+import { CardSection, InputLarge, Button, RedButton, CButton, DividerLine } from './common';
 
 
 class CustomerMain extends Component {

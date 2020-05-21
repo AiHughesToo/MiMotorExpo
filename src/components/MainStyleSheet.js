@@ -8,6 +8,19 @@ const Background = StyleSheet.create({
   }
 })
 
+const Logo = StyleSheet.create({
+  logoContainer: {
+    paddingTop: 25,
+    paddingBottom: 10,
+    justifyContent: 'center',
+    alignSelf: 'center'
+  },
+  logoImage: {
+    width: 100,
+    height: 98
+  }
+})
+
 const CardSectionStyle = StyleSheet.create({
   container: {
     padding: 5,
@@ -19,6 +32,10 @@ const CardSectionStyle = StyleSheet.create({
     justifyContent: 'flex-start',
     flexDirection: 'row',
     position: 'relative'
+  },
+  extraView: {
+    flex: 1,
+    paddingTop: 25,
   }
 })
 
@@ -66,4 +83,9 @@ const TextStyles = StyleSheet.create({
   }
 })
 
-export { Background, CardSectionStyle, TextStyles };
+// colors
+const redColor    = '#d94c35';
+const yellowColor = '#fbc042';
+const greenColor  = '#94cd65';
+
+export { Background, Logo, CardSectionStyle, TextStyles, redColor, yellowColor, greenColor };

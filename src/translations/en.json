@@ -1,4 +1,9 @@
 {
   "ready": "Ready",
-  "cancel": "Cancel"
+  "cancel": "Cancel",
+  "email": "Email",
+  "login": "Sign In",
+  "pw": "Password",
+  "register": "Register",
+  "forgot_pw": "Reset Password"
 }

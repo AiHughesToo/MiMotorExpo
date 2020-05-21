@@ -1,4 +1,9 @@
 {
   "ready": "Listo",
-  "cancel": "Cancelar"
+  "cancel": "Cancelar",
+  "email": "Email",
+  "login": "Acceder",
+  "pw": "Contraseña",
+  "register": "Regístrate",
+  "forgot_pw": "Restablecer la contraseña"
 }

@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import { emailChanged, passwordChanged, loginUser, requestPWToken, codeChanged, resetPW } from '../actions';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import AnimatedPill from './AnimatedPill';
 import { READY, E_READY,  PASSWORD_TEXT, EMAIL_TEXT } from '../LanguageFile';
 import { Background, TextStyles } from './MainStyleSheet';
 import { Card, CardSection, InputLarge, Input, CButton, DividerLine } from './common';
