@@ -6,7 +6,7 @@ import { emailChanged, passwordChanged, loginUser, requestPWToken, codeChanged, 
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { READY, E_READY,  PASSWORD_TEXT, EMAIL_TEXT } from '../LanguageFile';
 import { Background, TextStyles } from './MainStyleSheet';
-import { Card, CardSection, InputLarge, Input, CButton, DividerLine } from './common';
+import { Card, CardSection, Input, CButton, DividerLine } from './common';
 
 class ResetPassword extends Component { 
 

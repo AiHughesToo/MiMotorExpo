@@ -3,8 +3,8 @@ import { Platform, View, Text, ImageBackground } from 'react-native';
 import { connect } from 'react-redux';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { selectMotor, registerUser, emailChanged, passwordChanged, nameChanged, vinChanged, plateChanged, bikeTypeChanged} from '../actions';
-import { Card, CardSection, Input, Button, RedButton, Spinner, DividerLine } from './common';
-import { PASSWORD_TEXT, NAME_TEXT, EMAIL_TEXT, LOGIN_TEXT, SIGN_UP_TEXT, VIN_NUM, VEHICLE_TYPE, PLATE_NUM } from '../LanguageFile.js'
+import { Card, CardSection, Input, Button, Spinner } from './common';
+import { PASSWORD_TEXT, NAME_TEXT, EMAIL_TEXT, SIGN_UP_TEXT, VIN_NUM, VEHICLE_TYPE, PLATE_NUM } from '../LanguageFile.js'
 import SelectAccountBar from './SelectAccountBar'
 
 class SignUp extends Component {
