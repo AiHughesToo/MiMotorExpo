@@ -5,5 +5,22 @@
   "login": "Sign In",
   "pw": "Password",
   "register": "Register",
-  "forgot_pw": "Reset Password"
+  "forgot_pw": "Reset Password",
+  "request_token": "Request Code",
+  "code": "Code",
+  "client": "Clinet",
+  "rider": "Rider",
+  "vin": "VIN Number",
+  "plate": "License Plate",
+  "bike_type": "Bike Type",
+  "name": "Name",
+  "job_complete": "Mark Job Complete",
+  "ride_colmplete": "Mark Ride Complete",
+  "sign_out": "Sign Out",
+  "account_typ_select": "What type of account would you like to create?",
+  "check_email": "Check your email and paste the code in the field below and create a new password.",
+  "request_pw_par": "Forgotten your password?  Enter the email address you created your account with and press the button below. An email with a password reset code will be emailed to you.",
+  "no_jobs": "Right now we are not seeing any jobs this list updates every 10 seconds. Internet connection is required for this list to update.",
+  "job_instructions": "This list updates every 10 seconds. New jobs will appear and job taken by other rides will be removed.",
+  "hi": "hi"
 }

@@ -77,7 +77,7 @@ export const loginUser = ({ email, password }) => {
 export const logOutUser = () => {
   return (dispatch) => {
     dispatch({ type: LOG_OUT });
-    Actions.login();
+    Actions.auth();
   }
 };
 

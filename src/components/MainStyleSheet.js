@@ -53,29 +53,12 @@ const TextStyles = StyleSheet.create({
     justifyContent: 'center',
     alignSelf: 'center',
     color: '#fff',
-    fontSize: 15,
+    fontSize: 16,
     fontWeight: '500',
     paddingTop: 10,
     paddingBottom: 8
   },
-  englishLangStyle: {
-    justifyContent: 'center',
-    alignSelf: 'center',
-    color: '#fff',
-    fontSize: 12,
-    fontWeight: '500',
-    paddingTop: 2,
-    paddingBottom: 10,
-    paddingRight: 10,
-    paddingLeft: 10
-  },
   primaryAlertText: {
-    fontSize: 16,
-    alignSelf: 'center',
-    color: 'red',
-    fontWeight: 'bold',
-  },
-  englishAlertText: {
     fontSize: 16,
     alignSelf: 'center',
     color: 'red',

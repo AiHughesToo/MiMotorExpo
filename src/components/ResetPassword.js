@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { Platform, View, Text, ImageBackground } from 'react-native';
 import { connect } from 'react-redux';
-import { Actions } from 'react-native-router-flux';
 import { emailChanged, passwordChanged, loginUser, requestPWToken, codeChanged, resetPW } from '../actions';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { READY, E_READY,  PASSWORD_TEXT, EMAIL_TEXT } from '../LanguageFile';
-import { Background, TextStyles } from './MainStyleSheet';
-import { Card, CardSection, Input, CButton, DividerLine } from './common';
+import i18n from 'i18n-js';
+import { Background, TextStyles, yellowColor, greenColor } from './MainStyleSheet';
+import { Card, CardSection, Input, CButton, DividerLine, Spinner } from './common';
 
 class ResetPassword extends Component { 
 
@@ -32,35 +32,55 @@ class ResetPassword extends Component {
     this.props.codeChanged(text);
   }
 
+  renderRequestButton() {
+    if (this.props.loading) {
+      return <Spinner />;
+    }
+
+    return(
+      <CButton onPress={this.onCButtonPress.bind(this)} bgColor={yellowColor} text={{primary: i18n.t("request_token") }} />
+    );
+  }
+
+  renderSetButton() {
+    if (this.props.loading) {
+      return <Spinner />;
+    }
+
+    return(
+      <CButton onPress={this.onSubmitPasswordPress.bind(this)} bgColor={greenColor} text={{primary: i18n.t("forgot_pw")}} />
+    );
+  }
+
   renderSection() {
     if(this.props.requestSuccess){
       return (
         <Card>
           <CardSection>
-            <Text style={TextStyles.primaryLangStyleLrg}>Check your email and paste the code in the field below and create a new password.</Text>
+            <Text style={TextStyles.primaryLangStyleSml}>{i18n.t("check_email")}</Text>
           </CardSection>
           <CardSection>
             <Input
-                label={EMAIL_TEXT}
+                label={i18n.t("code")}
                 placeholder="CODE"
                 keyboardType='email-address'
                 onChangeText={this.onCodeChange.bind(this)}
                 value={this.props.code}
             />
           </CardSection>
-          <DividerLine/>
+          
           <CardSection>
             <Input
               secureTextEntry
-              label={PASSWORD_TEXT}
+              label={i18n.t("pw")}
               placeholder="password"
               onChangeText={this.onPasswordChange.bind(this)}
               value={this.props.password}
             />
           </CardSection>
-
+          <DividerLine/>
           <CardSection>
-            <CButton onPress={this.onSubmitPasswordPress.bind(this)} bgColor='#f8cd81' text={{primary: READY, secondary: E_READY }} />
+            {this.renderSetButton()}
           </CardSection>
           </Card>
       );
@@ -69,7 +89,7 @@ class ResetPassword extends Component {
       return (
         <Card>
           <CardSection>
-            <Text style={TextStyles.primaryLangStyleLrg}>If you have forgotten your password enter your email address and press the button below. An email with a password reset token will be sent to you.</Text>
+      <Text style={TextStyles.primaryLangStyleSml}>{i18n.t("request_pw_par")}</Text>
           </CardSection>
           <CardSection>
             <Input
@@ -84,7 +104,7 @@ class ResetPassword extends Component {
           <DividerLine/>
 
           <CardSection>
-            <CButton onPress={this.onCButtonPress.bind(this)} bgColor='#f8cd81' text={{primary: READY, secondary: E_READY }} />
+            {this.renderRequestButton()}
           </CardSection>
           </Card>
       );
@@ -96,9 +116,17 @@ class ResetPassword extends Component {
     
     return (
       <ImageBackground source={require('../../assets/main_background.png')} style={Background.backgroundImage}>
-        <View style={{ flex:1, paddingLeft: 15, paddingRight: 15 }}>
-        {this.renderSection()}
-        </View>
+
+        <KeyboardAwareScrollView
+          enableOnAndroid
+          enableAutomaticScroll
+          keyboardOpeningTime={0}
+          extraHeight={Platform.select({ android: 250 })}>
+
+          <View style={{ flex:1, paddingLeft: 15, paddingRight: 15 }}>
+          {this.renderSection()}
+          </View>
+        </KeyboardAwareScrollView>
       </ ImageBackground>
   
       );

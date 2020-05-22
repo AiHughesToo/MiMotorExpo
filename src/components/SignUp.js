@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import { Platform, View, Text, ImageBackground } from 'react-native';
 import { connect } from 'react-redux';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { selectMotor, registerUser, emailChanged, passwordChanged, nameChanged, vinChanged, plateChanged, bikeTypeChanged} from '../actions';
-import { Card, CardSection, Input, Button, Spinner } from './common';
-import { PASSWORD_TEXT, NAME_TEXT, EMAIL_TEXT, SIGN_UP_TEXT, VIN_NUM, VEHICLE_TYPE, PLATE_NUM } from '../LanguageFile.js'
-import SelectAccountBar from './SelectAccountBar'
+import i18n from "i18n-js";
+import { registerUser, emailChanged, passwordChanged, nameChanged, vinChanged, plateChanged, bikeTypeChanged} from '../actions';
+import { Card, CardSection, Input, Spinner, CButton} from './common';
+import { Background, TextStyles, greenColor } from './MainStyleSheet';
+import SelectAccountBar from './SelectAccountBar';
 
 class SignUp extends Component {
   onNameChange(text) {
@@ -51,8 +52,8 @@ class SignUp extends Component {
         <Card>
         <CardSection>
           <Input
-            label={VIN_NUM}
-            placeholder="VIN"
+            label={i18n.t('vin')}
+            placeholder={i18n.t('vin')}
             onChangeText={this.onVinChange.bind(this)}
             value={this.props.vin}
           />
@@ -60,8 +61,8 @@ class SignUp extends Component {
 
        <CardSection >
         <Input
-          label={PLATE_NUM}
-          placeholder="Plate"
+          label={i18n.t('plate')}
+          placeholder={i18n.t('plate')}
           onChangeText={this.onPlateChange.bind(this)}
           value={this.props.plate}
         />
@@ -69,8 +70,8 @@ class SignUp extends Component {
 
        <CardSection >
         <Input
-          label={VEHICLE_TYPE}
-          placeholder="Bike Type"
+          label={i18n.t('bike_type')}
+          placeholder={i18n.t('bike_type')}
           onChangeText={this.onBikeTypeChange.bind(this)}
           value={this.props.bikeType}
         />
@@ -88,8 +89,8 @@ class SignUp extends Component {
           <Card>
         <CardSection>
           <Input
-            label={NAME_TEXT}
-            placeholder="name"
+            label={i18n.t('name')}
+            placeholder={i18n.t('name')}
             onChangeText={this.onNameChange.bind(this)}
             value={this.props.userName}
           />
@@ -97,7 +98,7 @@ class SignUp extends Component {
 
         <CardSection>
           <Input
-            label={EMAIL_TEXT}
+            label={i18n.t('email')}
             placeholder="email@gmail.com"
             keyboardType='email-address'
             onChangeText={this.onEmailChange.bind(this)}
@@ -107,8 +108,8 @@ class SignUp extends Component {
 
           <CardSection>
             <Input
-             label={PASSWORD_TEXT}
-             placeholder={PASSWORD_TEXT}
+             label={i18n.t('pw')}
+             placeholder={i18n.t('pw')}
              onChangeText={this.onPasswordChange.bind(this)}
              value={this.props.password}
            />
@@ -133,24 +134,21 @@ class SignUp extends Component {
     }
 
     return(
-      <Button onPress={this.onButtonPress.bind(this)}>
-       {SIGN_UP_TEXT}
-      </Button>
+      <CButton onPress={this.onButtonPress.bind(this)} bgColor={greenColor} text={{primary: i18n.t('register') }} />  
     );
 
   }
   render() {
   
-  const { backgroundImage, sectionTitleTextStyle } = styles;
   return (
-    <ImageBackground source={require('../../assets/main_background.png')} style={backgroundImage}>
+    <ImageBackground source={require('../../assets/main_background.png')} style={Background.backgroundImage}>
       <KeyboardAwareScrollView
         enableOnAndroid
         enableAutomaticScroll
         keyboardOpeningTime={0}
         extraHeight={Platform.select({ android: 250 })}>
           <View style={{ marginBottom: 15 }}>
-           <Text style={sectionTitleTextStyle}> Select Account Type </ Text>
+           <Text style={TextStyles.primaryLangStyleSml}>{i18n.t("account_typ_select")} </ Text>
            <SelectAccountBar />
            {this.renderForm()}
           </View>
@@ -160,25 +158,6 @@ class SignUp extends Component {
     );
   }
   }
-
-  const styles = {
-  backgroundImage: {
-    flex: 1,
-    width: null,
-    height: null
-  },
-  logoImage: {
-    width: 100,
-    height: 98
-  },
-  sectionTitleTextStyle: {
-    color: '#fff',
-    fontSize: 16,
-    paddingTop: 10,
-    alignSelf: 'center',
-    fontWeight: 'bold'
-  }
-  };
 
   const mapStateToProps = state => {
    return {

@@ -9,7 +9,9 @@ import { AdMobBanner } from "expo-ads-admob";
 import { requestJobs, notesChanged, rideMethod, checkOutstandingJob } from '../actions/jobs_actions';
 import { logOutUser } from '../actions/index';
 import JobListItem from './JobListItem';
-import { CardSection, Button, Spinner } from './common';
+import i18n from "i18n-js";
+import { Background, TextStyles, greenColor } from './MainStyleSheet';
+import { CardSection, CButton, Spinner } from './common';
 
 class JobList extends Component {
   
@@ -109,11 +111,10 @@ class JobList extends Component {
      }
 
   render() {
-  const { backgroundImage } = styles;
   const jobsList = this.props.jobsList
     if (jobsList.length) {
       return (
-        <ImageBackground source={require('../../assets/main_background.png')} style={backgroundImage}>
+        <ImageBackground source={require('../../assets/main_background.png')} style={Background.backgroundImage}>
           <View style={{ flex:1, paddingLeft: 5, paddingRight: 5, paddingBottom: 20 }}>
             <CardSection>
             </CardSection>
@@ -139,12 +140,10 @@ class JobList extends Component {
               />
             </ScrollView>
             <CardSection>
-            <Text style={styles.textStyle}>This list updates every 10 seconds. New jobs will appear and job taken by other rides will be removed. </Text>
+            <Text style={TextStyles.primaryLangStyleSml}>{i18n.t("job_instructions")}</Text>
             </CardSection>
             <CardSection>
-              <Button onPress={this.onButtonPress.bind(this)}>
-              Cerrar sesión
-              </Button>
+              <CButton onPress={this.onButtonPress.bind(this)} bgColor={greenColor} text={{primary: i18n.t('sign_out') }} />
             </CardSection>
           </View>
         </ ImageBackground>
@@ -152,16 +151,14 @@ class JobList extends Component {
     }
 
   return (
-    <ImageBackground source={require('../../assets/main_background.png')} style={backgroundImage}>
+    <ImageBackground source={require('../../assets/main_background.png')} style={Background.backgroundImage}>
       <View style={{ flex:1, paddingLeft: 15, paddingRight: 15, paddingTop: 10 }}>
         {this.renderMap()}
         <CardSection>
-          <Button onPress={this.onButtonPress.bind(this)}>
-          Por favor espera
-          </Button>
+          <CButton onPress={this.onButtonPress.bind(this)} bgColor={greenColor} text={{primary: i18n.t('sign_out') }} />
         </CardSection>
         <CardSection>
-          <Text style={styles.textStyle}>Right now we are not seeing any jobs this list updates every 10 seconds. Remember you need signal for this list to update.</Text>
+          <Text style={TextStyles.primaryLangStyleSml}>{i18n.t("no_jobs")}</Text>
         </CardSection>
         <Spinner />
 
@@ -179,16 +176,6 @@ class JobList extends Component {
 }
 
 const styles = {
-  backgroundImage: {
-    flex: 1,
-    width: null,
-    height: null
-  },
-  textStyle: {
-    fontSize: 12,
-    color: 'white',
-    fontWeight: 'bold',
-  },
   jobsListStyle: {
     flex: 1,
     backgroundColor: 'white'

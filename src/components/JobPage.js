@@ -8,7 +8,9 @@ import * as Location from 'expo-location';
 import { AdMobInterstitial } from 'expo-ads-admob';
 import { requestJobs, notesChanged, rideComplete } from '../actions/jobs_actions';
 import { MARK_JOB_COMPLETE, JOB_PAGE_INSTRUCTIONS, CLIENT_NAME, RIDER_OLD_JOB_WARNING } from '../LanguageFile';
-import { CardSection, RedButton } from './common';
+import i18n from "i18n-js";
+import { Background, Logo, redColor, greenColor, yellowColor } from './MainStyleSheet';
+import { CardSection, CButton } from './common';
 
 class JobPage extends Component {
 
@@ -18,24 +20,11 @@ class JobPage extends Component {
   };
 
   componentDidMount() {
-    // AdMobInterstitial.addEventListener("interstitialDidLoad", () =>
-    //   console.log("interstitialDidLoad")
-    // );
-    // AdMobInterstitial.addEventListener("interstitialDidFailToLoad", () =>{
-    //   console.log("interstitialDidFailToLoad")
-    // }
-    // );
-    // AdMobInterstitial.addEventListener("interstitialDidOpen", () =>
-    //   console.log("interstitialDidOpen")
-    // );
 
     AdMobInterstitial.addEventListener("interstitialDidClose", () => {
       console.log("interstitialDidClose");
       this.completeJob();
      });
-    // AdMobInterstitial.addEventListener("interstitialWillLeaveApplication", () =>
-    //   console.log("interstitialWillLeaveApplication")
-    // );
   }
 
   componentWillUnmount() {
@@ -57,7 +46,6 @@ class JobPage extends Component {
     AdMobInterstitial.setTestDeviceID('EMULATOR');
     await AdMobInterstitial.requestAdAsync();
     await AdMobInterstitial.showAdAsync();
-    //this.completeJob();
   }
 
   getLocationAsync = async (token, job_id) => {
@@ -132,9 +120,7 @@ class JobPage extends Component {
               <Text style={styles.textStyleTwo}>Once you have taken your client to the destination mark the job complete. The destination is used to calculate your stats.</Text>
             </CardSection>
             <CardSection>
-              <RedButton onPress={this.onRedButtonPress.bind(this)}>
-                {MARK_JOB_COMPLETE}
-              </RedButton>
+              <CButton onPress={this.onRedButtonPress.bind(this)} bgColor={redColor} text={{primary: i18n.t('job_complete') }} />
             </CardSection>
           </View>
         </ ImageBackground>

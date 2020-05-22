@@ -5,5 +5,22 @@
   "login": "Acceder",
   "pw": "Contraseña",
   "register": "Regístrate",
-  "forgot_pw": "Restablecer la contraseña"
+  "forgot_pw": "Restablecer la Contraseña",
+  "request_token": "Código de Solicitud",
+  "code": "Código",
+  "client": "Cliente",
+  "rider": "Motorista",
+  "vin": "VIN Numero",
+  "plate": "Placa",
+  "bike_type": "Tipo de Motor",
+  "name": "Nombre",
+  "job_complete": "Trabajo Completo",
+  "ride_colmplete": "Paseo Completa",
+  "sign_out": "Cerrar Sesión",
+  "account_typ_select": "¿Qué tipo de cuenta te gustaría crear?",
+  "check_email": "Revise su correo electrónico y pegue el código en el campo a continuación y cree una nueva contraseña.",
+  "request_pw_par": "¿Olvidaste tu contraseña? Ingrese la dirección de correo electrónico con la que creó su cuenta y presione el botón a continuación. Se le enviará un correo electrónico con un código de restablecimiento de contraseña.",
+  "no_jobs": "En este momento no estamos viendo ningún trabajo, esta lista se actualiza cada 10 segundos. Se requiere conexión a Internet para que esta lista se actualice.",
+  "job_instructions": "Esta lista se actualiza cada 10 segundos. Aparecerán nuevos trabajos y se eliminarán los trabajos tomados por otros viajes.",
+  "hi": "Hola"
 }
