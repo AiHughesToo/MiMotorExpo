@@ -22,5 +22,11 @@
   "request_pw_par": "¿Olvidaste tu contraseña? Ingrese la dirección de correo electrónico con la que creó su cuenta y presione el botón a continuación. Se le enviará un correo electrónico con un código de restablecimiento de contraseña.",
   "no_jobs": "En este momento no estamos viendo ningún trabajo, esta lista se actualiza cada 10 segundos. Se requiere conexión a Internet para que esta lista se actualice.",
   "job_instructions": "Esta lista se actualiza cada 10 segundos. Aparecerán nuevos trabajos y se eliminarán los trabajos tomados por otros viajes.",
-  "hi": "Hola"
+  "go_to_client": "Viaje al marcador del cliente en el mapa para recoger a su cliente",
+  "client_name": "Nombre del cliente:",
+  "instructions": "Instrucciones:",
+  "mark_ride_comp_inst": "Una vez que haya llevado a su cliente al destino, marque el trabajo completo. El destino se utiliza para calcular sus estadísticas",
+  "hi": "Hola",
+  "rider_old_job_alert": "Este es un viejo trabajo. Recuerde que debe completar los trabajos anteriores antes de tomar uno nuevo.",
+  "take_job": "Tómalo"
 }

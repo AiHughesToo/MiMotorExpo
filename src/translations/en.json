@@ -22,5 +22,11 @@
   "request_pw_par": "Forgotten your password?  Enter the email address you created your account with and press the button below. An email with a password reset code will be emailed to you.",
   "no_jobs": "Right now we are not seeing any jobs this list updates every 10 seconds. Internet connection is required for this list to update.",
   "job_instructions": "This list updates every 10 seconds. New jobs will appear and job taken by other rides will be removed.",
-  "hi": "hi"
+  "go_to_client": "Travel to the client marker on the map to pick up your customer.",
+  "client_name": "Client Name:",
+  "instructions": "Instructions",
+  "mark_ride_comp_inst": "Once you have taken your client to the destination mark the job complete. The destination is used to calculate your stats.",
+  "hi": "hi",
+  "rider_old_job_alert": "This is an old job. Remember to complete the old jobs before taking a new one.",
+  "take_job": "Take it"
 }

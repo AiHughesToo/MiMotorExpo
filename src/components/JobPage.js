@@ -7,9 +7,8 @@ import * as Permissions from 'expo-permissions';
 import * as Location from 'expo-location';
 import { AdMobInterstitial } from 'expo-ads-admob';
 import { requestJobs, notesChanged, rideComplete } from '../actions/jobs_actions';
-import { MARK_JOB_COMPLETE, JOB_PAGE_INSTRUCTIONS, CLIENT_NAME, RIDER_OLD_JOB_WARNING } from '../LanguageFile';
 import i18n from "i18n-js";
-import { Background, Logo, redColor, greenColor, yellowColor } from './MainStyleSheet';
+import { Background, TextStyles, redColor } from './MainStyleSheet';
 import { CardSection, CButton } from './common';
 
 class JobPage extends Component {
@@ -68,18 +67,17 @@ class JobPage extends Component {
     if (this.props.oldJob) {
       return(
         <View style={styles.alertBox}>
-          <Text style={styles.alertText}>{RIDER_OLD_JOB_WARNING}</ Text>
+          <Text style={TextStyles.primaryAlertText}>{i18n.t("rider_old_job_alert")}</ Text>
         </View>
       );
     }
   }
 
   render() {
-  const { backgroundImage } = styles;
   const jobDetail = this.props.jobDetail.jobDetail;
     if (jobDetail) {
       return (
-        <ImageBackground source={require('../../assets/main_background.png')} style={backgroundImage}>
+        <ImageBackground source={require('../../assets/main_background.png')} style={Background.backgroundImage}>
           <View style={{ flex:1, paddingLeft: 5, paddingRight: 5, paddingBottom:50 }}>
          
             <MapView
@@ -103,13 +101,16 @@ class JobPage extends Component {
 
             <CardSection style={styles.jobsDetailStyle}>
             <View style={styles.jobsDetailStyle}>
+            <View style={{paddingBottom: 5, flexDirection: 'row'}}>
+                <Text style={TextStyles.primaryLangStyleSml}>{i18n.t("go_to_client")} </Text>
+                </View>
                 <View style={{paddingBottom: 5, flexDirection: 'row'}}>
-                <Text style={styles.textStyle}>{CLIENT_NAME} </Text>
-                <Text style={styles.textStyleTwo}>{jobDetail.title}</Text>
+                <Text style={TextStyles.primaryLangStyleLrg}>{i18n.t("client_name")} </Text>
+                <Text style={TextStyles.primaryLangStyleSml}>{jobDetail.title}</Text>
                 </View>
                 <View>
-                <Text style={styles.textStyle}>{JOB_PAGE_INSTRUCTIONS}</Text>
-                <Text style={styles.textStyleTwo}>{jobDetail.note}</Text>
+                <Text style={TextStyles.primaryLangStyleLrg}>{i18n.t("instructions")}</Text>
+                <Text style={TextStyles.primaryLangStyleSml}>{jobDetail.note}</Text>
                 </View>
             </View>
             </CardSection>
@@ -117,7 +118,7 @@ class JobPage extends Component {
               {this.renderAlert()}
             </CardSection>
             <CardSection>
-              <Text style={styles.textStyleTwo}>Once you have taken your client to the destination mark the job complete. The destination is used to calculate your stats.</Text>
+            <Text style={TextStyles.primaryLangStyleSml}>{i18n.t("mark_ride_comp_inst")}</Text>
             </CardSection>
             <CardSection>
               <CButton onPress={this.onRedButtonPress.bind(this)} bgColor={redColor} text={{primary: i18n.t('job_complete') }} />
@@ -128,7 +129,7 @@ class JobPage extends Component {
     }
 
   return (
-    <ImageBackground source={require('../../assets/main_background.png')} style={backgroundImage}>
+    <ImageBackground source={require('../../assets/main_background.png')} style={Background.backgroundImage}>
       <View style={{ flex:1, paddingLeft: 15, paddingRight: 15 }}>
       </View>
     </ ImageBackground>
@@ -137,23 +138,9 @@ class JobPage extends Component {
 }
 
 const styles = {
-  backgroundImage: {
-    flex: 1,
-    width: null,
-    height: null
-  },
   jobsDetailStyle: {
     flex: 1,
     paddingBottom: 20,
-  },
-  textStyle: {
-    fontSize: 15,
-    color: 'white',
-    fontWeight: 'bold',
-  },
-  textStyleTwo: {
-    fontSize: 15,
-    color: 'white',
   },
   alertBox: {
     justifyContent: 'center',
@@ -162,12 +149,6 @@ const styles = {
     borderRadius: 5,
     padding: 5,
     flex: 1,
-  },
-  alertText: {
-    fontSize: 16,
-    alignSelf: 'center',
-    color: 'red',
-    fontWeight: 'bold',
   }
 };
 

@@ -58,6 +58,13 @@ const TextStyles = StyleSheet.create({
     paddingTop: 10,
     paddingBottom: 8
   },
+  primaryLangStyleSmlNoPad: {
+    justifyContent: 'center',
+    alignSelf: 'center',
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '500'
+  },
   primaryAlertText: {
     fontSize: 16,
     alignSelf: 'center',
