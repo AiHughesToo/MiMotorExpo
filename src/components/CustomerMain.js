@@ -7,21 +7,21 @@ import { Marker }  from 'react-native-maps';
 import * as Permissions from 'expo-permissions';
 import * as Location from 'expo-location';
 import { AdMobInterstitial }from 'expo-ads-admob';
+import i18n from "i18n-js";
 import UserCard from './UserCard';
 import AnimatedPill from './AnimatedPill';
-import { GPS_WARNING_CLIENT, E_GPS_WARNING_CLIENT, CLIENT_READY,
-        E_CLIENT_READY, E_RIDE_INSTRUCTIONS, RIDE_INSTRUCTIONS,
-        READY, E_READY, E_CANCEL, CANCEL, IS_ON_THE_WAY, E_IS_ON_THE_WAY} from '../LanguageFile';
 import { requestRide, clientReady, noteChanged, clientCancel, checkOutstandingJob, rideComplete, clientCheckJobStatus} from '../actions/jobs_actions';
-import { CardSection, InputLarge, Button, RedButton, CButton, DividerLine } from './common';
+import { CardSection, InputLarge, CButton, DividerLine } from './common';
+import { Background, TextStyles, redColor, yellowColor, greenColor, AlertBox } from "./MainStyleSheet";
 
 
 class CustomerMain extends Component {
-  // we need some local state to set the location of the user.
   state = {
     location: null,
     locationErrorMessage: null
   };
+  
+  interval= 0;
 
   // check for outstanding jobs and give the user a warning if is one.
   componentWillMount() {
@@ -30,28 +30,16 @@ class CustomerMain extends Component {
   }
   
   // this runs every 8 seconds and checks if a rider has taken the ride request
-  // this.interval is how you fire a method on a timed schedule
   componentDidMount() {
-   this.interval = setInterval(() => this.check_job_status(), 8000);
-  //  AdMobInterstitial.addEventListener("interstitialDidLoad", () =>
-  //     console.log("interstitialDidLoad")
-  //   );
-  //   AdMobInterstitial.addEventListener("interstitialDidFailToLoad", () =>{
-  //     console.log("interstitialDidFailToLoad")
-  //   }
-  //   );
-  //   AdMobInterstitial.addEventListener("interstitialDidOpen", () =>
-  //     console.log("interstitialDidOpen")
-  //   );
+    this.interval = setInterval(() => this.check_job_status(), 8000);
+  
     AdMobInterstitial.addEventListener("interstitialDidClose", () => {
       
       this.completeJob();
     });
-  //   AdMobInterstitial.addEventListener("interstitialWillLeaveApplication", () =>
-  //     console.log("interstitialWillLeaveApplication")
-  //   );
+  
   }
-  // required to stop the checking of the job status 
+  
   componentWillUnmount() {
     AdMobInterstitial.removeAllListeners();
     clearInterval(this.interval);
@@ -134,8 +122,8 @@ class CustomerMain extends Component {
   renderAlert(){
     if (this.props.oldJob) {
       return(
-        <View style={styles.alertBox}>
-          <Text style={styles.alertText}>This is an old request. Remember You must close old requests before making a new one. </ Text>
+        <View style={AlertBox.alertBox}>
+          <Text style={TextStyles.primaryAlertText}>{i18n.t("customer_old_job_warn")}</ Text>
         </View>
       );
     }
@@ -143,15 +131,14 @@ class CustomerMain extends Component {
 
   // use state. userReady to display the first step or the second.
   renderSection(){
-  const { mainLangStyleLrg, mainLangStyleSml, englishLangStyle, sectionView } = styles;
+  const { sectionView } = styles;
   // user is ready to request a ride. this is a 2 step process to avoid
   // accidental or butt ride requests.
     if(this.props.userStage == 2){
       return(
       <View style={sectionView}>
         <View>
-          <Text style={mainLangStyleLrg}>{RIDE_INSTRUCTIONS}</ Text>
-          <Text style={englishLangStyle}>{E_RIDE_INSTRUCTIONS}</ Text>
+          <Text style={TextStyles.primaryLangStyleLrg}>{i18n.t("ride_instructions")}</Text>
         </View>
         <CardSection>
           <InputLarge
@@ -161,18 +148,13 @@ class CustomerMain extends Component {
           />
         </CardSection>
         <CardSection>
-          <Button onPress={this.onButtonPress.bind(this)}>
-           { READY }/{ E_READY }
-          </Button>
+          <CButton onPress={this.onButtonPress.bind(this)} bgColor={greenColor} text={{primary: i18n.t('ready') }} />
         </CardSection>
         <View>
-          <Text style={mainLangStyleSml}>{GPS_WARNING_CLIENT}</ Text>
-          <Text style={englishLangStyle}>{E_GPS_WARNING_CLIENT}</ Text>
+          <Text style={TextStyles.primaryLangStyleLrg}>{i18n.t("gps_warning")}</ Text>
         </View>
         <CardSection>
-          <RedButton onPress={this.onCancelButtonPress.bind(this)}>
-           { CANCEL }/{ E_CANCEL }
-          </RedButton>
+          <CButton onPress={this.onCancelButtonPress.bind(this)} bgColor={redColor} text={{primary: i18n.t('cancel') }} />
         </CardSection>
       </View>
       );
@@ -183,15 +165,13 @@ class CustomerMain extends Component {
       return(
         <View>
           <View>
-            <Text style={mainLangStyleLrg}>Ride Requested</ Text>
+            <Text style={TextStyles.primaryLangStyleLrg}>{i18n.t("requested")}</ Text>
           </View>
           <View style={{height: 80, marginBottom: 40, marginLeft: 15, marginRight: 15}}>
             <AnimatedPill />
           </ View>
           <CardSection>
-            <RedButton onPress={this.onRedButtonPress.bind(this)}>
-             { CANCEL }/{ E_CANCEL }
-            </RedButton>
+            <CButton onPress={this.onRedButtonPress.bind(this)} bgColor={redColor} text={{primary: i18n.t("cancel") }} />
           </CardSection>
         </View>
       );
@@ -200,12 +180,11 @@ class CustomerMain extends Component {
 // we need to let the user know who is on the way to pick them up.
 // the user can no longer cancel the job as someone has already commited.
     if(this.props.userStage == 4){
-    const { title, note, rider_name, rider_lat,
+    const { rider_name, rider_lat,
             rider_long, latitude, longitude } = this.props.jobDetail.jobDetail;
       return(
         <View>
-          <Text style={mainLangStyleLrg}>{rider_name}{IS_ON_THE_WAY}</ Text>
-          <Text style={englishLangStyle}>{rider_name}{E_IS_ON_THE_WAY}</ Text>
+          <Text style={TextStyles.primaryLangStyleLrg}>{rider_name}{i18n.t("on_way")}</ Text>
           <MapView
             style={{ marginBottom: 5, height: 275}}
             initialRegion={{
@@ -227,9 +206,7 @@ class CustomerMain extends Component {
             {this.renderAlert()}
           </CardSection>
           <CardSection>
-            <RedButton onPress={this.onRedButtonPress.bind(this)}>
-              Mark Ride Complete
-            </RedButton>
+            <CButton onPress={this.onRedButtonPress.bind(this)} bgColor={redColor} text={{primary: i18n.t("ride_colmplete") }} />
           </CardSection>
         </View>
       );
@@ -239,11 +216,10 @@ class CustomerMain extends Component {
     return(
       <View>
         <View>
-          <Text style={mainLangStyleSml}>{CLIENT_READY}</ Text>
-          <Text style={englishLangStyle}>{E_CLIENT_READY}</ Text>
+          <Text style={TextStyles.primaryLangStyleSml}>{i18n.t("client_ready")}</ Text>
         </View>
         <CardSection>
-         <CButton onPress={this.onYellowButtonPress.bind(this)} bgColor='#f8cd81' text={{primary: READY, secondary: E_READY }} /> 
+         <CButton onPress={this.onYellowButtonPress.bind(this)} bgColor={yellowColor} text={{primary: i18n.t("ready") }} /> 
         </CardSection>
       </View>
     );
@@ -252,7 +228,7 @@ class CustomerMain extends Component {
   render() {
   const { backgroundImage } = styles;
   return (
-    <ImageBackground source={require('../../assets/main_background.png')} style={backgroundImage}>
+    <ImageBackground source={require('../../assets/main_background.png')} style={Background.backgroundImage}>
       <View style={{ flex:1, paddingLeft: 15, paddingRight: 15 }}>
         <KeyboardAwareScrollView
           enableOnAndroid
@@ -271,58 +247,11 @@ class CustomerMain extends Component {
 }
 
 const styles = {
-  backgroundImage: {
-    flex: 1,
-    width: null,
-    height: null
-  },
   sectionView: {
     justifyContent: 'center',
-  },
-  mainLangStyleLrg: {
-    justifyContent: 'center',
-    alignSelf: 'center',
-    color: '#fff',
-    fontSize: 20,
-    fontWeight: '600',
-    paddingTop: 10,
-    paddingBottom: 10
-  },
-  mainLangStyleSml: {
-    justifyContent: 'center',
-    alignSelf: 'center',
-    color: '#fff',
-    fontSize: 15,
-    fontWeight: '500',
-    paddingTop: 10,
-    paddingBottom: 8
-  },
-  englishLangStyle: {
-    justifyContent: 'center',
-    alignSelf: 'center',
-    color: '#fff',
-    fontSize: 12,
-    fontWeight: '500',
-    paddingTop: 2,
-    paddingBottom: 10,
-    paddingRight: 10,
-    paddingLeft: 10
-  },
-  alertBox: {
-    justifyContent: 'center',
-    alignSelf: 'center',
-    backgroundColor: '#f8cd81',
-    borderRadius: 5,
-    padding: 5,
-    flex: 1,
-  },
-  alertText: {
-    fontSize: 16,
-    alignSelf: 'center',
-    color: 'red',
-    fontWeight: 'bold',
   }
 };
+
 const mapStateToProps = state => {
   const { user, token, loading, error } = state.auth;
   const { userStage, jobNote, jobId, oldJob, jobDetail } = state.job;

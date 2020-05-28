@@ -21,6 +21,8 @@ class JobList extends Component {
     lat: null,
     long: null,
   };
+  interval = 0;
+  intervalTwo = 0;
 
   componentWillMount() {
     const { token } = this.props;
@@ -37,6 +39,11 @@ class JobList extends Component {
     clearInterval(this.interval);
     clearInterval(this.intervalTwo);
   };
+
+  clearIntervals() {
+    clearInterval(this.interval);
+    clearInterval(this.intervalTwo);
+  }
 
   logOut() {
     this.props.logOutUser();

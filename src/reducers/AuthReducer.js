@@ -7,7 +7,7 @@ import { EMAIL_CHANGED, PASSWORD_CHANGED,
         REQUEST_PW_SUCCESS, CODE_CHANGED } from '../actions/types';
 
 const INITIAL_STATE = {
-email: 'r@r.com',
+email: 'c@c.com',
 password: '12345678',
 resetCode: '',
 vin: '',

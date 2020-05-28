@@ -14,9 +14,11 @@ import { CardSection, CButton } from './common';
 class JobPage extends Component {
 
   state = {
-    location: null,
+    location: {},
     locationErrorMessage: null,
   };
+
+  interval = 0;
 
   componentDidMount() {
 
@@ -24,10 +26,13 @@ class JobPage extends Component {
       console.log("interstitialDidClose");
       this.completeJob();
      });
+
+     this.interval = setInterval(() => this.getLocationAsync(), 2000);
   }
 
   componentWillUnmount() {
-     AdMobInterstitial.removeAllListeners();
+    clearInterval(this.interval);
+      AdMobInterstitial.removeAllListeners();
   }
 
   onRedButtonPress() {
@@ -37,7 +42,13 @@ class JobPage extends Component {
   completeJob() {
     const token = this.props.token;
     const job_id = this.props.jobDetail.jobDetail.id;
-    this.getLocationAsync(token, job_id);
+    this.getLocationAsync();
+    const lat = this.state.location.coords.latitude;
+    const long = this.state.location.coords.longitude;
+    console.log('ending position');
+    clearInterval(this.interval);
+    const { accountType } = this.props;
+    this.props.rideComplete({ token, job_id, userType: accountType, rider_lat: lat, rider_long: long });
   }
 
   showInterstitial = async () => {
@@ -47,7 +58,7 @@ class JobPage extends Component {
     await AdMobInterstitial.showAdAsync();
   }
 
-  getLocationAsync = async (token, job_id) => {
+  getLocationAsync = async () => {
      let { status } = await Permissions.askAsync(Permissions.LOCATION);
      if (status !== 'granted') {
        this.setState({
@@ -56,12 +67,16 @@ class JobPage extends Component {
      }
 
      let location = await Location.getCurrentPositionAsync({enableHighAccuracy: true});
-     const lat = location.coords.latitude;
-     const long = location.coords.longitude;
+     this.setState({location});
+  };
+
+  sendCompleteJobCall(token, job_id) {
+     const lat = this.state.location.coords.latitude;
+     const long = this.state.location.coords.longitude;
      console.log('ending position');
      const { accountType } = this.props;
      this.props.rideComplete({ token, job_id, userType: accountType, rider_lat: lat, rider_long: long });
-  };
+  }
 
   renderAlert(){
     if (this.props.oldJob) {
@@ -73,31 +88,46 @@ class JobPage extends Component {
     }
   }
 
+  renderMap(jobDetail) {
+     let rider_lat  = jobDetail.rider_lat;
+     let rider_long = jobDetail.rider_long;
+
+
+    if(Object.keys(this.state.location).length >> 0) {
+      console.log("1");
+      rider_lat = this.state.location.coords.latitude;
+      rider_long = this.state.location.coords.longitude;
+    } 
+      return (
+        <MapView
+        style={{ marginBottom: 5, height: 275}}
+        initialRegion={{
+          latitude: jobDetail.latitude,
+          longitude: jobDetail.longitude,
+          latitudeDelta: 0.0225,
+          longitudeDelta: 0.0099,
+        }} 
+        >
+        <Marker
+          coordinate={{ latitude: jobDetail.latitude, longitude: jobDetail.longitude }}
+          image={require('../../assets/personMapMarker.png')}
+        />
+        <Marker
+          coordinate={{ latitude: rider_lat, longitude: rider_long }}
+          image={require('../../assets/logoMapMarker.png')}
+        />
+      </MapView>
+      )
+    
+  }
+
   render() {
   const jobDetail = this.props.jobDetail.jobDetail;
     if (jobDetail) {
       return (
         <ImageBackground source={require('../../assets/main_background.png')} style={Background.backgroundImage}>
           <View style={{ flex:1, paddingLeft: 5, paddingRight: 5, paddingBottom:50 }}>
-         
-            <MapView
-              style={{ marginBottom: 5, height: 275}}
-              initialRegion={{
-                latitude: jobDetail.latitude,
-                longitude: jobDetail.longitude,
-                latitudeDelta: 0.0125,
-                longitudeDelta: 0.0081,
-              }} 
-              >
-              <Marker
-                coordinate={{ latitude: jobDetail.latitude, longitude: jobDetail.longitude }}
-                image={require('../../assets/personMapMarker.png')}
-              />
-              <Marker
-                coordinate={{ latitude: jobDetail.rider_lat, longitude: jobDetail.rider_long }}
-                image={require('../../assets/logoMapMarker.png')}
-              />
-            </MapView>
+              {this.renderMap(jobDetail)}
 
             <CardSection style={styles.jobsDetailStyle}>
             <View style={styles.jobsDetailStyle}>

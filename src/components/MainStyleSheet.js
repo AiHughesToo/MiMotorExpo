@@ -39,6 +39,17 @@ const CardSectionStyle = StyleSheet.create({
   }
 })
 
+const AlertBox = StyleSheet.create({
+  alertBox: {
+    justifyContent: 'center',
+    alignSelf: 'center',
+    backgroundColor: '#f8cd81',
+    borderRadius: 5,
+    padding: 5,
+    flex: 1,
+  }
+})
+
 const TextStyles = StyleSheet.create({
   primaryLangStyleLrg: {
     justifyContent: 'center',
@@ -78,4 +89,4 @@ const redColor    = '#d94c35';
 const yellowColor = '#fbc042';
 const greenColor  = '#94cd65';
 
-export { Background, Logo, CardSectionStyle, TextStyles, redColor, yellowColor, greenColor };
+export { Background, Logo, CardSectionStyle, TextStyles, AlertBox, redColor, yellowColor, greenColor };

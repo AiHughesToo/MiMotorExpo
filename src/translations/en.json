@@ -1,5 +1,6 @@
 {
   "ready": "Ready",
+  "client_ready": "Are you ready to request a ride?",
   "cancel": "Cancel",
   "email": "Email",
   "login": "Sign In",
@@ -26,7 +27,12 @@
   "client_name": "Client Name:",
   "instructions": "Instructions",
   "mark_ride_comp_inst": "Once you have taken your client to the destination mark the job complete. The destination is used to calculate your stats.",
-  "hi": "hi",
+  "hi": "Hello",
   "rider_old_job_alert": "This is an old job. Remember to complete the old jobs before taking a new one.",
-  "take_job": "Take it"
+  "take_job": "Take it",
+  "customer_old_job_warn": "This is an old request. Remember You must close old requests before making a new one.",
+  "ride_instructions": "Enter any special instructions or directions.",
+  "gps_warning": "You must have GPS enabled to use this feature. Remember riders close to you can see your location on a map.",
+  "on_way": "is on the way",
+  "requested": "Ride Requested"
 }
