@@ -162,6 +162,9 @@ const resetPWSuccess = (dispatch, response) => {
       type: REQUEST_PW_SUCCESS,
       payload: { loading: false, requestSuccess: false}});
   } else {
+    dispatch({
+      type: REQUEST_PW_SUCCESS,
+      payload: { loading: false, requestSuccess: true}});
     Actions.login();
   }
 };

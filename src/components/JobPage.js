@@ -27,7 +27,7 @@ class JobPage extends Component {
       this.completeJob();
      });
 
-     this.interval = setInterval(() => this.getLocationAsync(), 2000);
+     this.interval = setInterval(() => this.getLocationAsync(), 1000);
   }
 
   componentWillUnmount() {
