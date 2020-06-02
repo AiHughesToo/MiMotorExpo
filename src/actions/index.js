@@ -4,7 +4,8 @@ import { EMAIL_CHANGED, PASSWORD_CHANGED, LOGIN_USER,
          LOGIN_USER_SUCCESS, LOGIN_BLANK_ERROR,
          LOGIN_USER_FAIL, SELECT_MOTOR, SELECT_CLIENT,
          NAME_CHANGED, REGISTER_USER_SUCCESS, REGISTER_USER_FAIL, 
-         LOG_OUT, VIN_CHANGED, PLATE_CHANGED, BIKETYPE_CHANGED, REQUEST_PW_SUCCESS, CODE_CHANGED } from './types';
+         LOG_OUT, VIN_CHANGED, PLATE_CHANGED, BIKETYPE_CHANGED, REQUEST_PW_SUCCESS, 
+         CODE_CHANGED, SET_LOADING } from './types';
 
 // this is an action creator
 export const emailChanged = (text) => {
@@ -53,6 +54,15 @@ export const nameChanged = (text) => {
  };
 };
 
+export const setLoading = (loadingState) => {
+  console.log(loadingState);
+  return {      
+      type: SET_LOADING,
+      payload: { loading: loadingState}
+  };
+  
+};
+
 export const loginUser = ({ email, password }) => {
   if (email == '' || password == '') {
     return { type: LOGIN_BLANK_ERROR, payload: {error: 'email or password is blank.'} };
@@ -85,6 +95,7 @@ export const selectMotor = () => {
   return (dispatch) => { dispatch({ type: SELECT_MOTOR });
   };
 };
+
 export const selectClient = () => {
   return (dispatch) => { dispatch({ type: SELECT_CLIENT });
   };

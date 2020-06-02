@@ -131,8 +131,6 @@ const takeJobSuccess = (dispatch, response) => {
   dispatch({
     type: TAKE_JOB_SUCCESS,
     payload: { jobDetail: response }});
-    console.log("take job success");
-    console.log(response.taken);
     if (response.taken) {
       Actions.jobMap();
     }

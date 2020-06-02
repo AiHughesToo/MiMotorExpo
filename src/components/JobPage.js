@@ -7,6 +7,7 @@ import * as Permissions from 'expo-permissions';
 import * as Location from 'expo-location';
 import { AdMobInterstitial } from 'expo-ads-admob';
 import { requestJobs, notesChanged, rideComplete } from '../actions/jobs_actions';
+import { setLoading } from '../actions/index';
 import i18n from "i18n-js";
 import { Background, TextStyles, redColor } from './MainStyleSheet';
 import { CardSection, CButton } from './common';
@@ -36,7 +37,9 @@ class JobPage extends Component {
   }
 
   onRedButtonPress() {
+    this.props.setLoading(false);
     this.showInterstitial();
+    
   }
 
   completeJob() {
@@ -47,6 +50,8 @@ class JobPage extends Component {
     const long = this.state.location.coords.longitude;
     console.log('ending position');
     clearInterval(this.interval);
+    console.log("setLoading");
+    this.props.setLoading({loadingState: false });
     const { accountType } = this.props;
     this.props.rideComplete({ token, job_id, userType: accountType, rider_lat: lat, rider_long: long });
   }
@@ -194,4 +199,4 @@ const mapStateToProps = (state) => {
   }
 }
 
-export default connect(mapStateToProps, { requestJobs, notesChanged, rideComplete })(JobPage);
+export default connect(mapStateToProps, { requestJobs, notesChanged, rideComplete, setLoading })(JobPage);

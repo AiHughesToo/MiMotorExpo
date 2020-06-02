@@ -7,7 +7,7 @@ import * as Permissions from 'expo-permissions';
 import * as Location from 'expo-location';
 import { AdMobBanner } from "expo-ads-admob";
 import { requestJobs, notesChanged, rideMethod, checkOutstandingJob } from '../actions/jobs_actions';
-import { logOutUser } from '../actions/index';
+import { logOutUser, setLoading } from '../actions/index';
 import JobListItem from './JobListItem';
 import i18n from "i18n-js";
 import { Background, TextStyles, greenColor } from './MainStyleSheet';
@@ -27,6 +27,7 @@ class JobList extends Component {
   componentWillMount() {
     const { token } = this.props;
     this.props.checkOutstandingJob({ token, userType: 'rider' });
+    this.props.setLoading(false);
     this.getLocationAsync();
   }
 
@@ -117,6 +118,24 @@ class JobList extends Component {
        }
      }
 
+     renderJobList() {
+       if (this.props.loading) {
+         return (
+           <Spinner/>
+         )
+       } else {
+        return(
+          <ScrollView>
+            <FlatList
+              data={this.props.jobsList}
+              keyExtractor={job => `${job.id}`}
+              renderItem={this.renderRow.bind(this)}
+            />
+          </ScrollView> )
+       }
+       
+     }
+
   render() {
   const jobsList = this.props.jobsList
     if (jobsList.length) {
@@ -126,7 +145,7 @@ class JobList extends Component {
             <CardSection>
             </CardSection>
             <MapView
-              style={{ marginBottom: 5, height: 275}}
+              style={{ marginBottom: 5, height: 275, borderRadius: 50}}
               initialRegion={{
                 latitude: lat,
                 longitude: long,
@@ -139,13 +158,7 @@ class JobList extends Component {
                 image={require('../../assets/logoMapMarker.png')}
               />
             </MapView>  
-            <ScrollView>
-              <FlatList
-                data={this.props.jobsList}
-                keyExtractor={job => `${job.id}`}
-                renderItem={this.renderRow.bind(this)}
-              />
-            </ScrollView>
+              {this.renderJobList()}
             <CardSection>
             <Text style={TextStyles.primaryLangStyleSml}>{i18n.t("job_instructions")}</Text>
             </CardSection>
@@ -195,4 +208,4 @@ const mapStateToProps = (state) => {
  return { user, token, loading, error, jobsList, jobDetail, oldJob }
 }
 
-export default connect(mapStateToProps, { requestJobs, notesChanged, rideMethod, checkOutstandingJob, logOutUser })(JobList);
+export default connect(mapStateToProps, { requestJobs, notesChanged, rideMethod, checkOutstandingJob, logOutUser, setLoading })(JobList);

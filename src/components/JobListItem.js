@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, Text, TouchableHighlight, StyleSheet} from 'react-native';
 import { TakeButton } from './common';
-import { takeJob, rideMethod } from '../actions/jobs_actions';
+import { rideMethod } from '../actions/jobs_actions'; 
+import { setLoading } from '../actions/index';
 import i18n from "i18n-js";
 import { TextStyles } from './MainStyleSheet';
 
@@ -10,6 +11,7 @@ export class JobListItem extends Component {
 
   onButtonPress() {
     console.log(this.props);
+    this.props.setLoading(true);
     this.props.rideMethod({ job_id: this.props.data.id, lat: this.props.data.rider_lat,
             long: this.props.data.rider_long, token: this.props.data.token });
   }
@@ -71,4 +73,4 @@ const mapStateToProps = (state) => {
   }
 }
 
-export default connect(mapStateToProps, { rideMethod })(JobListItem);
+export default connect(mapStateToProps, { rideMethod, setLoading })(JobListItem);

@@ -4,7 +4,7 @@ import { EMAIL_CHANGED, PASSWORD_CHANGED,
         SELECT_MOTOR, SELECT_CLIENT, NAME_CHANGED,
         REGISTER_USER_SUCCESS, REGISTER_USER_FAIL, 
         LOG_OUT, VIN_CHANGED, PLATE_CHANGED, BIKETYPE_CHANGED,
-        REQUEST_PW_SUCCESS, CODE_CHANGED } from '../actions/types';
+        REQUEST_PW_SUCCESS, CODE_CHANGED, SET_LOADING } from '../actions/types';
 
 const INITIAL_STATE = {
 email: '',
@@ -66,6 +66,8 @@ export default (state = INITIAL_STATE, action) => {
         return { INITIAL_STATE };
     case REQUEST_PW_SUCCESS:
       return { ...state, loading: false, requestSuccess: action.payload.requestSuccess };
+    case SET_LOADING:
+      return {...state, loading: action.payload.loading };
     default:
       return state;
   }
