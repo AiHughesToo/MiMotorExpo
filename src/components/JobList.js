@@ -1,22 +1,33 @@
 import React, { Component } from 'react';
 import { FlatList, ScrollView, View, Text, ImageBackground} from 'react-native';
 import { connect } from 'react-redux';
-import { Location, Permissions, MapView } from 'expo';
+import MapView from 'react-native-maps';
+import { Marker }  from 'react-native-maps';
+import * as Permissions from 'expo-permissions';
+import * as Location from 'expo-location';
+import { AdMobBanner } from "expo-ads-admob";
 import { requestJobs, notesChanged, rideMethod, checkOutstandingJob } from '../actions/jobs_actions';
-import { logOutUser } from '../actions/index';
+import { logOutUser, setLoading } from '../actions/index';
 import JobListItem from './JobListItem';
-import { CardSection, Button, Spinner } from './common';
+import i18n from "i18n-js";
+import { Background, TextStyles, greenColor } from './MainStyleSheet';
+import { CardSection, CButton, Spinner } from './common';
 
 class JobList extends Component {
   
   state = {
     location: null,
     locationErrorMessage: null,
+    lat: null,
+    long: null,
   };
+  interval = 0;
+  intervalTwo = 0;
 
   componentWillMount() {
     const { token } = this.props;
     this.props.checkOutstandingJob({ token, userType: 'rider' });
+    this.props.setLoading(false);
     this.getLocationAsync();
   }
 
@@ -30,13 +41,16 @@ class JobList extends Component {
     clearInterval(this.intervalTwo);
   };
 
+  clearIntervals() {
+    clearInterval(this.interval);
+    clearInterval(this.intervalTwo);
+  }
+
   logOut() {
-    console.log('I ran the logout user');
     this.props.logOutUser();
   }
   // get the Location information and send the request for list of local jobs.
    getLocationAsync = async () => {
-     console.log('im still running');
      let { status } = await Permissions.askAsync(Permissions.LOCATION);
      if (status !== 'granted') {
        this.setState({
@@ -45,7 +59,7 @@ class JobList extends Component {
      }
 
      let location = await Location.getCurrentPositionAsync({enableHighAccuracy: true});
-     this.setState({ location});
+     this.setState({location});
      this.sendJobRequest();
    };
 
@@ -58,6 +72,8 @@ class JobList extends Component {
       long = JSON.stringify(this.state.location.coords.longitude);
       lat = parseFloat(lat, 10);
       long = parseFloat(long, 10);
+      this.setState({lat, long})
+      console.log(this.state.lat);
       range = 5
       const { token } = this.props;
       const { jobsList } = this.props.jobsList;
@@ -79,44 +95,75 @@ class JobList extends Component {
        );
      }
 
+     renderMap() {
+       if(!this.state.lat) {
+         console.log("lat not set");
+       } else {
+         return (
+           <MapView
+              style={{ marginBottom: 5, height: 175}}
+              initialRegion={{
+                latitude: lat,
+                longitude: long,
+                latitudeDelta: 0.0125,
+                longitudeDelta: 0.0081,
+              }}  
+              >
+              <Marker
+                coordinate={{ latitude: lat, longitude: long }}
+                image={require('../../assets/logoMapMarker.png')}
+              />
+           </MapView>  
+         )
+       }
+     }
+
+     renderJobList() {
+       if (this.props.loading) {
+         return (
+           <Spinner/>
+         )
+       } else {
+        return(
+          <ScrollView>
+            <FlatList
+              data={this.props.jobsList}
+              keyExtractor={job => `${job.id}`}
+              renderItem={this.renderRow.bind(this)}
+            />
+          </ScrollView> )
+       }
+       
+     }
+
   render() {
-  const { backgroundImage } = styles;
   const jobsList = this.props.jobsList
     if (jobsList.length) {
       return (
-        <ImageBackground source={require('../../assets/main_background.png')} style={backgroundImage}>
+        <ImageBackground source={require('../../assets/main_background.png')} style={Background.backgroundImage}>
           <View style={{ flex:1, paddingLeft: 5, paddingRight: 5, paddingBottom: 20 }}>
             <CardSection>
             </CardSection>
             <MapView
-              style={{ marginBottom: 5, height: 175}}
-              region={{
-              latitude: this.state.location.coords.latitude,
-              longitude: long,
-              latitudeDelta: 0.0162,
-              longitudeDelta: 0.0081,
-             }}>
-              <MapView.Marker
-                coordinate={{latitude: this.state.location.coords.latitude, longitude: this.state.location.coords.longitude }}
-                title={'You are here'}
-                description={"hi"}
+              style={{ marginBottom: 5, height: 275, borderRadius: 50}}
+              initialRegion={{
+                latitude: lat,
+                longitude: long,
+                latitudeDelta: 0.0125,
+                longitudeDelta: 0.0081,
+              }}  
+              >
+              <Marker
+                coordinate={{ latitude: lat, longitude: long }}
                 image={require('../../assets/logoMapMarker.png')}
               />
-            </MapView>
-            <ScrollView>
-              <FlatList
-                data={this.props.jobsList}
-                keyExtractor={job => `${job.id}`}
-                renderItem={this.renderRow.bind(this)}
-              />
-            </ScrollView>
+            </MapView>  
+              {this.renderJobList()}
             <CardSection>
-            <Text style={styles.textStyle}>This list updates every 10 seconds. New jobs will appear and job taken by other rides will be removed. </Text>;
+            <Text style={TextStyles.primaryLangStyleSml}>{i18n.t("job_instructions")}</Text>
             </CardSection>
             <CardSection>
-              <Button onPress={this.onButtonPress.bind(this)}>
-              Cerrar sesión
-              </Button>
+              <CButton onPress={this.onButtonPress.bind(this)} bgColor={greenColor} text={{primary: i18n.t('sign_out') }} />
             </CardSection>
           </View>
         </ ImageBackground>
@@ -124,32 +171,31 @@ class JobList extends Component {
     }
 
   return (
-    <ImageBackground source={require('../../assets/main_background.png')} style={backgroundImage}>
-      <View style={{ flex:1, paddingLeft: 15, paddingRight: 15 }}>
+    <ImageBackground source={require('../../assets/main_background.png')} style={Background.backgroundImage}>
+      <View style={{ flex:1, paddingLeft: 15, paddingRight: 15, paddingTop: 10 }}>
+        {this.renderMap()}
         <CardSection>
-          <Button onPress={this.onButtonPress.bind(this)}>
-          Por favor espera
-          </Button>
+          <CButton onPress={this.onButtonPress.bind(this)} bgColor={greenColor} text={{primary: i18n.t('sign_out') }} />
+        </CardSection>
+        <CardSection>
+          <Text style={TextStyles.primaryLangStyleSml}>{i18n.t("no_jobs")}</Text>
         </CardSection>
         <Spinner />
 
       </View>
+      <CardSection>
+        <AdMobBanner
+          bannerSize="fullBanner"
+          adUnitID="ca-app-pub-3940256099942544/6300978111" 
+          servePersonalizedAds // true or false
+          onDidFailToReceiveAdWithError={this.bannerError} />
+      </CardSection>
     </ ImageBackground>
     );
   }
 }
 
 const styles = {
-  backgroundImage: {
-    flex: 1,
-    width: null,
-    height: null
-  },
-  textStyle: {
-    fontSize: 15,
-    color: 'white',
-    fontWeight: 'bold',
-  },
   jobsListStyle: {
     flex: 1,
     backgroundColor: 'white'
@@ -162,4 +208,4 @@ const mapStateToProps = (state) => {
  return { user, token, loading, error, jobsList, jobDetail, oldJob }
 }
 
-export default connect(mapStateToProps, { requestJobs, notesChanged, rideMethod, checkOutstandingJob, logOutUser })(JobList);
+export default connect(mapStateToProps, { requestJobs, notesChanged, rideMethod, checkOutstandingJob, logOutUser, setLoading })(JobList);

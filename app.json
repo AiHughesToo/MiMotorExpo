@@ -1,11 +1,14 @@
 {
   "expo": {
     "name": "mimotor",
-    "description": "This project is really great.",
+    "description": "Motor hailing application",
     "slug": "mimotor",
     "privacy": "public",
-    "sdkVersion": "28.0.0",
-    "platforms": ["ios", "android"],
+    "sdkVersion": "37.0.0",
+    "platforms": [
+      "ios",
+      "android"
+    ],
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -15,11 +18,12 @@
       "backgroundColor": "#ffffff"
     },
     "android": {
-          "package": "com.aihughes.mimotor",
-          "config": {
-            "googleMaps": { "apiKey": "AIzaSyBs8G2GE6ZGZ-RyTZVoY5_lQqYyW1W0EyY"}
-          }
-        },
+      "package": "com.aihughes.mimotor",
+      "config": {
+        "googleMaps": { "apiKey": "AIzaSyBs8G2GE6ZGZ-RyTZVoY5_lQqYyW1W0EyY" },
+        "googleMobileAdsAppId": "ca-app-pub-3940256099942544~3347511713" 
+      }
+    },
     "updates": {
       "fallbackToCacheTimeout": 0
     },
@@ -27,7 +31,11 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "bundleIdentifier": "net.mimotor.app",
+      "supportsTablet": true,
+      "config": {
+        "googleMobileAdsAppId": "ca-app-pub-3940256099942544~1458002511" 
+      }
     }
   }
 }

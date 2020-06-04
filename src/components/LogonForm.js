@@ -1,51 +1,50 @@
 import React, { Component } from 'react';
-import { Platform, View, Text, Image, ImageBackground} from 'react-native';
+import { Platform, View, Text, Image, ImageBackground } from 'react-native';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { emailChanged, passwordChanged, loginUser } from '../actions';
-import { Card, CardSection, Input, Button, RedButton, Spinner, DividerLine } from './common';
-import { PASSWORD_TEXT, EMAIL_TEXT, LOGIN_TEXT, FORGOT_PASSWORD_TEXT, SIGN_UP_TEXT } from '../LanguageFile.js'
-import { AdMobBanner, AdMobInterstitial } from "expo";
+import i18n from 'i18n-js';
+import { Card, CardSection, BannerAdSection, Input, Spinner, DividerLine, CButton } from './common';
+import { Background, Logo, redColor, greenColor, yellowColor } from './MainStyleSheet';
+import { AdMobBanner } from "expo-ads-admob";
 
 class LoginForm extends Component {
-// this is a helper method that calls the action from the input
+
   onEmailChange(text) {
   this.props.emailChanged(text);
   }
-// this helper method calls the action and keeps the state and value of the Input
-// updated as you type.
+
   onPasswordChange(text) {
-  this.props.passwordChanged(text);
+  this.props.passwordChanged(text);   
   } 
 
-  onButtonPress() {
+  onLoginButtonPress() {
     const { email, password } = this.props;
     this.props.loginUser({ email, password });
   } 
   
-  onRedButtonPress() {
+  onRegisterButtonPress() {
     Actions.signUp();
+  }
+
+  onResetLinkPress() {
+    Actions.resetPassword();
   }
 
   bannerError() {
     console.log("An error");
     return;
   }
-// we need to show the user that we are waiting on the network request
-// render button looks at loading piece of state and shows a spinner if loading is true.
-// else it returns the login button.
-  renderButton() {
+
+  renderLoginButton() {
     if (this.props.loading) {
       return <Spinner />;
     }
 
     return(
-      <Button onPress={this.onButtonPress.bind(this)}>
-       {LOGIN_TEXT}
-      </Button>
+      <CButton onPress={this.onLoginButtonPress.bind(this)} bgColor={greenColor} text={{primary: i18n.t('login') }} />
     );
-
   }
 
   renderError() {
@@ -57,35 +56,34 @@ class LoginForm extends Component {
   }
 
   render() {
-// a bit of destructuring for the styles. this makes the variables available below.
-  const { logoContainer, forgotPassStyle, logoImage, divLine } = styles;
+
   return (
-<ImageBackground source={require('../../assets/main_background.png')} style={styles.backgroundImage}>
-  <View style={{ flex:1, paddingLeft: 5, paddingRight: 5 }}>
+  <ImageBackground source={require('../../assets/main_background.png')} style={Background.backgroundImage}>
+    <View style={{ flex:1, paddingLeft: 5, paddingRight: 5 }}>
+
     <KeyboardAwareScrollView
       enableOnAndroid
       enableAutomaticScroll
       keyboardOpeningTime={0}
       extraHeight={Platform.select({ android: 250 })}>
 
-    <View style={logoContainer}>
-        <Image source={require('../../assets/temp_logo.png')} style={styles.logoImage} />
+    <View style={Logo.logoContainer}>
+        <Image source={require('../../assets/temp_logo.png')} style={Logo.logoImage} />
       </View>
       <Card>
         <CardSection>
           <Input
-            label={EMAIL_TEXT}
+            label={i18n.t('email')}
             placeholder="email@gmail.com"
             keyboardType='email-address'
             onChangeText={this.onEmailChange.bind(this)}
             value={this.props.email}
           />
         </CardSection>
-
         <CardSection>
           <Input
            secureTextEntry
-           label={PASSWORD_TEXT}
+           label={i18n.t('pw')}
            placeholder="password"
            onChangeText={this.onPasswordChange.bind(this)}
            value={this.props.password}
@@ -93,28 +91,26 @@ class LoginForm extends Component {
         </CardSection>
           {this.renderError()}
         <CardSection>
-          {this.renderButton()}
+          {this.renderLoginButton()}
         </CardSection>
-        <View>
-          <Text style={forgotPassStyle}> {FORGOT_PASSWORD_TEXT} </Text>
-        </View>
         <DividerLine />
         <CardSection>
-        <RedButton onPress={this.onRedButtonPress.bind(this)}>
-          {SIGN_UP_TEXT}
-        </RedButton>
+          <CButton onPress={this.onResetLinkPress.bind(this)} bgColor={yellowColor} text={{primary: i18n.t('forgot_pw') }} />
+        </CardSection>
+        <DividerLine />
+        <CardSection>
+          <CButton onPress={this.onRegisterButtonPress.bind(this)} bgColor={redColor} text={{primary: i18n.t('register') }} />  
         </CardSection>
       </Card>
       </KeyboardAwareScrollView>
-
-      <AdMobBanner
-          style={styles.bottomBanner}
+      <BannerAdSection>
+        <AdMobBanner
           bannerSize="fullBanner"
-          adUnitID="ca-app-pub-3940256099942544/6300978111"
-          // Test ID, Replace with your-admob-unit-id
-          testDeviceID="EMULATOR"
-          didFailToReceiveAdWithError={this.bannerError}
-        />
+          adUnitID="ca-app-pub-3940256099942544/6300978111" 
+          servePersonalizedAds // true or false
+          onDidFailToReceiveAdWithError={this.bannerError} />
+      </BannerAdSection>
+      
     </View>
   </ ImageBackground>
 
@@ -122,33 +118,7 @@ class LoginForm extends Component {
   }
 }
 
-const styles = {
-  logoContainer: {
-    paddingTop: 25,
-    paddingBottom: 10,
-    justifyContent: 'center',
-    alignSelf: 'center'
-  },
-  forgotPassStyle: {
-    color: '#fff',
-    alignSelf: 'center',
-    paddingTop: 10,
-    fontSize: 17
-  },
-  logoImage: {
-    width: 100,
-    height: 98
-  },
-  bottomBanner: {
-    position: "absolute",
-    bottom: 0
-  },
-  backgroundImage: {
-    flex: 1,
-    width: null,
-    height: null
-  }
-};
+
 // maping the state to the properties of this component.
 const mapStateToProps = state => {
  return {

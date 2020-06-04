@@ -2,11 +2,17 @@ import { EMAIL_CHANGED, PASSWORD_CHANGED,
         LOGIN_USER, LOGIN_USER_SUCCESS,
         LOGIN_BLANK_ERROR, LOGIN_USER_FAIL,
         SELECT_MOTOR, SELECT_CLIENT, NAME_CHANGED,
-        REGISTER_USER_SUCCESS, REGISTER_USER_FAIL, LOG_OUT } from '../actions/types';
+        REGISTER_USER_SUCCESS, REGISTER_USER_FAIL, 
+        LOG_OUT, VIN_CHANGED, PLATE_CHANGED, BIKETYPE_CHANGED,
+        REQUEST_PW_SUCCESS, CODE_CHANGED, SET_LOADING } from '../actions/types';
 
 const INITIAL_STATE = {
-email: 'test@test.com',
-password: '12345678',
+email: '',
+password: '',
+resetCode: '',
+vin: '',
+plate: '',
+bikeType: '',
 token: '',
 user: null,
 token: '',
@@ -14,15 +20,24 @@ loading: false,
 error: '',
 accountType: '',
 userName: '',
-userMessage: ''
+userMessage: '',
+requestSuccess: false,
 };
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case EMAIL_CHANGED:
       return { ...state, email: action.payload };
+    case CODE_CHANGED:
+      return { ...state, resetCode: action.payload };
     case NAME_CHANGED:
       return { ...state, userName: action.payload };
+    case VIN_CHANGED:
+      return { ...state, vin: action.payload };
+    case PLATE_CHANGED:
+      return { ...state, plate: action.payload };
+    case BIKETYPE_CHANGED:
+      return { ...state, bikeType: action.payload };
     case PASSWORD_CHANGED:
       return { ...state, password: action.payload };
     case LOGIN_BLANK_ERROR:
@@ -49,6 +64,10 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, loading: false, password: '', user: action.payload.user};
     case LOG_OUT:
         return { INITIAL_STATE };
+    case REQUEST_PW_SUCCESS:
+      return { ...state, loading: false, requestSuccess: action.payload.requestSuccess };
+    case SET_LOADING:
+      return {...state, loading: action.payload.loading };
     default:
       return state;
   }

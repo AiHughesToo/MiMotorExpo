@@ -3,14 +3,14 @@ import { View } from 'react-native';
 import { CardSectionStyle } from '../MainStyleSheet';
 
 
-const CardSection = (props) => {
+const BannerAdSection = (props) => {
 
   return (
-     <View style={CardSectionStyle.container}>
+     <View style={CardSectionStyle.bannerAd}>
      {props.children}
      </View>
   );
 
 };
 
-export  { CardSection };
+export  { BannerAdSection };

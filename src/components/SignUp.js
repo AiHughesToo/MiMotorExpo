@@ -1,20 +1,18 @@
 import React, { Component } from 'react';
-import { Platform, View, Text, Image, ImageBackground, TouchableWithoutFeedback} from 'react-native';
+import { Platform, View, Text, ImageBackground } from 'react-native';
 import { connect } from 'react-redux';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { selectMotor, registerUser, emailChanged, passwordChanged, nameChanged} from '../actions';
-import { Card, CardSection, Input, Button, RedButton, Spinner, DividerLine } from './common';
-import { PASSWORD_TEXT, NAME_TEXT, EMAIL_TEXT, LOGIN_TEXT, SIGN_UP_TEXT } from '../LanguageFile.js'
-import SelectAccountBar from './SelectAccountBar'
+import i18n from "i18n-js";
+import { registerUser, emailChanged, passwordChanged, nameChanged, vinChanged, plateChanged, bikeTypeChanged} from '../actions';
+import { Card, CardSection, Input, Spinner, CButton} from './common';
+import { Background, TextStyles, greenColor } from './MainStyleSheet';
+import SelectAccountBar from './SelectAccountBar';
 
 class SignUp extends Component {
-
-  // this helper method calls the action and keeps the state and value of the Input
-  // updated as you type.
-
   onNameChange(text) {
   this.props.nameChanged(text);
   }
+  
   onEmailChange(text) {
    this.props.emailChanged(text);
   }
@@ -23,9 +21,21 @@ class SignUp extends Component {
     this.props.passwordChanged(text);
   }
 
+  onVinChange(text) {
+    this.props.vinChanged(text);
+  }
+
+  onPlateChange(text) {
+    this.props.plateChanged(text);
+  }
+
+  onBikeTypeChange(text) {
+    this.props.bikeTypeChanged(text);
+  }
+
   onButtonPress() {
-      const { email, password, accountType, name } = this.props;
-      this.props.registerUser({ email, password, accountType, name });
+      const { email, password, accountType, name, vin, plate, bikeType } = this.props;
+      this.props.registerUser({ email, password, accountType, name, vin, plate, bikeType });
   }
 
   renderError() {
@@ -33,40 +43,83 @@ class SignUp extends Component {
         return(
           <Text style={{alignSelf: 'center', color: '#f00f00', fontSize: 20}}>{this.props.error}</Text>
         );
-      }
+    }
   }
-  renderForm() {
-    if (this.props.accountType) {
+ 
+  renderFields() {
+    if (this.props.accountType == "rider") {
       return(
         <Card>
         <CardSection>
           <Input
-            label={NAME_TEXT}
-            placeholder="name"
+            label={i18n.t('vin')}
+            placeholder={i18n.t('vin')}
+            onChangeText={this.onVinChange.bind(this)}
+            value={this.props.vin}
+          />
+        </CardSection>
+
+       <CardSection >
+        <Input
+          label={i18n.t('plate')}
+          placeholder={i18n.t('plate')}
+          onChangeText={this.onPlateChange.bind(this)}
+          value={this.props.plate}
+        />
+       </CardSection>
+
+       <CardSection >
+        <Input
+          label={i18n.t('bike_type')}
+          placeholder={i18n.t('bike_type')}
+          onChangeText={this.onBikeTypeChange.bind(this)}
+          value={this.props.bikeType}
+        />
+       </CardSection>
+  
+       </Card>
+      );
+    }
+  }
+
+  renderForm() {
+    if (this.props.accountType) {
+      return(
+        <Card>
+          <Card>
+        <CardSection>
+          <Input
+            label={i18n.t('name')}
+            placeholder={i18n.t('name')}
             onChangeText={this.onNameChange.bind(this)}
             value={this.props.userName}
           />
         </CardSection>
 
-          <CardSection>
-            <Input
-              label={EMAIL_TEXT}
-              placeholder="email@gmail.com"
-              keyboardType='email-address'
-              onChangeText={this.onEmailChange.bind(this)}
-              value={this.props.email}
-            />
-          </CardSection>
+        <CardSection>
+          <Input
+            label={i18n.t('email')}
+            placeholder="email@gmail.com"
+            keyboardType='email-address'
+            onChangeText={this.onEmailChange.bind(this)}
+            value={this.props.email}
+          />
+        </CardSection>
 
           <CardSection>
             <Input
-             label={PASSWORD_TEXT}
-             placeholder={PASSWORD_TEXT}
+             label={i18n.t('pw')}
+             placeholder={i18n.t('pw')}
              onChangeText={this.onPasswordChange.bind(this)}
              value={this.props.password}
-            />
+           />
           </CardSection>
-            {this.renderError()}
+          </Card>
+
+          {this.renderFields()}
+          
+          {this.renderError()}
+
           <CardSection>
             {this.renderButton()}
           </CardSection>
@@ -81,24 +134,21 @@ class SignUp extends Component {
     }
 
     return(
-      <Button onPress={this.onButtonPress.bind(this)}>
-       {SIGN_UP_TEXT}
-      </Button>
+      <CButton onPress={this.onButtonPress.bind(this)} bgColor={greenColor} text={{primary: i18n.t('register') }} />  
     );
 
   }
   render() {
-  // a bit of destructuring for the styles. this makes the variables available below.
-  const { backgroundImage, sectionTitleTextStyle } = styles;
+  
   return (
-    <ImageBackground source={require('../../assets/main_background.png')} style={backgroundImage}>
+    <ImageBackground source={require('../../assets/main_background.png')} style={Background.backgroundImage}>
       <KeyboardAwareScrollView
         enableOnAndroid
         enableAutomaticScroll
         keyboardOpeningTime={0}
         extraHeight={Platform.select({ android: 250 })}>
           <View style={{ marginBottom: 15 }}>
-           <Text style={sectionTitleTextStyle}> Select Account Type </ Text>
+           <Text style={TextStyles.primaryLangStyleSml}>{i18n.t("account_typ_select")} </ Text>
            <SelectAccountBar />
            {this.renderForm()}
           </View>
@@ -109,29 +159,13 @@ class SignUp extends Component {
   }
   }
 
-  const styles = {
-  backgroundImage: {
-    flex: 1,
-    width: null,
-    height: null
-  },
-  logoImage: {
-    width: 100,
-    height: 98
-  },
-  sectionTitleTextStyle: {
-    color: '#fff',
-    fontSize: 16,
-    paddingTop: 10,
-    alignSelf: 'center',
-    fontWeight: 'bold'
-  }
-  };
-
   const mapStateToProps = state => {
    return {
     accountType: state.auth.accountType,
     email: state.auth.email,
+    vin: state.auth.vin,
+    plate: state.auth.plate,
+    bikeType: state.auth.bikeType,
     name: state.auth.userName,
     password: state.auth.password,
     loading: state.auth.loading,
@@ -139,4 +173,4 @@ class SignUp extends Component {
     };
   };
 
-export default connect(mapStateToProps, { emailChanged, passwordChanged, registerUser, nameChanged }) (SignUp);
+export default connect(mapStateToProps, { emailChanged, passwordChanged, registerUser, nameChanged, vinChanged, plateChanged, bikeTypeChanged }) (SignUp);

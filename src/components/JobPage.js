@@ -1,52 +1,59 @@
 import React, { Component } from 'react';
-import { View, Text, Image, ImageBackground} from 'react-native';
+import { View, Text, ImageBackground} from 'react-native';
 import { connect } from 'react-redux';
-import { Location, Permissions, MapView, AdMobInterstitial } from 'expo';
+import MapView from 'react-native-maps';
+import { Marker }  from 'react-native-maps';
+import * as Permissions from 'expo-permissions';
+import * as Location from 'expo-location';
+import { AdMobInterstitial } from 'expo-ads-admob';
 import { requestJobs, notesChanged, rideComplete } from '../actions/jobs_actions';
-import { MARK_JOB_COMPLETE, JOB_PAGE_INSTRUCTIONS, CLIENT_NAME, RIDER_OLD_JOB_WARNING } from '../LanguageFile';
-import { Card, CardSection, Button, RedButton } from './common';
+import { setLoading } from '../actions/index';
+import i18n from "i18n-js";
+import { Background, TextStyles, redColor } from './MainStyleSheet';
+import { CardSection, CButton } from './common';
 
 class JobPage extends Component {
 
   state = {
-    location: null,
+    location: {},
     locationErrorMessage: null,
   };
 
+  interval = 0;
+
   componentDidMount() {
-    AdMobInterstitial.addEventListener("interstitialDidLoad", () =>
-      console.log("interstitialDidLoad")
-    );
-    AdMobInterstitial.addEventListener("interstitialDidFailToLoad", () =>{
-      console.log("interstitialDidFailToLoad")
-    }
-    );
-    AdMobInterstitial.addEventListener("interstitialDidOpen", () =>
-      console.log("interstitialDidOpen")
-    );
+
     AdMobInterstitial.addEventListener("interstitialDidClose", () => {
       console.log("interstitialDidClose");
       this.completeJob();
-    }
-      
-    );
-    AdMobInterstitial.addEventListener("interstitialWillLeaveApplication", () =>
-      console.log("interstitialWillLeaveApplication")
-    );
+     });
+
+     this.interval = setInterval(() => this.getLocationAsync(), 1000);
   }
 
   componentWillUnmount() {
-    AdMobInterstitial.removeAllListeners();
+    clearInterval(this.interval);
+      AdMobInterstitial.removeAllListeners();
   }
 
   onRedButtonPress() {
+    this.props.setLoading(false);
     this.showInterstitial();
+    
   }
 
   completeJob() {
     const token = this.props.token;
     const job_id = this.props.jobDetail.jobDetail.id;
-    this.getLocationAsync(token, job_id);
+    this.getLocationAsync();
+    const lat = this.state.location.coords.latitude;
+    const long = this.state.location.coords.longitude;
+    console.log('ending position');
+    clearInterval(this.interval);
+    console.log("setLoading");
+    this.props.setLoading({loadingState: false });
+    const { accountType } = this.props;
+    this.props.rideComplete({ token, job_id, userType: accountType, rider_lat: lat, rider_long: long });
   }
 
   showInterstitial = async () => {
@@ -56,7 +63,7 @@ class JobPage extends Component {
     await AdMobInterstitial.showAdAsync();
   }
 
-  getLocationAsync = async (token, job_id) => {
+  getLocationAsync = async () => {
      let { status } = await Permissions.askAsync(Permissions.LOCATION);
      if (status !== 'granted') {
        this.setState({
@@ -65,60 +72,80 @@ class JobPage extends Component {
      }
 
      let location = await Location.getCurrentPositionAsync({enableHighAccuracy: true});
-     const lat = location.coords.latitude;
+     this.setState({location});
+  };
+
+  sendCompleteJobCall(token, job_id) {
+     const lat = this.state.location.coords.latitude;
+     const long = this.state.location.coords.longitude;
      console.log('ending position');
      const { accountType } = this.props;
-     this.props.rideComplete({ token, job_id, userType: accountType });
-  };
+     this.props.rideComplete({ token, job_id, userType: accountType, rider_lat: lat, rider_long: long });
+  }
 
   renderAlert(){
     if (this.props.oldJob) {
       return(
         <View style={styles.alertBox}>
-          <Text style={styles.alertText}>{RIDER_OLD_JOB_WARNING}</ Text>
+          <Text style={TextStyles.primaryAlertText}>{i18n.t("rider_old_job_alert")}</ Text>
         </View>
       );
     }
   }
 
+  renderMap(jobDetail) {
+     let rider_lat  = jobDetail.rider_lat;
+     let rider_long = jobDetail.rider_long;
+
+
+    if(Object.keys(this.state.location).length >> 0) {
+      console.log("1");
+      rider_lat = this.state.location.coords.latitude;
+      rider_long = this.state.location.coords.longitude;
+    } 
+      return (
+        <MapView
+        style={{ marginBottom: 5, height: 275}}
+        initialRegion={{
+          latitude: jobDetail.latitude,
+          longitude: jobDetail.longitude,
+          latitudeDelta: 0.0225,
+          longitudeDelta: 0.0099,
+        }} 
+        >
+        <Marker
+          coordinate={{ latitude: jobDetail.latitude, longitude: jobDetail.longitude }}
+          image={require('../../assets/personMapMarker.png')}
+        />
+        <Marker
+          coordinate={{ latitude: rider_lat, longitude: rider_long }}
+          image={require('../../assets/logoMapMarker.png')}
+        />
+      </MapView>
+      )
+    
+  }
+
   render() {
-  const { backgroundImage } = styles;
   const jobDetail = this.props.jobDetail.jobDetail;
     if (jobDetail) {
       return (
-        <ImageBackground source={require('../../assets/main_background.png')} style={backgroundImage}>
+        <ImageBackground source={require('../../assets/main_background.png')} style={Background.backgroundImage}>
           <View style={{ flex:1, paddingLeft: 5, paddingRight: 5, paddingBottom:50 }}>
-            <MapView
-              style={{ flex: 1 }}
-              region={{
-              latitude: jobDetail.rider_lat,
-              longitude: jobDetail.rider_long,
-              latitudeDelta: 0.0312,
-              longitudeDelta: 0.0231,
-             }}>
-              <MapView.Marker
-                coordinate={{latitude: jobDetail.rider_lat, longitude: jobDetail.rider_long }}
-                title={'Tu es aqui'}
-                description={"Hola"}
-                image={require('../../assets/logoMapMarker.png')}
-              />
-              <MapView.Marker
-                coordinate={{latitude: jobDetail.latitude, longitude: jobDetail.longitude }}
-                title={jobDetail.title}
-                description={jobDetail.note}
-                image={require('../../assets/personMapMarker.png')}
-              />
+              {this.renderMap(jobDetail)}
 
-            </MapView>
             <CardSection style={styles.jobsDetailStyle}>
             <View style={styles.jobsDetailStyle}>
+            <View style={{paddingBottom: 5, flexDirection: 'row'}}>
+                <Text style={TextStyles.primaryLangStyleSml}>{i18n.t("go_to_client")} </Text>
+                </View>
                 <View style={{paddingBottom: 5, flexDirection: 'row'}}>
-                <Text style={styles.textStyle}>{CLIENT_NAME} </Text>
-                <Text style={styles.textStyleTwo}>{jobDetail.title}</Text>
+                <Text style={TextStyles.primaryLangStyleLrg}>{i18n.t("client_name")} </Text>
+                <Text style={TextStyles.primaryLangStyleSml}>{jobDetail.title}</Text>
                 </View>
                 <View>
-                <Text style={styles.textStyle}>{JOB_PAGE_INSTRUCTIONS}</Text>
-                <Text style={styles.textStyleTwo}>{jobDetail.note}</Text>
+                <Text style={TextStyles.primaryLangStyleLrg}>{i18n.t("instructions")}</Text>
+                <Text style={TextStyles.primaryLangStyleSml}>{jobDetail.note}</Text>
                 </View>
             </View>
             </CardSection>
@@ -126,9 +153,10 @@ class JobPage extends Component {
               {this.renderAlert()}
             </CardSection>
             <CardSection>
-              <RedButton onPress={this.onRedButtonPress.bind(this)}>
-                {MARK_JOB_COMPLETE}
-              </RedButton>
+            <Text style={TextStyles.primaryLangStyleSml}>{i18n.t("mark_ride_comp_inst")}</Text>
+            </CardSection>
+            <CardSection>
+              <CButton onPress={this.onRedButtonPress.bind(this)} bgColor={redColor} text={{primary: i18n.t('job_complete') }} />
             </CardSection>
           </View>
         </ ImageBackground>
@@ -136,7 +164,7 @@ class JobPage extends Component {
     }
 
   return (
-    <ImageBackground source={require('../../assets/main_background.png')} style={backgroundImage}>
+    <ImageBackground source={require('../../assets/main_background.png')} style={Background.backgroundImage}>
       <View style={{ flex:1, paddingLeft: 15, paddingRight: 15 }}>
       </View>
     </ ImageBackground>
@@ -145,23 +173,9 @@ class JobPage extends Component {
 }
 
 const styles = {
-  backgroundImage: {
-    flex: 1,
-    width: null,
-    height: null
-  },
   jobsDetailStyle: {
     flex: 1,
     paddingBottom: 20,
-  },
-  textStyle: {
-    fontSize: 15,
-    color: 'white',
-    fontWeight: 'bold',
-  },
-  textStyleTwo: {
-    fontSize: 15,
-    color: 'white',
   },
   alertBox: {
     justifyContent: 'center',
@@ -170,12 +184,6 @@ const styles = {
     borderRadius: 5,
     padding: 5,
     flex: 1,
-  },
-  alertText: {
-    fontSize: 16,
-    alignSelf: 'center',
-    color: 'red',
-    fontWeight: 'bold',
   }
 };
 
@@ -191,4 +199,4 @@ const mapStateToProps = (state) => {
   }
 }
 
-export default connect(mapStateToProps, { requestJobs, notesChanged, rideComplete })(JobPage);
+export default connect(mapStateToProps, { requestJobs, notesChanged, rideComplete, setLoading })(JobPage);

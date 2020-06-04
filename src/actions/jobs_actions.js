@@ -32,13 +32,6 @@ export const noteChanged = (text) => {
   };
 };
 
-// export const notesChanged = (text) => {
-//   return {
-//     type: JOBS_NOTE_CHANGED,
-//     payload: text
-//   };
-// };
-
 // this post request creates a new job in the DB.
 export const requestRide = ({ lat, long, token, jobNote }) => {
   return (dispatch) => {
@@ -89,8 +82,9 @@ export const requestJobs = ({ lat, long, token, range }) => {
          payload: { jobsList: response }});
      };
 
-// rider mark Complete
-export const rideComplete = ({ token, job_id, userType }) => {
+// client mark Complete
+export const rideComplete = ({ token, job_id, userType, rider_lat = 0.00, rider_long = 0.00 }) => {
+  console.log("rider lat is: " + rider_lat);
     return (dispatch) => {
       fetch('https://memotor-dev.herokuapp.com/job/complete/'+ job_id, {
         method: 'PUT',
@@ -98,19 +92,21 @@ export const rideComplete = ({ token, job_id, userType }) => {
           'Authorization': token,
           'Accept': 'application/json',
           'Content-Type': 'application/json',
-        }
+        },
+        body: JSON.stringify({ 'rider_lat': rider_lat, 'rider_long': rider_long })
       })
       .then((response) => response.json())
       .then(response => rideCompleteSuccess(dispatch, response, userType));
     };
 };
 
+
 const rideCompleteSuccess = (dispatch, response, userType) => {
   dispatch({
-    type: RIDE_COMPLETE});
-
+    type: RIDE_COMPLETE}); 
+    console.log(response.rider_complete);
   if (userType === 'rider') {
-      Actions.jobList();
+      Actions.rider();
     }
 };
 
@@ -136,7 +132,7 @@ const takeJobSuccess = (dispatch, response) => {
     type: TAKE_JOB_SUCCESS,
     payload: { jobDetail: response }});
     if (response.taken) {
-      Actions.onJob();
+      Actions.jobMap();
     }
 };
 
@@ -164,7 +160,7 @@ const checkedJobs = (dispatch, response, userType) => {
       dispatch({
         type: HAS_OLD_JOB,
         payload: { jobDetail: response}});
-        Actions.onJob();
+        Actions.jobMap();
     } else if (!response.user_complete && userType === 'client') {
       console.log('user has an outstanding job.');
       if (response.taken) {

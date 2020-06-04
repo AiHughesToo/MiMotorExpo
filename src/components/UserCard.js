@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, Text, Image } from 'react-native';
-import { emailChanged, passwordChanged, loginUser } from '../actions';
-import { Card, CardSection, Input, Button } from './common';
+import { Card, CardSection } from './common';
+import { TextStyles } from "./MainStyleSheet";
+import i18n from "i18n-js";
 
 class UserCard extends Component {
 
@@ -14,8 +15,7 @@ const { textStyle, displayStyle } = styles;
       <CardSection>
         <Image source={require('../../assets/person.png')} style={styles.userImage} />
         <View>
-          <Text style={textStyle}>Hello {this.props.userName}</Text>
-          <Text style={textStyle}>Account Type: {this.props.user_type}</Text>
+          <Text style={TextStyles.primaryLangStyleLrg}>{i18n.t("hi")} {this.props.userName}</Text>
         </View>
       </CardSection>
     </Card>
@@ -24,11 +24,6 @@ const { textStyle, displayStyle } = styles;
  }
 }
 const styles = {
-  textStyle: {
-    color: '#fff',
-    fontSize: 17,
-    padding: 5
-  },
   displayStyle: {
     padding: 5
   },

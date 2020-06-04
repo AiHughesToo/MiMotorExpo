@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { View, Text, Image, ImageBackground, TouchableWithoutFeedback } from 'react-native';
+import { View, Text, Image, TouchableWithoutFeedback, I18nManager } from 'react-native';
 import { connect } from 'react-redux';
 import { selectMotor, selectClient } from '../actions';
-import { Card, CardSection, Input, Button, RedButton, Spinner, DividerLine } from './common';
+import i18n from "i18n-js";
+
 
 class SelectAccountBar extends Component {
 
@@ -37,13 +38,13 @@ const { barStyle, buttonViewStyle, textStyle } = styles;
       <TouchableWithoutFeedback onPress={this.onSelectMotor.bind(this)}>
         <View style={ buttonViewStyle }>
           {this.renderMotorImage()}
-          <Text style={ textStyle }> Motorista </ Text>
+          <Text style={ textStyle }>{i18n.t("rider")}</ Text>
         </View>
       </ TouchableWithoutFeedback>
       <TouchableWithoutFeedback onPress={this.onSelectClient.bind(this)}>
         <View style={ buttonViewStyle }>
           {this.renderClientImage()}
-          <Text style={ textStyle }> Client </ Text>
+          <Text style={ textStyle }>{i18n.t("client")}</ Text>
         </View>
       </ TouchableWithoutFeedback>
       </View>

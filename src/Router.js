@@ -5,6 +5,7 @@ import JobList from './components/JobList';
 import JobPage from './components/JobPage';
 import CustomerMain from './components/CustomerMain';
 import SignUp from './components/SignUp';
+import ResetPassword from './components/ResetPassword';
 import { E_MAIN_TITLE, MAIN_TITLE, E_REGISTER, REGISTER, WORKING, JOB_LIST } from './LanguageFile';
 
 const RouterComponent = () => {
@@ -15,9 +16,10 @@ const { headerColor, headerText } = styles;
         <Scene key='auth'>
           <Scene key='login' component={LogonForm} title={MAIN_TITLE} titleStyle={ headerText } />
           <Scene key='signUp' component={SignUp} title={REGISTER} />
+          <Scene key='resetPassword' component={ResetPassword} title='Reset Password' />
         </Scene>
         <Scene key='rider'>
-          <Scene key='jobList' component={JobList} title={JOB_LIST} />
+          <Scene key='jobList' component={JobList} title={JOB_LIST} /> 
         </Scene>
         <Scene key='jobMap'>
           <Scene key='onJob' component={JobPage} title={WORKING} />
@@ -25,6 +27,7 @@ const { headerColor, headerText } = styles;
         <Scene key='client'>
           <Scene key='clientMain' component={CustomerMain} title='Client' />
         </Scene>
+
       </Scene>
     </Router>
   );

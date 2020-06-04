@@ -8,5 +8,7 @@ export * from './Spinner';
 export * from './RedButton';
 export * from './DividerLine';
 export * from './YellowButton';
+export * from './CButton';
+export * from './BannerAdSection';
 export * from './InputLarge';
 export * from './TakeButton';

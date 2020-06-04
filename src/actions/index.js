@@ -3,7 +3,9 @@ import { Actions } from 'react-native-router-flux';
 import { EMAIL_CHANGED, PASSWORD_CHANGED, LOGIN_USER,
          LOGIN_USER_SUCCESS, LOGIN_BLANK_ERROR,
          LOGIN_USER_FAIL, SELECT_MOTOR, SELECT_CLIENT,
-         NAME_CHANGED, REGISTER_USER_SUCCESS, REGISTER_USER_FAIL, LOG_OUT } from './types';
+         NAME_CHANGED, REGISTER_USER_SUCCESS, REGISTER_USER_FAIL, 
+         LOG_OUT, VIN_CHANGED, PLATE_CHANGED, BIKETYPE_CHANGED, REQUEST_PW_SUCCESS, 
+         CODE_CHANGED, SET_LOADING } from './types';
 
 // this is an action creator
 export const emailChanged = (text) => {
@@ -12,6 +14,31 @@ export const emailChanged = (text) => {
     payload: text
   };
 };
+export const codeChanged = (text) => {
+  return {
+    type: CODE_CHANGED,
+    payload: text
+  };
+};
+export const vinChanged = (text) => {
+  return {
+    type: VIN_CHANGED,
+    payload: text
+  }
+}
+export const plateChanged = (text) => {
+  return {
+    type: PLATE_CHANGED,
+    payload: text
+  }
+}
+
+export const bikeTypeChanged = (text) => {
+  return {
+    type: BIKETYPE_CHANGED,
+    payload: text
+  }
+}
 
 export const passwordChanged = (text) => {
   return {
@@ -25,6 +52,15 @@ export const nameChanged = (text) => {
     type: NAME_CHANGED,
     payload: text
  };
+};
+
+export const setLoading = (loadingState) => {
+  console.log(loadingState);
+  return {      
+      type: SET_LOADING,
+      payload: { loading: loadingState}
+  };
+  
 };
 
 export const loginUser = ({ email, password }) => {
@@ -51,7 +87,7 @@ export const loginUser = ({ email, password }) => {
 export const logOutUser = () => {
   return (dispatch) => {
     dispatch({ type: LOG_OUT });
-    Actions.login();
+    Actions.auth();
   }
 };
 
@@ -59,15 +95,24 @@ export const selectMotor = () => {
   return (dispatch) => { dispatch({ type: SELECT_MOTOR });
   };
 };
+
 export const selectClient = () => {
   return (dispatch) => { dispatch({ type: SELECT_CLIENT });
   };
 };
 
-export const registerUser = ({ email, password, name, accountType }) => {
+// refactor this to only have 1 if statement. 
+export const registerUser = ({ email, password, name, accountType, vin, plate, bikeType}) => {
   if (email == '' || password == '' || name == '' || accountType == '') {
     return { type: LOGIN_BLANK_ERROR, payload: {error: 'All fileds are required.'} };
+  } 
+  
+  if (accountType == 'rider') {
+    if (vin == '' || bikeType == ''){
+      return { type: LOGIN_BLANK_ERROR, payload: {error: 'All fileds are required.'} };
+    }
   }
+
   return (dispatch) => {
   // we dispatch this to set the loading spinner
     dispatch({ type: LOGIN_USER });
@@ -78,7 +123,7 @@ export const registerUser = ({ email, password, name, accountType }) => {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ 'email': email, 'password': password , name: name, account_type: accountType })
+      body: JSON.stringify({ 'email': email, 'password': password , name: name, account_type: accountType, vin_number: vin, plate_number: plate, bike_type: bikeType })
     })
     .then((response) => response.json())
     .then(response => registerUserSuccess(dispatch, response));
@@ -100,6 +145,75 @@ const registerUserSuccess = (dispatch, response) => {
   }
 
 };
+
+export const resetPW = ({ password, code }) => {
+  if (code == '' || password == '') {
+    return { type: LOGIN_BLANK_ERROR, payload: {error: 'code or password is blank.'} };
+  }
+  return (dispatch) => {
+// we dispatch this to set the loading spinner
+    dispatch({ type: LOGIN_USER });
+
+    fetch('https://memotor-dev.herokuapp.com/set_pass', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ 'token': code, 'password': password })
+    })
+    .then((response) => response.json())
+    .then(response => resetPWSuccess(dispatch, response));
+  };
+};
+
+const resetPWSuccess = (dispatch, response) => {
+  if (response.errors) {
+    dispatch({
+      type: REQUEST_PW_SUCCESS,
+      payload: { loading: false, requestSuccess: false}});
+  } else {
+    dispatch({
+      type: REQUEST_PW_SUCCESS,
+      payload: { loading: false, requestSuccess: true}});
+    Actions.login();
+  }
+};
+
+export const requestPWToken = ({ email }) => {
+  if (email == '') {
+    return { type: LOGIN_BLANK_ERROR, payload: {error: 'email or password is blank.'} };
+  }
+  return (dispatch) => {
+// we dispatch this to set the loading spinner
+    dispatch({ type: LOGIN_USER });
+
+    fetch('https://memotor-dev.herokuapp.com/reset_password', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ 'email': email })
+    })
+    .then((response) => response.json())
+    .then(response => requestPWSuccess(dispatch, response));
+  };
+};
+
+const requestPWSuccess = (dispatch, response) => {
+  if (response.errors) {
+    dispatch({
+      type: REQUEST_PW_SUCCESS,
+      payload: { loading: false, requestSuccess: false}});
+  } else {
+    dispatch({
+      type: REQUEST_PW_SUCCESS,
+      payload: { loading: false, requestSuccess: true}});
+    Keyboard.dismiss();
+  }
+};
+
 const loginUserSuccess = (dispatch, response) => {
 
   if (response.errors) {
