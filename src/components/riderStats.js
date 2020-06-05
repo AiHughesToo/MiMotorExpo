@@ -1,17 +1,11 @@
 import React, { Component } from 'react';
-import { FlatList, ScrollView, View, Text, ImageBackground} from 'react-native';
+import { FlatList, ScrollView, View, Text, ImageBackground, Image} from 'react-native';
 import { connect } from 'react-redux';
-import MapView from 'react-native-maps';
-import { Marker }  from 'react-native-maps';
-import * as Permissions from 'expo-permissions';
-import * as Location from 'expo-location';
-import { AdMobBanner } from "expo-ads-admob";
 import { requestJobs, notesChanged, rideMethod, checkOutstandingJob } from '../actions/jobs_actions';
 import { logOutUser, setLoading } from '../actions/index';
-import JobListItem from './JobListItem';
 import i18n from "i18n-js";
-import { Background, TextStyles, greenColor } from './MainStyleSheet';
-import { CardSection, CButton, Spinner } from './common';
+import { Background, TextStyles, Logo, greenColor } from './MainStyleSheet';
+import { CardSection, CButton } from './common';
 
 class RiderStats extends Component {
   
@@ -26,7 +20,7 @@ class RiderStats extends Component {
 
   componentWillMount() {
     const { token } = this.props;
-    this.props.checkOutstandingJob({ token, userType: 'rider' });
+    //this.props.checkOutstandingJob({ token, userType: 'rider' });
     this.props.setLoading(false);
   }
 
@@ -55,18 +49,31 @@ class RiderStats extends Component {
 
 
   render() {
+    const { email, userName } = this.props;
 
     return (
       <ImageBackground source={require('../../assets/main_background.png')} style={Background.backgroundImage}>
         <View style={{ flex:1, paddingLeft: 15, paddingRight: 15, paddingTop: 10 }}>
           <CardSection>
-            <CButton onPress={this.onButtonPress.bind(this)} bgColor={greenColor} text={{primary: i18n.t('sign_out') }} />
+            <Image source={require('../../assets/temp_logo.png')} style={Logo.userImage} />
+            <View style={{ flex:1 }}> 
+            <CardSection>
+              <Text style={TextStyles.primaryLangStyleSml}>{i18n.t("email")}</Text>
+              <Text style={TextStyles.primaryLangStyleSml}>: {email}</Text>
+            </CardSection>
+            <CardSection>
+              <Text style={TextStyles.primaryLangStyleSml}>{i18n.t("name")}</Text>
+              <Text style={TextStyles.primaryLangStyleSml}>: {userName}</Text>
+            </CardSection>
+             
+              
+            </View>
+
           </CardSection>
           <CardSection>
-            <Text style={TextStyles.primaryLangStyleSml}>{i18n.t("no_jobs")}</Text>
+            <Text style={TextStyles.primaryLangStyleSml}>{i18n.t("email")}</Text>
           </CardSection>
-          <Spinner />
-
+        
         </View>
       </ ImageBackground>
       );
@@ -81,9 +88,9 @@ const styles = {
 };
 
 const mapStateToProps = (state) => {
-  const { user, token, loading, error } = state.auth;
+  const { userName, token, loading, error, email } = state.auth;
   const { jobsList, jobDetail, oldJob } = state.job;
- return { user, token, loading, error, jobsList, jobDetail, oldJob }
+ return { userName, token, loading, error, email, jobsList, jobDetail, oldJob }
 }
 
 export default connect(mapStateToProps, { requestJobs, notesChanged, rideMethod, checkOutstandingJob, logOutUser, setLoading })(RiderStats);

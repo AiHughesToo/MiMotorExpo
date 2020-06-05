@@ -34,5 +34,6 @@
   "ride_instructions": "Ingrese instrucciones o instrucciones especiales.",
   "gps_warning": "Debe tener el GPS habilitado para usar esta función. Recuerde que los ciclistas cercanos a usted pueden ver su ubicación en un mapa.",
   "on_way": " está en el camino",
-  "requested": "Paseo Solicitado"
+  "requested": "Paseo Solicitado",
+  "rider_stats": "Mis Estadísticas"
 }

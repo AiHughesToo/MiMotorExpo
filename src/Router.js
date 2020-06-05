@@ -5,6 +5,7 @@ import JobList from './components/JobList';
 import JobPage from './components/JobPage';
 import CustomerMain from './components/CustomerMain';
 import SignUp from './components/SignUp';
+import RiderStats from './components/riderStats';
 import ResetPassword from './components/ResetPassword';
 import { E_MAIN_TITLE, MAIN_TITLE, E_REGISTER, REGISTER, WORKING, JOB_LIST } from './LanguageFile';
 
@@ -20,6 +21,7 @@ const { headerColor, headerText } = styles;
         </Scene>
         <Scene key='rider'>
           <Scene key='jobList' component={JobList} title={JOB_LIST} /> 
+          <Scene key='riderStats' component={RiderStats} title={JOB_LIST} /> 
         </Scene>
         <Scene key='jobMap'>
           <Scene key='onJob' component={JobPage} title={WORKING} />

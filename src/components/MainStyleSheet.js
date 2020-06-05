@@ -18,6 +18,13 @@ const Logo = StyleSheet.create({
   logoImage: {
     width: 100,
     height: 98
+  },
+  userImage: {
+    width: 70,
+    height: 70,
+    backgroundColor: '#1b364e',
+    borderRadius: 35,
+    marginRight: 10
   }
 })
 

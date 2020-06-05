@@ -34,5 +34,6 @@
   "ride_instructions": "Enter any special instructions or directions.",
   "gps_warning": "You must have GPS enabled to use this feature. Remember riders close to you can see your location on a map.",
   "on_way": "is on the way",
-  "requested": "Ride Requested"
+  "requested": "Ride Requested",
+  "rider_stats": "My stats"
 }

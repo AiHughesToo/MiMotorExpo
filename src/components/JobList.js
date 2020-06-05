@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { FlatList, ScrollView, View, Text, ImageBackground} from 'react-native';
+import { Actions } from 'react-native-router-flux';
+import { FlatList, ScrollView, View, Text, ImageBackground, Image} from 'react-native';
 import { connect } from 'react-redux';
 import MapView from 'react-native-maps';
 import { Marker }  from 'react-native-maps';
@@ -10,7 +11,7 @@ import { requestJobs, notesChanged, rideMethod, checkOutstandingJob } from '../a
 import { logOutUser, setLoading } from '../actions/index';
 import JobListItem from './JobListItem';
 import i18n from "i18n-js";
-import { Background, TextStyles, greenColor } from './MainStyleSheet';
+import { Background, TextStyles, Logo, greenColor } from './MainStyleSheet';
 import { CardSection, CButton, Spinner } from './common';
 
 class JobList extends Component {
@@ -84,6 +85,19 @@ class JobList extends Component {
       this.logOut();
      }
 
+     onStatsButtonPress() {
+       Actions.riderStats();
+     }
+
+     renderStatsButton() {
+       return (
+         <CardSection style={{ flex:1, paddingLeft: 5, paddingRight: 5, paddingBottom: 20 }}>
+           <Image source={require('../../assets/temp_logo.png')} style={Logo.userImage} />
+           <CButton onPress={this.onStatsButtonPress.bind(this)} bgColor={greenColor} text={{primary: i18n.t('rider_stats') }} />
+        </CardSection>
+       )
+     }
+
      renderRow({ item }) {
       item.rider_lat = this.state.location.coords.latitude;
       item.rider_long = this.state.location.coords.longitude;
@@ -143,6 +157,7 @@ class JobList extends Component {
         <ImageBackground source={require('../../assets/main_background.png')} style={Background.backgroundImage}>
           <View style={{ flex:1, paddingLeft: 5, paddingRight: 5, paddingBottom: 20 }}>
             <CardSection>
+              {this.renderStatsButton()}
             </CardSection>
             <MapView
               style={{ marginBottom: 5, height: 275, borderRadius: 50}}
@@ -173,6 +188,7 @@ class JobList extends Component {
   return (
     <ImageBackground source={require('../../assets/main_background.png')} style={Background.backgroundImage}>
       <View style={{ flex:1, paddingLeft: 15, paddingRight: 15, paddingTop: 10 }}>
+        {this.renderStatsButton()}
         {this.renderMap()}
         <CardSection>
           <CButton onPress={this.onButtonPress.bind(this)} bgColor={greenColor} text={{primary: i18n.t('sign_out') }} />

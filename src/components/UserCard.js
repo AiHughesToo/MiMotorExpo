@@ -8,7 +8,7 @@ import i18n from "i18n-js";
 class UserCard extends Component {
 
 render() {
-const { textStyle, displayStyle } = styles;
+const { displayStyle } = styles;
   return (
     <View style={displayStyle}>
     <Card>
