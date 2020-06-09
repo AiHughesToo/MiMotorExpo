@@ -35,5 +35,7 @@
   "gps_warning": "You must have GPS enabled to use this feature. Remember riders close to you can see your location on a map.",
   "on_way": "is on the way",
   "requested": "Ride Requested",
-  "rider_stats": "My stats"
+  "rider_stats": "My stats",
+  "life_time_dist": "Livetime distance driven",
+  "num_jobs": "Lifetime number of jobs"
 }

@@ -28,6 +28,17 @@ const Logo = StyleSheet.create({
   }
 })
 
+const Award = StyleSheet.create({
+  container: {
+    paddingTop: 5,
+    paddingBottom: 5,
+    width: 87,
+    height: 100,
+    justifyContent: 'center',
+    alignSelf: 'center'
+  }
+})
+
 const CardSectionStyle = StyleSheet.create({
   container: {
     padding: 5,
@@ -76,6 +87,13 @@ const TextStyles = StyleSheet.create({
     paddingTop: 10,
     paddingBottom: 8
   },
+  primaryLangStyleLrgNoPad: {
+    justifyContent: 'center',
+    alignSelf: 'center',
+    color: '#fff',
+    fontSize: 20,
+    fontWeight: '600'
+  },
   primaryLangStyleSmlNoPad: {
     justifyContent: 'center',
     alignSelf: 'center',
@@ -96,4 +114,4 @@ const redColor    = '#d94c35';
 const yellowColor = '#fbc042';
 const greenColor  = '#94cd65';
 
-export { Background, Logo, CardSectionStyle, TextStyles, AlertBox, redColor, yellowColor, greenColor };
+export { Background, Logo, CardSectionStyle, TextStyles, AlertBox, Award, redColor, yellowColor, greenColor };

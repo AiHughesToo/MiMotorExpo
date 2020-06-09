@@ -4,7 +4,7 @@ import { EMAIL_CHANGED, PASSWORD_CHANGED,
         SELECT_MOTOR, SELECT_CLIENT, NAME_CHANGED,
         REGISTER_USER_SUCCESS, REGISTER_USER_FAIL, 
         LOG_OUT, VIN_CHANGED, PLATE_CHANGED, BIKETYPE_CHANGED,
-        REQUEST_PW_SUCCESS, CODE_CHANGED, SET_LOADING } from '../actions/types';
+        REQUEST_PW_SUCCESS, CODE_CHANGED, SET_LOADING, SET_MY_STATS } from '../actions/types';
 
 const INITIAL_STATE = {
 email: '',
@@ -21,6 +21,8 @@ error: '',
 accountType: '',
 userName: '',
 userMessage: '',
+life_t_distance: '',
+life_t_num_jobs: '',
 requestSuccess: false,
 };
 
@@ -42,6 +44,8 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, password: action.payload };
     case LOGIN_BLANK_ERROR:
       return { ...state, error: action.payload.error };
+    case SET_MY_STATS:
+      return { ...state, life_t_distance: action.payload.life_t_distance, life_t_num_jobs: action.payload.life_t_num_jobs };
     case LOGIN_USER_FAIL:
       return { ...state, error: 'Authentication Failed', password: '', loading: false };
     case REGISTER_USER_FAIL:

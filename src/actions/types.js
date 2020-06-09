@@ -29,3 +29,4 @@ export const REQUEST_PW_SUCCESS = 'request_pw_success';
 export const LOG_OUT = 'log_out';
 export const CODE_CHANGED = 'code_changed';
 export const SET_LOADING = 'set_loading';
+export const SET_MY_STATS = 'set_my_stats';

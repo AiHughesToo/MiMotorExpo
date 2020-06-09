@@ -5,7 +5,7 @@ import { EMAIL_CHANGED, PASSWORD_CHANGED, LOGIN_USER,
          LOGIN_USER_FAIL, SELECT_MOTOR, SELECT_CLIENT,
          NAME_CHANGED, REGISTER_USER_SUCCESS, REGISTER_USER_FAIL, 
          LOG_OUT, VIN_CHANGED, PLATE_CHANGED, BIKETYPE_CHANGED, REQUEST_PW_SUCCESS, 
-         CODE_CHANGED, SET_LOADING } from './types';
+         CODE_CHANGED, SET_LOADING, SET_MY_STATS } from './types';
 
 // this is an action creator
 export const emailChanged = (text) => {
@@ -61,6 +61,28 @@ export const setLoading = (loadingState) => {
       payload: { loading: loadingState}
   };
   
+};
+
+export const checkMyStats = ({ token }) => {
+  return (dispatch) => {
+
+    fetch('https://memotor-dev.herokuapp.com/mystats', {
+      method: 'GET',
+      headers: {
+        'Authorization': token,
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      }
+    })
+    .then((response) => response.json())
+    .then((response) => setStats(dispatch, response));
+  };
+};
+
+const setStats = (dispatch, response) => {
+      dispatch({
+        type: SET_MY_STATS,
+        payload: { life_t_distance: response.life_t_distance, life_t_num_jobs: response.life_t_num_jobs}});
 };
 
 export const loginUser = ({ email, password }) => {

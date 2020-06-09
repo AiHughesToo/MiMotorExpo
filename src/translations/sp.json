@@ -35,5 +35,7 @@
   "gps_warning": "Debe tener el GPS habilitado para usar esta función. Recuerde que los ciclistas cercanos a usted pueden ver su ubicación en un mapa.",
   "on_way": " está en el camino",
   "requested": "Paseo Solicitado",
-  "rider_stats": "Mis Estadísticas"
+  "rider_stats": "Mis Estadísticas",
+  "life_time_dist": "Distancia recorrida de por vida",
+  "num_jobs": "Distancia recorrida de por vida"
 }
