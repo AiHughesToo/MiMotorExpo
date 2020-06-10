@@ -49,5 +49,11 @@
   "etw": "Este a Oeste",
   "rdo": "RD Uno",
   "oa": "Una vez Alrededor",
-  "moon": "A la Luna"
+  "moon": "A la Luna",
+  "titel": "MiMotor",
+  "re_pass": "Restablecer la contraseña",
+  "job_list": "Lista de Trabajos",
+  "stats": "Mis estadísticas",
+  "working": "En el Trabajo",
+  "ride_request": "Solicitar un Viaje"
 }

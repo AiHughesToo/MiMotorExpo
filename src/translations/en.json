@@ -49,5 +49,12 @@
   "etw": "East to West",
   "rdo": "RD One",
   "oa": "Once Around",
-  "moon": "To the Moon"
+  "moon": "To the Moon",
+  "titel": "MiMotor",
+  "regester": "Regester",
+  "re_pass": "Reset Password",
+  "job_list": "Job List",
+  "stats": "My Stats",
+  "working": "On the Job",
+  "ride_request": "Request a Ride"
 }
