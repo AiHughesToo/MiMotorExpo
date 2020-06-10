@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { ScrollView, View, Text, ImageBackground, Image, TouchableHighlightBase} from 'react-native';
 import { connect } from 'react-redux';
-import { requestJobs, rideMethod, checkOutstandingJob } from '../actions/jobs_actions';
-import { logOutUser, setLoading, checkMyStats } from '../actions/index';
+import { setLoading, checkMyStats } from '../actions/index';
 import i18n from "i18n-js";
 import { Background, TextStyles, Logo, Award } from './MainStyleSheet';
 import { CardSection, Spinner, DividerLine } from './common';
@@ -16,8 +15,6 @@ class RiderStats extends Component {
     long: null,
   };
 
-  first_ride = '../../assets/locked_award.png';
-
   componentWillMount() {
     const { token } = this.props;
     this.props.checkMyStats({ token });
@@ -29,25 +26,10 @@ class RiderStats extends Component {
     if (this.props.life_t_num_jobs >> 0) this.first_ride = '../../assets/temp_logo.png';
   }
 
-  setAwardStates() {
-    if (this.props.life_t_num_jobs >> 0) this.first_ride = '../../assets/temp_logo.png';
-  }
-
-  calculateDistance() {
-    if (this.props.life_t_distance) {
-      
-    }
-  }
-
 
   render() {
     const { email, userName } = this.props;
     let image_source = '../../assets/locked_award.png'
-
-    // let first_ride = this.props.life_t_num_jobs >> 0 ? '../../assets/temp_logo.png': '../../assets/locked_award.png';
-    this.setAwardStates();
-    console.log(this.first_ride);
-  
 
     if(this.props.life_t_distance) {
       return (
@@ -64,10 +46,11 @@ class RiderStats extends Component {
                   <Text style={TextStyles.primaryLangStyleSml}>{i18n.t("name")}</Text>
                   <Text style={TextStyles.primaryLangStyleSml}>: {userName}</Text>
                 </CardSection>
-              </View>
-              
+              </View>              
             </CardSection>
+
             <DividerLine />
+
             <View>
              <Text style={TextStyles.primaryLangStyleLrgNoPad}>{i18n.t("life_time_dist")}:</Text>
              <Text style={TextStyles.primaryLangStyleSmlNoPad}>{this.props.life_t_distance.toFixed(2)}km / {(this.props.life_t_distance/1.609).toFixed(2)}mi</Text>
@@ -76,70 +59,107 @@ class RiderStats extends Component {
               <Text style={TextStyles.primaryLangStyleLrg}>{i18n.t("num_jobs")}: </Text>
               <Text style={TextStyles.primaryLangStyleSmlNoPad}>{this.props.life_t_num_jobs}</Text>
             </View>
+
             <DividerLine />
+
             <ScrollView> 
+
               <CardSection>
                 <View style={{ flex: 1 }}>
                   <Image source={
-                    this.props.life_t_num_jobs > 0 ? require('../../assets/temp_logo.png') : require('../../assets/locked_award.png')
+                    this.props.life_t_num_jobs > 0 ? require('../../assets/firstRide.png') : require('../../assets/locked_award.png')
                     } style={Award.container} />
-                  <Text style={TextStyles.primaryLangStyleSmlNoPad}>First Ride</Text>
+                  <Text style={TextStyles.primaryLangStyleSmlNoPad}>{i18n.t("first_r")}</Text>
                 </View>
+
                 <View style={{ flex: 1 }}>
                   <Image source={
-                    this.props.life_t_num_jobs > 10 ? require('../../assets/temp_logo.png') : require('../../assets/locked_award.png')
+                    this.props.life_t_num_jobs > 10 ? require('../../assets/tenthRide.png') : require('../../assets/locked_award.png')
                     } style={Award.container} />
-                  <Text style={TextStyles.primaryLangStyleSmlNoPad}>10</Text>
+                  <Text style={TextStyles.primaryLangStyleSmlNoPad}>{i18n.t("10")}</Text>
                 </View>
+
                 <View style={{ flex: 1 }}>
                   <Image source={
-                    this.props.life_t_num_jobs > 100 ? require('../../assets/temp_logo.png') : require('../../assets/locked_award.png')
+                    this.props.life_t_num_jobs > 10 ? require('../../assets/hundred.png') : require('../../assets/locked_award.png')
                     } style={Award.container} />
-                  <Text style={TextStyles.primaryLangStyleSmlNoPad}>100</Text>
+                  <Text style={TextStyles.primaryLangStyleSmlNoPad}>{i18n.t("100")}</Text>
                 </View>
+
               </CardSection>
+
               <CardSection>
                 <View style={{ flex: 1 }}>
-                  <Image source={require(image_source)} style={Award.container} />
-                  <Text style={TextStyles.primaryLangStyleSmlNoPad}>First Mile</Text>
+                  <Image source={
+                    this.props.life_t_num_jobs > 10 ? require('../../assets/f_mile.png') : require('../../assets/locked_award.png')
+                    } style={Award.container} />
+                  <Text style={TextStyles.primaryLangStyleSmlNoPad}>{i18n.t("first_k")}</Text>
                 </View>
+
                 <View style={{ flex: 1 }}>
-                  <Image source={require('../../assets/locked_award.png')} style={Award.container} />
-                  <Text style={TextStyles.primaryLangStyleSmlNoPad}>North to South</Text>
+                  <Image source={
+                    this.props.life_t_num_jobs > 10 ? require('../../assets/nts.png') : require('../../assets/locked_award.png')
+                    } style={Award.container} />
+                  <Text style={TextStyles.primaryLangStyleSmlNoPad}>{i18n.t("nts")}</Text>
                 </View>
+
                 <View style={{ flex: 1 }}>
-                  <Image source={require('../../assets/locked_award.png')} style={Award.container} />
-                  <Text style={TextStyles.primaryLangStyleSmlNoPad}>East to West</Text>
+                  <Image source={
+                    this.props.life_t_num_jobs > 10 ? require('../../assets/etw.png') : require('../../assets/locked_award.png')
+                    } style={Award.container} />  
+                  <Text style={TextStyles.primaryLangStyleSmlNoPad}>{i18n.t("etw")}</Text>
                 </View>
+
               </CardSection>
+
               <CardSection>
                 <View style={{ flex: 1 }}>
-                  <Image source={require(image_source)} style={Award.container} />
-                  <Text style={TextStyles.primaryLangStyleSmlNoPad}>500</Text>
+                  <Image source={
+                    this.props.life_t_num_jobs > 10 ? require('../../assets/five_hun.png') : require('../../assets/locked_award.png')
+                    } style={Award.container} />  
+                  <Text style={TextStyles.primaryLangStyleSmlNoPad}>{i18n.t("500")}</Text>
                 </View>
+
                 <View style={{ flex: 1 }}>
-                  <Image source={require('../../assets/locked_award.png')} style={Award.container} />
-                  <Text style={TextStyles.primaryLangStyleSmlNoPad}>1000</Text>
+                  <Image source={
+                    this.props.life_t_num_jobs > 10 ? require('../../assets/thousand.png') : require('../../assets/locked_award.png')
+                    } style={Award.container} />  
+                  <Text style={TextStyles.primaryLangStyleSmlNoPad}>{i18n.t("1000")}</Text>
                 </View>
+
                 <View style={{ flex: 1 }}>
-                  <Image source={require('../../assets/locked_award.png')} style={Award.container} />
-                  <Text style={TextStyles.primaryLangStyleSmlNoPad}>5000</Text>
+                 <Image source={
+                    this.props.life_t_num_jobs > 10 ? require('../../assets/fivek.png') : require('../../assets/locked_award.png')
+                    } style={Award.container} />  
+                  <Text style={TextStyles.primaryLangStyleSmlNoPad}>{i18n.t("5000")}</Text>
                 </View>
+
               </CardSection>
+
               <CardSection>
                 <View style={{ flex: 1 }}>
-                  <Image source={require(image_source)} style={Award.container} />
-                  <Text style={TextStyles.primaryLangStyleSmlNoPad}>RD One</Text>
+                  <Image source={
+                    this.props.life_t_num_jobs > 10 ? require('../../assets/oa.png') : require('../../assets/locked_award.png')
+                    } style={Award.container} />  
+                  <Text style={TextStyles.primaryLangStyleSmlNoPad}>{i18n.t("rdo")}</Text>
                 </View>
+
                 <View style={{ flex: 1 }}>
-                  <Image source={require('../../assets/locked_award.png')} style={Award.container} />
-                  <Text style={TextStyles.primaryLangStyleSmlNoPad}>Once Around</Text>
+                  <Image source={
+                    this.props.life_t_num_jobs > 10 ? require('../../assets/oncea.png') : require('../../assets/locked_award.png')
+                    } style={Award.container} />  
+                  <Text style={TextStyles.primaryLangStyleSmlNoPad}>{i18n.t("oa")}</Text>
                 </View>
+
                 <View style={{ flex: 1 }}>
-                  <Image source={require('../../assets/locked_award.png')} style={Award.container} />
-                  <Text style={TextStyles.primaryLangStyleSmlNoPad}>To the Moon</Text>
+                  <Image source={
+                    this.props.life_t_num_jobs > 10 ? require('../../assets/moon.png') : require('../../assets/locked_award.png')
+                    } style={Award.container} />  
+                  <Text style={TextStyles.primaryLangStyleSmlNoPad}>{i18n.t("moon")}</Text>
                 </View>
+
               </CardSection>
+
             </ScrollView>
           
           </View>
@@ -156,17 +176,10 @@ class RiderStats extends Component {
    }
 }
 
-const styles = {
-  jobsListStyle: {
-    flex: 1,
-    backgroundColor: 'white'
-  }
-};
-
 const mapStateToProps = (state) => {
   const { userName, token, loading, error, email, life_t_distance, life_t_num_jobs } = state.auth;
   const { jobsList, jobDetail, oldJob } = state.job;
  return { userName, token, loading, error, email, jobsList, jobDetail, oldJob, life_t_distance, life_t_num_jobs }
 }
 
-export default connect(mapStateToProps, { requestJobs, rideMethod, checkOutstandingJob, logOutUser, setLoading, checkMyStats })(RiderStats);
+export default connect(mapStateToProps, { setLoading, checkMyStats })(RiderStats);

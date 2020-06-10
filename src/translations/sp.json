@@ -37,5 +37,17 @@
   "requested": "Paseo Solicitado",
   "rider_stats": "Mis Estadísticas",
   "life_time_dist": "Distancia recorrida de por vida",
-  "num_jobs": "Distancia recorrida de por vida"
+  "num_jobs": "Distancia recorrida de por vida",
+  "first_r": "Primer Paseo",
+  "10": "10",
+  "100": "100",
+  "500": "500",
+  "1000": "1000",
+  "5000": "5000",
+  "first_k": "Primera Milla",
+  "nts": "Norte a Sur",
+  "etw": "Este a Oeste",
+  "rdo": "RD Uno",
+  "oa": "Una vez Alrededor",
+  "moon": "A la Luna"
 }

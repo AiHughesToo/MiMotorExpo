@@ -37,5 +37,17 @@
   "requested": "Ride Requested",
   "rider_stats": "My stats",
   "life_time_dist": "Livetime distance driven",
-  "num_jobs": "Lifetime number of jobs"
+  "num_jobs": "Lifetime number of jobs",
+  "first_r": "First Ride",
+  "10": "10",
+  "100": "100",
+  "500": "500",
+  "1000": "1000",
+  "5000": "5000",
+  "first_k": "First Mile",
+  "nts": "North to South",
+  "etw": "East to West",
+  "rdo": "RD One",
+  "oa": "Once Around",
+  "moon": "To the Moon"
 }
