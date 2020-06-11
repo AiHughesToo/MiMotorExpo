@@ -81,7 +81,7 @@ class RiderStats extends Component {
 
                 <View style={{ flex: 1 }}>
                   <Image source={
-                    this.props.life_t_num_jobs > 10 ? require('../../assets/hundred.png') : require('../../assets/locked_award.png')
+                    this.props.life_t_num_jobs > 100 ? require('../../assets/hundred.png') : require('../../assets/locked_award.png')
                     } style={Award.container} />
                   <Text style={TextStyles.primaryLangStyleSmlNoPad}>{i18n.t("100")}</Text>
                 </View>
@@ -91,21 +91,21 @@ class RiderStats extends Component {
               <CardSection>
                 <View style={{ flex: 1 }}>
                   <Image source={
-                    this.props.life_t_num_jobs > 10 ? require('../../assets/f_mile.png') : require('../../assets/locked_award.png')
+                    this.props.life_t_distance > 1 ? require('../../assets/f_mile.png') : require('../../assets/locked_award.png')
                     } style={Award.container} />
                   <Text style={TextStyles.primaryLangStyleSmlNoPad}>{i18n.t("first_k")}</Text>
                 </View>
 
                 <View style={{ flex: 1 }}>
                   <Image source={
-                    this.props.life_t_num_jobs > 10 ? require('../../assets/nts.png') : require('../../assets/locked_award.png')
+                    this.props.life_t_distance > 265 ? require('../../assets/nts.png') : require('../../assets/locked_award.png')
                     } style={Award.container} />
                   <Text style={TextStyles.primaryLangStyleSmlNoPad}>{i18n.t("nts")}</Text>
                 </View>
 
                 <View style={{ flex: 1 }}>
                   <Image source={
-                    this.props.life_t_num_jobs > 10 ? require('../../assets/etw.png') : require('../../assets/locked_award.png')
+                    this.props.life_t_distance > 390 ? require('../../assets/etw.png') : require('../../assets/locked_award.png')
                     } style={Award.container} />  
                   <Text style={TextStyles.primaryLangStyleSmlNoPad}>{i18n.t("etw")}</Text>
                 </View>
@@ -115,21 +115,21 @@ class RiderStats extends Component {
               <CardSection>
                 <View style={{ flex: 1 }}>
                   <Image source={
-                    this.props.life_t_num_jobs > 10 ? require('../../assets/five_hun.png') : require('../../assets/locked_award.png')
+                    this.props.life_t_num_jobs > 500 ? require('../../assets/five_hun.png') : require('../../assets/locked_award.png')
                     } style={Award.container} />  
                   <Text style={TextStyles.primaryLangStyleSmlNoPad}>{i18n.t("500")}</Text>
                 </View>
 
                 <View style={{ flex: 1 }}>
                   <Image source={
-                    this.props.life_t_num_jobs > 10 ? require('../../assets/thousand.png') : require('../../assets/locked_award.png')
+                    this.props.life_t_num_jobs > 1000 ? require('../../assets/thousand.png') : require('../../assets/locked_award.png')
                     } style={Award.container} />  
                   <Text style={TextStyles.primaryLangStyleSmlNoPad}>{i18n.t("1000")}</Text>
                 </View>
 
                 <View style={{ flex: 1 }}>
                  <Image source={
-                    this.props.life_t_num_jobs > 10 ? require('../../assets/fivek.png') : require('../../assets/locked_award.png')
+                    this.props.life_t_num_jobs > 5000 ? require('../../assets/fivek.png') : require('../../assets/locked_award.png')
                     } style={Award.container} />  
                   <Text style={TextStyles.primaryLangStyleSmlNoPad}>{i18n.t("5000")}</Text>
                 </View>
@@ -139,21 +139,21 @@ class RiderStats extends Component {
               <CardSection>
                 <View style={{ flex: 1 }}>
                   <Image source={
-                    this.props.life_t_num_jobs > 10 ? require('../../assets/oa.png') : require('../../assets/locked_award.png')
+                    this.props.life_t_distance> 1563 ? require('../../assets/oa.png') : require('../../assets/locked_award.png')
                     } style={Award.container} />  
                   <Text style={TextStyles.primaryLangStyleSmlNoPad}>{i18n.t("rdo")}</Text>
                 </View>
 
                 <View style={{ flex: 1 }}>
                   <Image source={
-                    this.props.life_t_num_jobs > 10 ? require('../../assets/oncea.png') : require('../../assets/locked_award.png')
+                    this.props.life_t_distance > 40000 ? require('../../assets/oncea.png') : require('../../assets/locked_award.png')
                     } style={Award.container} />  
                   <Text style={TextStyles.primaryLangStyleSmlNoPad}>{i18n.t("oa")}</Text>
                 </View>
 
                 <View style={{ flex: 1 }}>
                   <Image source={
-                    this.props.life_t_num_jobs > 10 ? require('../../assets/moon.png') : require('../../assets/locked_award.png')
+                    this.props.life_t_distance > 384400 ? require('../../assets/moon.png') : require('../../assets/locked_award.png')
                     } style={Award.container} />  
                   <Text style={TextStyles.primaryLangStyleSmlNoPad}>{i18n.t("moon")}</Text>
                 </View>

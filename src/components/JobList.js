@@ -115,7 +115,7 @@ class JobList extends Component {
        } else {
          return (
            <MapView
-              style={{ marginBottom: 5, height: 175}}
+              style={{ marginBottom: 5, height: 175, borderRadius: 50}}
               initialRegion={{
                 latitude: lat,
                 longitude: long,
@@ -156,9 +156,7 @@ class JobList extends Component {
       return (
         <ImageBackground source={require('../../assets/main_background.png')} style={Background.backgroundImage}>
           <View style={{ flex:1, paddingLeft: 5, paddingRight: 5, paddingBottom: 20 }}>
-            <CardSection>
-              {this.renderStatsButton()}
-            </CardSection>
+            {this.renderStatsButton()}
             <MapView
               style={{ marginBottom: 5, height: 275, borderRadius: 50}}
               initialRegion={{

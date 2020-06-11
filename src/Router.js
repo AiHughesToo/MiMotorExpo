@@ -8,7 +8,6 @@ import SignUp from './components/SignUp';
 import RiderStats from './components/riderStats';
 import ResetPassword from './components/ResetPassword';
 import i18n from "i18n-js";
-import { E_MAIN_TITLE, MAIN_TITLE, E_REGISTER, REGISTER, WORKING, JOB_LIST } from './LanguageFile';
 
 const RouterComponent = () => {
 const { headerColor, headerText } = styles;

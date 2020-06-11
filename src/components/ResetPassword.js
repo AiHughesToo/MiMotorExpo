@@ -3,7 +3,6 @@ import { Platform, View, Text, ImageBackground } from 'react-native';
 import { connect } from 'react-redux';
 import { emailChanged, passwordChanged, loginUser, requestPWToken, codeChanged, resetPW } from '../actions';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { READY, E_READY,  PASSWORD_TEXT, EMAIL_TEXT } from '../LanguageFile';
 import i18n from 'i18n-js';
 import { Background, TextStyles, yellowColor, greenColor } from './MainStyleSheet';
 import { Card, CardSection, Input, CButton, DividerLine, Spinner } from './common';
@@ -93,7 +92,7 @@ class ResetPassword extends Component {
           </CardSection>
           <CardSection>
             <Input
-                label={EMAIL_TEXT}
+                label={i18n.t("email")}
                 placeholder="email@gmail.com"
                 keyboardType='email-address'
                 onChangeText={this.onEmailChange.bind(this)}

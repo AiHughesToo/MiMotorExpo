@@ -18,7 +18,8 @@ import { Background, TextStyles, redColor, yellowColor, greenColor, AlertBox } f
 class CustomerMain extends Component {
   state = {
     location: null,
-    locationErrorMessage: null
+    locationErrorMessage: null,
+    adLoaded: false
   };
   
   interval= 0;
@@ -41,7 +42,10 @@ class CustomerMain extends Component {
   }
   
   componentWillUnmount() {
-    AdMobInterstitial.removeAllListeners();
+    if(this.adLoaded) {
+      AdMobInterstitial.removeAllListeners();
+    }
+   
     clearInterval(this.interval);
   };
 
@@ -50,6 +54,8 @@ class CustomerMain extends Component {
     AdMobInterstitial.setTestDeviceID('EMULATOR');
     await AdMobInterstitial.requestAdAsync();
     await AdMobInterstitial.showAdAsync();
+    let adLoaded = true;
+    this.setState({ adLoaded });
   }
 
   check_job_status(){
@@ -89,8 +95,7 @@ class CustomerMain extends Component {
 
   // get the Location information and send the request for a ride.
   getLocationAsync = async () => {
-    console.log("im getting the location");
-    
+
     let { status } = await Permissions.askAsync(Permissions.LOCATION);
     if (status !== 'granted') {
       this.setState({
@@ -100,7 +105,6 @@ class CustomerMain extends Component {
 
     let location = await Location.getCurrentPositionAsync({enableHighAccuracy: true});
     this.setState({ location });
-    console.log(JSON.stringify(this.state.location.coords.latitude));
     this.sendRideRequest();
   };
 
@@ -145,6 +149,7 @@ class CustomerMain extends Component {
             placeholder=" "
             onChangeText={this.onNoteChange.bind(this)}
             value={this.props.jobNote}
+            maxLength={120}
           />
         </CardSection>
         <CardSection>
@@ -184,7 +189,7 @@ class CustomerMain extends Component {
             rider_long, latitude, longitude } = this.props.jobDetail.jobDetail;
       return(
         <View>
-          <Text style={TextStyles.primaryLangStyleLrg}>{rider_name}{i18n.t("on_way")}</ Text>
+          <Text style={TextStyles.primaryLangStyleLrg}>{rider_name} {i18n.t("on_way")}</ Text>
           <MapView
             style={{ marginBottom: 5, height: 275}}
             initialRegion={{
