@@ -200,7 +200,7 @@ class JobList extends Component {
       <CardSection>
         <AdMobBanner
           bannerSize="fullBanner"
-          adUnitID="ca-app-pub-3940256099942544/6300978111" 
+          adUnitID="ca-app-pub-9886916161414347/2140688502" //iOs id
           servePersonalizedAds // true or false
           onDidFailToReceiveAdWithError={this.bannerError} />
       </CardSection>

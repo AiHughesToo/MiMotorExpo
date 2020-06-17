@@ -11,7 +11,7 @@ import i18n from "i18n-js";
 import UserCard from './UserCard';
 import AnimatedPill from './AnimatedPill';
 import { requestRide, clientReady, noteChanged, clientCancel, checkOutstandingJob, rideComplete, clientCheckJobStatus} from '../actions/jobs_actions';
-import { CardSection, InputLarge, CButton, DividerLine } from './common';
+import { CardSection, InputLarge, CButton, DividerLine, Spinner } from './common';
 import { Background, TextStyles, redColor, yellowColor, greenColor, AlertBox } from "./MainStyleSheet";
 
 
@@ -19,7 +19,8 @@ class CustomerMain extends Component {
   state = {
     location: null,
     locationErrorMessage: null,
-    adLoaded: false
+    adLoaded: false,
+    readyPress: false
   };
   
   interval= 0;
@@ -50,12 +51,11 @@ class CustomerMain extends Component {
   };
 
   showInterstitial = async () => {
-    AdMobInterstitial.setAdUnitID('ca-app-pub-3940256099942544/1033173712'); // Test ID, Replace with your-admob-unit-id
+    AdMobInterstitial.setAdUnitID('ca-app-pub-9886916161414347/4930503371'); // iOs id 
     AdMobInterstitial.setTestDeviceID('EMULATOR');
     await AdMobInterstitial.requestAdAsync();
     await AdMobInterstitial.showAdAsync();
-    let adLoaded = true;
-    this.setState({ adLoaded });
+    this.setState({ adLoaded: true, readyPress: false });
   }
 
   check_job_status(){
@@ -73,7 +73,6 @@ class CustomerMain extends Component {
 
   // let the user cancel a ride request.
   onCancelButtonPress() {
-   this.completeJob();
    this.props.clientCancel();
   }; 
   
@@ -104,13 +103,14 @@ class CustomerMain extends Component {
     }
 
     let location = await Location.getCurrentPositionAsync({enableHighAccuracy: true});
-    this.setState({ location });
+    this.setState({ location: location, readyPress: true });
+
     this.sendRideRequest();
   };
 
  // handle the button to make the network call sending lat long and the token.
  onButtonPress() {
-  this.getLocationAsync();
+   this.getLocationAsync();
  }
 // send the lat, long and note off to the backend.
  sendRideRequest() {
@@ -133,6 +133,16 @@ class CustomerMain extends Component {
     }
   }
 
+  renderReadyButton() {
+    if (this.state.readyPress) {
+      return <Spinner />;
+    }
+
+    return(
+      <CButton onPress={this.onButtonPress.bind(this)} bgColor={greenColor} text={{primary: i18n.t('ready') }} />
+    );
+  }
+
   // use state. userReady to display the first step or the second.
   renderSection(){
   const { sectionView } = styles;
@@ -153,7 +163,7 @@ class CustomerMain extends Component {
           />
         </CardSection>
         <CardSection>
-          <CButton onPress={this.onButtonPress.bind(this)} bgColor={greenColor} text={{primary: i18n.t('ready') }} />
+          {this.renderReadyButton()}
         </CardSection>
         <View>
           <Text style={TextStyles.primaryLangStyleLrg}>{i18n.t("gps_warning")}</ Text>

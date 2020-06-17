@@ -52,10 +52,9 @@ export const requestRide = ({ lat, long, token, jobNote }) => {
 
 const requestRideSuccess = (dispatch, response) => {
   dispatch({
-    type: JOB_REQUESTED_SUCCESS,
+    type: JOB_REQUESTED_SUCCESS, 
     payload: { jobDetail: response }});
   Keyboard.dismiss();
-
 };
 
 // this post request a list of jobs local to the range.

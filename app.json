@@ -9,7 +9,7 @@
       "ios",
       "android"
     ],
-    "version": "1.0.1",
+    "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -21,7 +21,7 @@
       "package": "com.aihughes.mimotor",
       "config": {
         "googleMaps": { "apiKey": "AIzaSyBs8G2GE6ZGZ-RyTZVoY5_lQqYyW1W0EyY" },
-        "googleMobileAdsAppId": "ca-app-pub-3940256099942544~3347511713" 
+        "googleMobileAdsAppId": "ca-app-pub-9886916161414347~9375987175" 
       }
     },
     "updates": {
@@ -34,7 +34,7 @@
       "bundleIdentifier": "net.mimotor.app",
       "supportsTablet": true,
       "config": {
-        "googleMobileAdsAppId": "ca-app-pub-3940256099942544~1458002511" 
+        "googleMobileAdsAppId": "ca-app-pub-9886916161414347~2427435447" 
       }
     }
   }

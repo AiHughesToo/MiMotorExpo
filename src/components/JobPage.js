@@ -57,7 +57,7 @@ class JobPage extends Component {
   }
 
   showInterstitial = async () => {
-    AdMobInterstitial.setAdUnitID('ca-app-pub-3940256099942544/1033173712'); // Test ID, Replace with your-admob-unit-id
+    AdMobInterstitial.setAdUnitID('ca-app-pub-9886916161414347/4930503371'); // iOs id
     AdMobInterstitial.setTestDeviceID('EMULATOR');
     await AdMobInterstitial.requestAdAsync();
     await AdMobInterstitial.showAdAsync();

@@ -51,7 +51,7 @@ export default (state = INITIAL_STATE, action) => {
     case REGISTER_USER_FAIL:
         return { ...state, error: 'Email is already in use', password: '', loading: false };
     case LOGIN_USER:
-      return { ...state, error: '', loading: true };
+      return { ...state, error: '', loading: true }; 
     case SELECT_MOTOR:
       return { ...state, accountType: 'rider' };
     case SELECT_CLIENT:
