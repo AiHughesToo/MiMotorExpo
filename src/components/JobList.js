@@ -7,11 +7,11 @@ import { Marker }  from 'react-native-maps';
 import * as Permissions from 'expo-permissions';
 import * as Location from 'expo-location';
 import { AdMobBanner } from "expo-ads-admob";
-import { requestJobs, notesChanged, rideMethod, checkOutstandingJob } from '../actions/jobs_actions';
+import { requestJobs, rideMethod, checkOutstandingJob } from '../actions/jobs_actions';
 import { logOutUser, setLoading } from '../actions/index';
 import JobListItem from './JobListItem';
 import i18n from "i18n-js";
-import { Background, TextStyles, Logo, greenColor } from './MainStyleSheet';
+import { Background, TextStyles, Logo, greenColor, redColor } from './MainStyleSheet';
 import { CardSection, CButton, Spinner } from './common';
 
 class JobList extends Component {
@@ -28,7 +28,7 @@ class JobList extends Component {
   componentWillMount() {
     const { token } = this.props;
     this.props.checkOutstandingJob({ token, userType: 'rider' });
-    this.props.setLoading(false);
+    
     this.getLocationAsync();
   }
 
@@ -52,6 +52,7 @@ class JobList extends Component {
   }
   // get the Location information and send the request for list of local jobs.
    getLocationAsync = async () => {
+    
      let { status } = await Permissions.askAsync(Permissions.LOCATION);
      if (status !== 'granted') {
        this.setState({
@@ -61,10 +62,11 @@ class JobList extends Component {
 
      let location = await Location.getCurrentPositionAsync({enableHighAccuracy: true});
      this.setState({location});
+     this.props.setLoading(false);
      this.sendJobRequest();
    };
 
-   // send the lat, long and note off to the backend.
+   // send the lat, long and range off to the backend.
     sendJobRequest() {
       if(!this.state.location.coords) {
         this.getLocationAsync();
@@ -75,9 +77,9 @@ class JobList extends Component {
       long = parseFloat(long, 10);
       this.setState({lat, long})
       console.log(this.state.lat);
-      range = 5
+      range = 25      // set the range
       const { token } = this.props;
-      const { jobsList } = this.props.jobsList;
+      //const { jobsList } = this.props.jobsList;
       this.props.requestJobs({ lat, long, token, range});
      }
 
@@ -176,7 +178,7 @@ class JobList extends Component {
             <Text style={TextStyles.primaryLangStyleSml}>{i18n.t("job_instructions")}</Text>
             </CardSection>
             <CardSection>
-              <CButton onPress={this.onButtonPress.bind(this)} bgColor={greenColor} text={{primary: i18n.t('sign_out') }} />
+              <CButton onPress={this.onButtonPress.bind(this)} bgColor={redColor} text={{primary: i18n.t('sign_out') }} />
             </CardSection>
           </View>
         </ ImageBackground>
@@ -189,7 +191,7 @@ class JobList extends Component {
         {this.renderStatsButton()}
         {this.renderMap()}
         <CardSection>
-          <CButton onPress={this.onButtonPress.bind(this)} bgColor={greenColor} text={{primary: i18n.t('sign_out') }} />
+          <CButton onPress={this.onButtonPress.bind(this)} bgColor={redColor} text={{primary: i18n.t('sign_out') }} />
         </CardSection>
         <CardSection>
           <Text style={TextStyles.primaryLangStyleSml}>{i18n.t("no_jobs")}</Text>
@@ -222,4 +224,4 @@ const mapStateToProps = (state) => {
  return { user, token, loading, error, jobsList, jobDetail, oldJob }
 }
 
-export default connect(mapStateToProps, { requestJobs, notesChanged, rideMethod, checkOutstandingJob, logOutUser, setLoading })(JobList);
+export default connect(mapStateToProps, { requestJobs, rideMethod, checkOutstandingJob, logOutUser, setLoading })(JobList);

@@ -105,7 +105,7 @@ class LoginForm extends Component {
       </KeyboardAwareScrollView>
       <BannerAdSection>
         <AdMobBanner
-          bannerSize="fullBanner"
+          bannerSize="mediumRectangle"
           adUnitID="ca-app-pub-9886916161414347/2140688502" 
           servePersonalizedAds // true or false
           onDidFailToReceiveAdWithError={this.bannerError} />

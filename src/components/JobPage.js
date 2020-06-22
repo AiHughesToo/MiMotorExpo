@@ -6,7 +6,7 @@ import { Marker }  from 'react-native-maps';
 import * as Permissions from 'expo-permissions';
 import * as Location from 'expo-location';
 import { AdMobInterstitial } from 'expo-ads-admob';
-import { requestJobs, notesChanged, rideComplete } from '../actions/jobs_actions';
+import { requestJobs, rideComplete } from '../actions/jobs_actions';
 import { setLoading } from '../actions/index';
 import i18n from "i18n-js";
 import { Background, TextStyles, redColor } from './MainStyleSheet';
@@ -22,24 +22,29 @@ class JobPage extends Component {
   interval = 0;
 
   componentDidMount() {
+     this.interval = setInterval(() => this.getLocationAsync(), 1000);
 
-    AdMobInterstitial.addEventListener("interstitialDidClose", () => {
-      console.log("interstitialDidClose");
+     AdMobInterstitial.addEventListener("interstitialDidClose", () => {
       this.completeJob();
      });
-
-     this.interval = setInterval(() => this.getLocationAsync(), 1000);
   }
 
   componentWillUnmount() {
     clearInterval(this.interval);
-      AdMobInterstitial.removeAllListeners();
+    AdMobInterstitial.removeAllListeners();
   }
 
   onRedButtonPress() {
     this.props.setLoading(false);
-    this.showInterstitial();
-    
+    this.showInterstitial(); 
+  }
+
+  showInterstitial = async () => {
+    AdMobInterstitial.setAdUnitID('ca-app-pub-9886916161414347/4930503371'); // iOs id
+    AdMobInterstitial.setTestDeviceID('EMULATOR');
+    AdMobInterstitial.addEventListener("interstitialDidFailToLoad", () => this.completeJob());
+    await AdMobInterstitial.requestAdAsync();
+    await AdMobInterstitial.showAdAsync();
   }
 
   completeJob() {
@@ -48,19 +53,10 @@ class JobPage extends Component {
     this.getLocationAsync();
     const lat = this.state.location.coords.latitude;
     const long = this.state.location.coords.longitude;
-    console.log('ending position');
     clearInterval(this.interval);
-    console.log("setLoading");
     this.props.setLoading({loadingState: false });
     const { accountType } = this.props;
     this.props.rideComplete({ token, job_id, userType: accountType, rider_lat: lat, rider_long: long });
-  }
-
-  showInterstitial = async () => {
-    AdMobInterstitial.setAdUnitID('ca-app-pub-9886916161414347/4930503371'); // iOs id
-    AdMobInterstitial.setTestDeviceID('EMULATOR');
-    await AdMobInterstitial.requestAdAsync();
-    await AdMobInterstitial.showAdAsync();
   }
 
   getLocationAsync = async () => {
@@ -105,7 +101,7 @@ class JobPage extends Component {
     } 
       return (
         <MapView
-        style={{ marginBottom: 5, height: 275}}
+        style={{ marginBottom: 4, height: 255}}
         initialRegion={{
           latitude: jobDetail.latitude,
           longitude: jobDetail.longitude,
@@ -136,10 +132,10 @@ class JobPage extends Component {
 
             <CardSection style={styles.jobsDetailStyle}>
             <View style={styles.jobsDetailStyle}>
-            <View style={{paddingBottom: 5, flexDirection: 'row'}}>
+            <View style={{paddingBottom: 4, flexDirection: 'row'}}>
                 <Text style={TextStyles.primaryLangStyleSml}>{i18n.t("go_to_client")} </Text>
                 </View>
-                <View style={{paddingBottom: 5, flexDirection: 'row'}}>
+                <View style={{paddingBottom: 4, flexDirection: 'row'}}>
                 <Text style={TextStyles.primaryLangStyleLrg}>{i18n.t("client_name")} </Text>
                 <Text style={TextStyles.primaryLangStyleSml}>{jobDetail.title}</Text>
                 </View>
@@ -199,4 +195,4 @@ const mapStateToProps = (state) => {
   }
 }
 
-export default connect(mapStateToProps, { requestJobs, notesChanged, rideComplete, setLoading })(JobPage);
+export default connect(mapStateToProps, { requestJobs, rideComplete, setLoading })(JobPage);

@@ -10,6 +10,7 @@ import { AdMobInterstitial }from 'expo-ads-admob';
 import i18n from "i18n-js";
 import UserCard from './UserCard';
 import AnimatedPill from './AnimatedPill';
+import { logOutUser } from '../actions/index';
 import { requestRide, clientReady, noteChanged, clientCancel, checkOutstandingJob, rideComplete, clientCheckJobStatus} from '../actions/jobs_actions';
 import { CardSection, InputLarge, CButton, DividerLine, Spinner } from './common';
 import { Background, TextStyles, redColor, yellowColor, greenColor, AlertBox } from "./MainStyleSheet";
@@ -34,12 +35,6 @@ class CustomerMain extends Component {
   // this runs every 8 seconds and checks if a rider has taken the ride request
   componentDidMount() {
     this.interval = setInterval(() => this.check_job_status(), 8000);
-  
-    AdMobInterstitial.addEventListener("interstitialDidClose", () => {
-      
-      this.completeJob();
-    });
-  
   }
   
   componentWillUnmount() {
@@ -53,9 +48,20 @@ class CustomerMain extends Component {
   showInterstitial = async () => {
     AdMobInterstitial.setAdUnitID('ca-app-pub-9886916161414347/4930503371'); // iOs id 
     AdMobInterstitial.setTestDeviceID('EMULATOR');
+    AdMobInterstitial.addEventListener("interstitialDidClose", () => this.completeJob());
+    AdMobInterstitial.addEventListener("interstitialDidFailToLoad", (event) => this.completeJob());
     await AdMobInterstitial.requestAdAsync();
+    
     await AdMobInterstitial.showAdAsync();
     this.setState({ adLoaded: true, readyPress: false });
+  }
+
+  onLogoutPress() {
+    this.logOut();
+   }
+
+  logOut() {
+    this.props.logOutUser();
   }
 
   check_job_status(){
@@ -110,6 +116,7 @@ class CustomerMain extends Component {
 
  // handle the button to make the network call sending lat long and the token.
  onButtonPress() {
+  this.setState({ readyPress: true });
    this.getLocationAsync();
  }
 // send the lat, long and note off to the backend.
@@ -233,8 +240,14 @@ class CustomerMain extends Component {
         <View>
           <Text style={TextStyles.primaryLangStyleSml}>{i18n.t("client_ready")}</ Text>
         </View>
-        <CardSection>
+        <CardSection style={{ marginBottom: 50}}>
          <CButton onPress={this.onYellowButtonPress.bind(this)} bgColor={yellowColor} text={{primary: i18n.t("ready") }} /> 
+        </CardSection>
+        <View style={{ marginBottom: 50, paddingBottom: 150}}>
+
+        </View>
+        <CardSection>
+          <CButton onPress={this.onLogoutPress.bind(this)} bgColor={redColor} text={{primary: i18n.t('sign_out') }} />
         </CardSection>
       </View>
     );
@@ -275,4 +288,4 @@ return { user, token, loading, error, userStage, jobNote, jobId, oldJob, jobDeta
 };
 
 
-export default connect(mapStateToProps, { requestRide, clientReady, noteChanged, clientCancel, checkOutstandingJob, rideComplete, clientCheckJobStatus }) (CustomerMain);
+export default connect(mapStateToProps, { requestRide, clientReady, noteChanged, clientCancel, checkOutstandingJob,  logOutUser, rideComplete, clientCheckJobStatus }) (CustomerMain);
