@@ -12,8 +12,9 @@ import UserCard from './UserCard';
 import AnimatedPill from './AnimatedPill';
 import { logOutUser } from '../actions/index';
 import { requestRide, clientReady, noteChanged, clientCancel, checkOutstandingJob, rideComplete, clientCheckJobStatus} from '../actions/jobs_actions';
-import { CardSection, InputLarge, CButton, DividerLine, Spinner } from './common';
-import { Background, TextStyles, redColor, yellowColor, greenColor, AlertBox } from "./MainStyleSheet";
+import { CardSection, BannerAdSection, InputLarge, CButton, DividerLine, Spinner } from './common';
+import { Background, Logo, TextStyles, redColor, yellowColor, greenColor, AlertBox } from "./MainStyleSheet";
+import { AdMobBanner } from "expo-ads-admob";
 
 
 class CustomerMain extends Component {
@@ -166,7 +167,7 @@ class CustomerMain extends Component {
             placeholder=" "
             onChangeText={this.onNoteChange.bind(this)}
             value={this.props.jobNote}
-            maxLength={120}
+            maxLength={60}
           />
         </CardSection>
         <CardSection>
@@ -243,8 +244,14 @@ class CustomerMain extends Component {
         <CardSection style={{ marginBottom: 50}}>
          <CButton onPress={this.onYellowButtonPress.bind(this)} bgColor={yellowColor} text={{primary: i18n.t("ready") }} /> 
         </CardSection>
-        <View style={{ marginBottom: 50, paddingBottom: 150}}>
-
+        <View style={Logo.adContainer}>
+          <BannerAdSection>
+            <AdMobBanner
+              bannerSize="mediumRectangle"
+              adUnitID="ca-app-pub-9886916161414347/2140688502" 
+              servePersonalizedAds // true or false
+              onDidFailToReceiveAdWithError={this.bannerError} />
+          </BannerAdSection>
         </View>
         <CardSection>
           <CButton onPress={this.onLogoutPress.bind(this)} bgColor={redColor} text={{primary: i18n.t('sign_out') }} />

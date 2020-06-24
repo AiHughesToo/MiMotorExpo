@@ -6,7 +6,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { emailChanged, passwordChanged, loginUser } from '../actions';
 import i18n from 'i18n-js';
 import { Card, CardSection, BannerAdSection, Input, Spinner, DividerLine, CButton } from './common';
-import { Background, Logo, redColor, greenColor, yellowColor } from './MainStyleSheet';
+import { Background, TextStyles, Logo, redColor, greenColor, yellowColor } from './MainStyleSheet';
 import { AdMobBanner } from "expo-ads-admob";
 
 class LoginForm extends Component {
@@ -67,8 +67,8 @@ class LoginForm extends Component {
       keyboardOpeningTime={0}
       extraHeight={Platform.select({ android: 250 })}>
 
-    <View style={Logo.logoContainer}>
-        <Image source={require('../../assets/temp_logo.png')} style={Logo.logoImage} />
+      <View style={Logo.logoContainer}>
+        <Image source={require('../../assets/temp_logo.png')} style={Logo.logoImage} /> 
       </View>
       <Card>
         <CardSection>
@@ -89,6 +89,7 @@ class LoginForm extends Component {
            value={this.props.password}
           />
         </CardSection>
+
           {this.renderError()}
         <CardSection>
           {this.renderLoginButton()}
@@ -101,8 +102,9 @@ class LoginForm extends Component {
         <CardSection>
           <CButton onPress={this.onRegisterButtonPress.bind(this)} bgColor={redColor} text={{primary: i18n.t('register') }} />  
         </CardSection>
+        <Text style={TextStyles.verySmlNoPad}>{i18n.t("ad_support")}</Text>
       </Card>
-      </KeyboardAwareScrollView>
+      <View style={Logo.adContainer}>
       <BannerAdSection>
         <AdMobBanner
           bannerSize="mediumRectangle"
@@ -110,7 +112,10 @@ class LoginForm extends Component {
           servePersonalizedAds // true or false
           onDidFailToReceiveAdWithError={this.bannerError} />
       </BannerAdSection>
-      
+      </View>
+      </KeyboardAwareScrollView>
+     
+     
     </View>
   </ ImageBackground>
 

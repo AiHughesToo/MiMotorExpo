@@ -16,6 +16,7 @@ const { displayStyle } = styles;
         <Image source={require('../../assets/person.png')} style={styles.userImage} />
         <View>
           <Text style={TextStyles.primaryLangStyleLrg}>{i18n.t("hi")} {this.props.userName}</Text>
+          <Text style={TextStyles.primaryLangStyleLrg}>{i18n.t("email")} {this.props.email}</Text>
         </View>
       </CardSection>
     </Card>

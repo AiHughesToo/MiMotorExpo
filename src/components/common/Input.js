@@ -39,7 +39,7 @@ const styles = {
     flex: 1
   },
   containerStyle: {
-    height: 40,
+    height: 37,
     flex: 1,
     flexDirection: 'row',
     borderWidth: 1,

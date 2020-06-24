@@ -11,10 +11,10 @@ const DividerLine = (props) => {
 const styles = {
 
   divLine: {
-    borderColor: '#435b78',
+    borderColor: '#999999',
     borderTopWidth: 1.5,
-    paddingBottom: 15,
-    marginTop: 15,
+    paddingBottom: 5,
+    marginTop: 5,
     marginRight: 45,
     marginLeft: 45,
     height: 2

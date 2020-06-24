@@ -93,10 +93,10 @@ class JobList extends Component {
 
      renderStatsButton() {
        return (
-         <CardSection style={{ flex:1, paddingLeft: 5, paddingRight: 5, paddingBottom: 20 }}>
+         <View style={{ flex:1, paddingLeft: 5, paddingRight: 5, paddingBottom: 2, flexDirection: 'row' }}>
            <Image source={require('../../assets/temp_logo.png')} style={Logo.userImage} />
            <CButton onPress={this.onStatsButtonPress.bind(this)} bgColor={greenColor} text={{primary: i18n.t('rider_stats') }} />
-        </CardSection>
+        </View>
        )
      }
 
@@ -117,7 +117,7 @@ class JobList extends Component {
        } else {
          return (
            <MapView
-              style={{ marginBottom: 5, height: 175, borderRadius: 50}}
+              style={{ marginBottom: 5, height: 150, borderRadius: 15 }}
               initialRegion={{
                 latitude: lat,
                 longitude: long,
@@ -159,23 +159,10 @@ class JobList extends Component {
         <ImageBackground source={require('../../assets/main_background.png')} style={Background.backgroundImage}>
           <View style={{ flex:1, paddingLeft: 5, paddingRight: 5, paddingBottom: 20 }}>
             {this.renderStatsButton()}
-            <MapView
-              style={{ marginBottom: 5, height: 275, borderRadius: 50}}
-              initialRegion={{
-                latitude: lat,
-                longitude: long,
-                latitudeDelta: 0.0125,
-                longitudeDelta: 0.0081,
-              }}  
-              >
-              <Marker
-                coordinate={{ latitude: lat, longitude: long }}
-                image={require('../../assets/logoMapMarker.png')}
-              />
-            </MapView>  
-              {this.renderJobList()}
+            {this.renderMap()}
+            {this.renderJobList()}
             <CardSection>
-            <Text style={TextStyles.primaryLangStyleSml}>{i18n.t("job_instructions")}</Text>
+            <Text style={TextStyles.verySmlNoPad}>{i18n.t("job_instructions")}</Text>
             </CardSection>
             <CardSection>
               <CButton onPress={this.onButtonPress.bind(this)} bgColor={redColor} text={{primary: i18n.t('sign_out') }} />
@@ -187,7 +174,7 @@ class JobList extends Component {
 
   return (
     <ImageBackground source={require('../../assets/main_background.png')} style={Background.backgroundImage}>
-      <View style={{ flex:1, paddingLeft: 15, paddingRight: 15, paddingTop: 10 }}>
+      <View style={{ flex:1, paddingLeft: 15, paddingRight: 15, paddingTop: 10, marginBottom: 220 }}>
         {this.renderStatsButton()}
         {this.renderMap()}
         <CardSection>
@@ -199,13 +186,7 @@ class JobList extends Component {
         <Spinner />
 
       </View>
-      <CardSection>
-        <AdMobBanner
-          bannerSize="fullBanner"
-          adUnitID="ca-app-pub-9886916161414347/2140688502" //iOs id
-          servePersonalizedAds // true or false
-          onDidFailToReceiveAdWithError={this.bannerError} />
-      </CardSection>
+  
     </ ImageBackground>
     );
   }

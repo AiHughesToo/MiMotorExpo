@@ -5,15 +5,16 @@ import { setLoading, checkMyStats } from '../actions/index';
 import i18n from "i18n-js";
 import { Background, TextStyles, Logo, Award } from './MainStyleSheet';
 import { CardSection, Spinner, DividerLine } from './common';
+import UserCard from './UserCard';
 
 class RiderStats extends Component {
   
-  state = {
-    location: null,
-    locationErrorMessage: null,
-    lat: null,
-    long: null,
-  };
+  // state = {
+  //   location: null,
+  //   locationErrorMessage: null,
+  //   lat: null,
+  //   long: null,
+  // };@
 
   componentWillMount() {
     const { token } = this.props;
@@ -23,31 +24,29 @@ class RiderStats extends Component {
 
   componentDidMount() {
     // this.props.life_t_num_jobs >> 0 ? '../../assets/temp_logo.png': '../../assets/locked_award.png';
-    if (this.props.life_t_num_jobs >> 0) this.first_ride = '../../assets/temp_logo.png';
+    // if (this.props.life_t_num_jobs >> 0) this.first_ride = '../../assets/temp_logo.png';
   }
 
 
   render() {
     const { email, userName } = this.props;
-    let image_source = '../../assets/locked_award.png'
+    // let image_source = '../../assets/locked_award.png'
 
     if(this.props.life_t_distance) {
       return (
         <ImageBackground source={require('../../assets/main_background.png')} style={Background.backgroundImage}>
           <View style={{ flex:1, paddingLeft: 15, paddingRight: 15, paddingTop: 10 }}>
+
+            <View style={{flex: 1, marginBottom: 100}}>
             <CardSection>
               <Image source={require('../../assets/temp_logo.png')} style={Logo.userImage} />
-              <View style={{ flex:1 }}> 
+              <View style={{ flex: 1 }}> 
                 <CardSection>
-                  <Text style={TextStyles.primaryLangStyleSml}>{i18n.t("email")}</Text>
-                  <Text style={TextStyles.primaryLangStyleSml}>: {email}</Text>
-                </CardSection>
-                <CardSection>
-                  <Text style={TextStyles.primaryLangStyleSml}>{i18n.t("name")}</Text>
-                  <Text style={TextStyles.primaryLangStyleSml}>: {userName}</Text>
+                  <Text style={[TextStyles.primaryLangStyleLrg, {paddingBottom: 20}]}>{i18n.t("hi")}: {userName}</Text>
                 </CardSection>
               </View>              
             </CardSection>
+            </View>
 
             <DividerLine />
 

@@ -10,21 +10,34 @@ const Background = StyleSheet.create({
 
 const Logo = StyleSheet.create({
   logoContainer: {
-    paddingTop: 25,
-    paddingBottom: 10,
+    paddingTop: 5,
+    paddingBottom: 1,
     justifyContent: 'center',
     alignSelf: 'center'
   },
   logoImage: {
-    width: 100,
-    height: 98
+    width: 55,
+    height: 53
   },
   userImage: {
-    width: 70,
-    height: 70,
+    width: 75,
+    height: 75,
     backgroundColor: '#1b364e',
     borderRadius: 35,
     marginRight: 10
+  },
+  userImageMainScreen: {
+    width: 60,
+    height: 60,
+    backgroundColor: '#1b364e',
+    borderRadius: 35,
+    marginRight: 10
+  },
+  adContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignSelf: 'center',
+    marginTop: 10
   }
 })
 
@@ -41,15 +54,24 @@ const Award = StyleSheet.create({
 
 const CardSectionStyle = StyleSheet.create({
   container: {
+    padding: 15,
+    justifyContent: 'flex-start',
+    flex: 1,
+    flexDirection: 'row',
+    position: 'relative'
+  },
+  containerTwo: {
     padding: 5,
     justifyContent: 'flex-start',
-    flexDirection: 'row',
+    flex: 1,
+    flexDirection: 'column',
     position: 'relative'
   },
   bannerAd: {
     justifyContent: 'flex-start',
     flexDirection: 'row',
-    position: 'relative'
+    position: 'relative',
+    marginBottom: 10
   },
   extraView: {
     flex: 1,
@@ -74,9 +96,9 @@ const TextStyles = StyleSheet.create({
     alignSelf: 'center',
     color: '#fff',
     fontSize: 20,
-    fontWeight: '600',
-    paddingTop: 10,
-    paddingBottom: 10
+    fontWeight: '700',
+    paddingTop: 7,
+    paddingBottom: 7
   },
   primaryLangStyleSml: {
     justifyContent: 'center',
@@ -99,6 +121,13 @@ const TextStyles = StyleSheet.create({
     alignSelf: 'center',
     color: '#fff',
     fontSize: 16,
+    fontWeight: '500'
+  },
+  verySmlNoPad: {
+    justifyContent: 'center',
+    alignSelf: 'center',
+    color: '#fff',
+    fontSize: 12,
     fontWeight: '500'
   },
   primaryAlertText: {
