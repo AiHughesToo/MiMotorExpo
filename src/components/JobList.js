@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { Actions } from 'react-native-router-flux';
-import { FlatList, ScrollView, View, Text, ImageBackground, Image} from 'react-native';
+import { FlatList, ScrollView, View, Text, ImageBackground, Image } from 'react-native';
 import { connect } from 'react-redux';
-import MapView from 'react-native-maps';
-import { Marker }  from 'react-native-maps';
+import MapView, { Marker } from 'react-native-maps';
 import * as Permissions from 'expo-permissions';
 import * as Location from 'expo-location';
 import { AdMobBanner } from "expo-ads-admob";
@@ -22,6 +21,7 @@ class JobList extends Component {
     lat: null,
     long: null,
   };
+
   interval = 0;
   intervalTwo = 0;
 
@@ -34,17 +34,14 @@ class JobList extends Component {
 
   componentDidMount() {
    this.interval = setInterval(() => this.getLocationAsync(), 9000);
-   this.intervalTwo = setInterval(() => this.logOut(), 10800000);
   }
 
   componentWillUnmount() {
     clearInterval(this.interval);
-    clearInterval(this.intervalTwo);
   };
 
   clearIntervals() {
     clearInterval(this.interval);
-    clearInterval(this.intervalTwo);
   }
 
   logOut() {
@@ -93,7 +90,7 @@ class JobList extends Component {
 
      renderStatsButton() {
        return (
-         <View style={{ flex:1, paddingLeft: 5, paddingRight: 5, paddingBottom: 2, flexDirection: 'row' }}>
+         <View style={{ flex:1, paddingLeft: 5, paddingRight: 5, paddingBottom: 2, height:50, marginBottom: 10, backgroundColor: "#ccc", flexDirection: 'row' }}>
            <Image source={require('../../assets/temp_logo.png')} style={Logo.userImage} />
            <CButton onPress={this.onStatsButtonPress.bind(this)} bgColor={greenColor} text={{primary: i18n.t('rider_stats') }} />
         </View>
@@ -129,6 +126,7 @@ class JobList extends Component {
                 coordinate={{ latitude: lat, longitude: long }}
                 image={require('../../assets/logoMapMarker.png')}
               />
+              
            </MapView>  
          )
        }
@@ -174,7 +172,7 @@ class JobList extends Component {
 
   return (
     <ImageBackground source={require('../../assets/main_background.png')} style={Background.backgroundImage}>
-      <View style={{ flex:1, paddingLeft: 15, paddingRight: 15, paddingTop: 10, marginBottom: 220 }}>
+      <View style={{ flex:1, paddingLeft: 15, paddingRight: 15, paddingTop: 10, marginBottom: 150 }}>
         {this.renderStatsButton()}
         {this.renderMap()}
         <CardSection>

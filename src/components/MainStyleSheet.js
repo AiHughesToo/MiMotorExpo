@@ -20,15 +20,8 @@ const Logo = StyleSheet.create({
     height: 53
   },
   userImage: {
-    width: 75,
-    height: 75,
-    backgroundColor: '#1b364e',
-    borderRadius: 35,
-    marginRight: 10
-  },
-  userImageMainScreen: {
-    width: 60,
-    height: 60,
+    width: 70,
+    height: 70,
     backgroundColor: '#1b364e',
     borderRadius: 35,
     marginRight: 10
@@ -54,17 +47,10 @@ const Award = StyleSheet.create({
 
 const CardSectionStyle = StyleSheet.create({
   container: {
-    padding: 15,
-    justifyContent: 'flex-start',
-    flex: 1,
-    flexDirection: 'row',
-    position: 'relative'
-  },
-  containerTwo: {
     padding: 5,
     justifyContent: 'flex-start',
     flex: 1,
-    flexDirection: 'column',
+    flexDirection: 'row',
     position: 'relative'
   },
   bannerAd: {
