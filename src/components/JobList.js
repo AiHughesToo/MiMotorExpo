@@ -73,7 +73,6 @@ class JobList extends Component {
       lat = parseFloat(lat, 10);
       long = parseFloat(long, 10);
       this.setState({lat, long})
-      console.log(this.state.lat);
       range = 25      // set the range
       const { token } = this.props;
       //const { jobsList } = this.props.jobsList;
@@ -90,7 +89,7 @@ class JobList extends Component {
 
      renderStatsButton() {
        return (
-         <View style={{ flex:1, paddingLeft: 5, paddingRight: 5, paddingBottom: 2, height:50, marginBottom: 10, backgroundColor: "#ccc", flexDirection: 'row' }}>
+         <View style={{flex: 1, paddingLeft: 5, paddingRight: 5, paddingBottom: 2, marginBottom: 5, flexDirection: 'row', maxHeight: 70, minHeight: 70 }}>
            <Image source={require('../../assets/temp_logo.png')} style={Logo.userImage} />
            <CButton onPress={this.onStatsButtonPress.bind(this)} bgColor={greenColor} text={{primary: i18n.t('rider_stats') }} />
         </View>
@@ -159,12 +158,14 @@ class JobList extends Component {
             {this.renderStatsButton()}
             {this.renderMap()}
             {this.renderJobList()}
+            <View style={{flex: 1, minHeight: 90}}>
             <CardSection>
             <Text style={TextStyles.verySmlNoPad}>{i18n.t("job_instructions")}</Text>
             </CardSection>
             <CardSection>
               <CButton onPress={this.onButtonPress.bind(this)} bgColor={redColor} text={{primary: i18n.t('sign_out') }} />
             </CardSection>
+            </View>
           </View>
         </ ImageBackground>
         );

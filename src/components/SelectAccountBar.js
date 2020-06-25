@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, Image, TouchableWithoutFeedback, I18nManager } from 'react-native';
+import { View, Text, Image, TouchableWithoutFeedback } from 'react-native';
 import { connect } from 'react-redux';
 import { selectMotor, selectClient } from '../actions';
 import i18n from "i18n-js";

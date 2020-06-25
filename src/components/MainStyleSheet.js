@@ -109,6 +109,13 @@ const TextStyles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '500'
   },
+  SmlNoPad: {
+    justifyContent: 'center',
+    alignSelf: 'center',
+    color: '#fff',
+    fontSize: 13,
+    fontWeight: '500'
+  },
   verySmlNoPad: {
     justifyContent: 'center',
     alignSelf: 'center',

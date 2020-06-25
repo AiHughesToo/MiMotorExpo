@@ -1,13 +1,7 @@
 import { Keyboard } from 'react-native';
 import { Actions } from 'react-native-router-flux';
-import { EMAIL_CHANGED, PASSWORD_CHANGED, LOGIN_USER,
-         LOGIN_USER_SUCCESS, LOGIN_BLANK_ERROR,
-         LOGIN_USER_FAIL, SELECT_MOTOR, SELECT_CLIENT,
-         NAME_CHANGED, REGISTER_USER, REGISTER_USER_SUCCESS,
-         REGISTER_USER_FAIL, CLIENT_READY,
-         JOB_NOTE_CHANGED, JOB_REQUESTED_SUCCESS,
-         CLIENT_CANCEL, JOB_LIST_SUCCESS, JOBS_NOTE_CHANGED,
-         TAKE_JOB_SUCCESS, RIDE_COMPLETE, HAS_OLD_JOB,
+import { CLIENT_READY, JOB_NOTE_CHANGED, JOB_REQUESTED_SUCCESS,
+         CLIENT_CANCEL, JOB_LIST_SUCCESS, TAKE_JOB_SUCCESS, RIDE_COMPLETE, HAS_OLD_JOB,
          CLIENT_HAS_OLD_JOB, CLIENT_HAS_OPEN_JOB, CLIENT_NOTIFY_OF_RIDER } from './types';
 
 // action for client to set ready to request a ride.
@@ -83,7 +77,6 @@ export const requestJobs = ({ lat, long, token, range }) => {
 
 // client mark Complete
 export const rideComplete = ({ token, job_id, userType, rider_lat = 0.00, rider_long = 0.00 }) => {
-  console.log("rider lat is: " + rider_lat);
     return (dispatch) => {
       fetch('https://memotor-dev.herokuapp.com/job/complete/'+ job_id, {
         method: 'PUT',
@@ -103,7 +96,6 @@ export const rideComplete = ({ token, job_id, userType, rider_lat = 0.00, rider_
 const rideCompleteSuccess = (dispatch, response, userType) => {
   dispatch({
     type: RIDE_COMPLETE}); 
-    console.log(response.rider_complete);
   if (userType === 'rider') {
       Actions.rider();
     }
@@ -161,7 +153,6 @@ const checkedJobs = (dispatch, response, userType) => {
         payload: { jobDetail: response}});
         Actions.jobMap();
     } else if (!response.user_complete && userType === 'client') {
-      console.log('user has an outstanding job.');
       if (response.taken) {
         dispatch({
           type: CLIENT_HAS_OLD_JOB,
@@ -193,7 +184,6 @@ export const clientCheckJobStatus = ({token, jobId}) => {
 
 const updateClientJobStatus = (dispatch, response) => {
   if (response.taken){
-    console.log('job taken');
     dispatch({
       type: CLIENT_NOTIFY_OF_RIDER,
       payload: { jobDetail: response}});

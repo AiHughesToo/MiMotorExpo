@@ -29,9 +29,9 @@ const styles = {
   textStyle: {
     alignSelf: 'center',
     color: '#fff',
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: '600',
-    padding: 12,
+    padding: 10,
   }
 };
 

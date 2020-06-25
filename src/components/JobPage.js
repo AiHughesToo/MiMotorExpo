@@ -74,7 +74,6 @@ class JobPage extends Component {
   sendCompleteJobCall(token, job_id) {
      const lat = this.state.location.coords.latitude;
      const long = this.state.location.coords.longitude;
-     console.log('ending position');
      const { accountType } = this.props;
      this.props.rideComplete({ token, job_id, userType: accountType, rider_lat: lat, rider_long: long });
   }
@@ -95,13 +94,13 @@ class JobPage extends Component {
 
 
     if(Object.keys(this.state.location).length >> 0) {
-      console.log("1");
+
       rider_lat = this.state.location.coords.latitude;
       rider_long = this.state.location.coords.longitude;
     } 
       return (
         <MapView
-        style={{ marginBottom: 4, height: 255}}
+        style={{ marginBottom: 4, height: 255, borderRadius: 10 }}
         initialRegion={{
           latitude: jobDetail.latitude,
           longitude: jobDetail.longitude,
@@ -132,24 +131,24 @@ class JobPage extends Component {
 
             <CardSection style={styles.jobsDetailStyle}>
             <View style={styles.jobsDetailStyle}>
-            <View style={{paddingBottom: 4, flexDirection: 'row'}}>
-                <Text style={TextStyles.primaryLangStyleSml}>{i18n.t("go_to_client")} </Text>
-                </View>
-                <View style={{paddingBottom: 4, flexDirection: 'row'}}>
+              <View style={{paddingBottom: 4, flexDirection: 'row'}}>
+                <Text style={TextStyles.SmlNoPad}>{i18n.t("go_to_client")} </Text>
+              </View>
+              <View style={{paddingBottom: 4, flexDirection: 'row'}}>
                 <Text style={TextStyles.primaryLangStyleLrg}>{i18n.t("client_name")} </Text>
                 <Text style={TextStyles.primaryLangStyleSml}>{jobDetail.title}</Text>
-                </View>
-                <View>
-                <Text style={TextStyles.primaryLangStyleLrg}>{i18n.t("instructions")}</Text>
-                <Text style={TextStyles.primaryLangStyleSml}>{jobDetail.note}</Text>
-                </View>
+              </View>
+              <View style={{flex: 1, minHeight:50}}>
+                <Text style={TextStyles.primaryLangStyleSml}>{i18n.t("instructions")}</Text>
+                <Text style={TextStyles.primaryLangStyleLrg}>{jobDetail.note}</Text>
+              </View>
             </View>
             </CardSection>
             <CardSection>
               {this.renderAlert()}
             </CardSection>
             <CardSection>
-            <Text style={TextStyles.primaryLangStyleSml}>{i18n.t("mark_ride_comp_inst")}</Text>
+            <Text style={TextStyles.SmlNoPad}>{i18n.t("mark_ride_comp_inst")}</Text>
             </CardSection>
             <CardSection>
               <CButton onPress={this.onRedButtonPress.bind(this)} bgColor={redColor} text={{primary: i18n.t('job_complete') }} />

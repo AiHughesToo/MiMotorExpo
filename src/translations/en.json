@@ -57,5 +57,7 @@
   "stats": "My Stats",
   "working": "On the Job",
   "ride_request": "Request a Ride",
-  "ad_support": "App supported by ads. Drivers NOT employed by MiMotor"
+  "ad_support": "App supported by ads. Drivers NOT employed by MiMotor",
+  "rider_reg_error": "All fileds are required and Vin number must be correct.",
+  "reg_error": "All fileds are required."
 }

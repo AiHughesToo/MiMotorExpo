@@ -1,5 +1,6 @@
 import { Keyboard } from 'react-native';
 import { Actions } from 'react-native-router-flux';
+import i18n from "i18n-js";
 import { EMAIL_CHANGED, PASSWORD_CHANGED, LOGIN_USER,
          LOGIN_USER_SUCCESS, LOGIN_BLANK_ERROR,
          LOGIN_USER_FAIL, SELECT_MOTOR, SELECT_CLIENT,
@@ -55,7 +56,6 @@ export const nameChanged = (text) => {
 };
 
 export const setLoading = (loadingState) => {
-  console.log(loadingState);
   return {      
       type: SET_LOADING,
       payload: { loading: loadingState}
@@ -126,12 +126,13 @@ export const selectClient = () => {
 // refactor this to only have 1 if statement. 
 export const registerUser = ({ email, password, name, accountType, vin, plate, bikeType}) => {
   if (email == '' || password == '' || name == '' || accountType == '') {
-    return { type: LOGIN_BLANK_ERROR, payload: {error: 'All fileds are required.'} };
+    return { type: LOGIN_BLANK_ERROR, payload: {error: i18n.t("reg_error")} };
   } 
   
   if (accountType == 'rider') {
-    if (vin == '' || bikeType == ''){
-      return { type: LOGIN_BLANK_ERROR, payload: {error: 'All fileds are required.'} };
+    let vinLength = vin.length;
+    if (vin == '' || bikeType == '' || vinLength << 10){
+      return { type: LOGIN_BLANK_ERROR, payload: {error: i18n.t("rider_reg_error")} };
     }
   }
 

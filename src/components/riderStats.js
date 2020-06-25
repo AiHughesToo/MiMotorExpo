@@ -1,20 +1,13 @@
 import React, { Component } from 'react';
-import { ScrollView, View, Text, ImageBackground, Image, TouchableHighlightBase} from 'react-native';
+import { ScrollView, View, Text, ImageBackground, Image } from 'react-native';
 import { connect } from 'react-redux';
 import { setLoading, checkMyStats } from '../actions/index';
 import i18n from "i18n-js";
 import { Background, TextStyles, Logo, Award } from './MainStyleSheet';
 import { CardSection, Spinner, DividerLine } from './common';
-import UserCard from './UserCard';
 
 class RiderStats extends Component {
   
-  // state = {
-  //   location: null,
-  //   locationErrorMessage: null,
-  //   lat: null,
-  //   long: null,
-  // };@
 
   componentWillMount() {
     const { token } = this.props;
@@ -22,15 +15,8 @@ class RiderStats extends Component {
     this.props.setLoading(false); 
   }
 
-  componentDidMount() {
-    // this.props.life_t_num_jobs >> 0 ? '../../assets/temp_logo.png': '../../assets/locked_award.png';
-    // if (this.props.life_t_num_jobs >> 0) this.first_ride = '../../assets/temp_logo.png';
-  }
-
-
   render() {
     const { email, userName } = this.props;
-    // let image_source = '../../assets/locked_award.png'
 
     if(this.props.life_t_distance) {
       return (
@@ -42,7 +28,7 @@ class RiderStats extends Component {
               <Image source={require('../../assets/temp_logo.png')} style={Logo.userImage} />
               <View style={{ flex: 1 }}> 
                 <CardSection>
-                  <Text style={[TextStyles.primaryLangStyleLrg, {paddingBottom: 20}]}>{i18n.t("hi")}: {userName}</Text>
+                  <Text style={[TextStyles.primaryLangStyleLrg, {paddingBottom: 5}]}>{i18n.t("hi")}: {userName}</Text>
                 </CardSection>
               </View>              
             </CardSection>
@@ -51,12 +37,12 @@ class RiderStats extends Component {
             <DividerLine />
 
             <View>
-             <Text style={TextStyles.primaryLangStyleLrgNoPad}>{i18n.t("life_time_dist")}:</Text>
-             <Text style={TextStyles.primaryLangStyleSmlNoPad}>{this.props.life_t_distance.toFixed(2)}km / {(this.props.life_t_distance/1.609).toFixed(2)}mi</Text>
+             <Text style={TextStyles.primaryLangStyleSmlNoPad}>{i18n.t("life_time_dist")}:</Text>
+             <Text style={TextStyles.primaryLangStyleLrg}>{this.props.life_t_distance.toFixed(2)}mi / {(this.props.life_t_distance*1.609).toFixed(2)}km</Text>
             </View>
             <View>
-              <Text style={TextStyles.primaryLangStyleLrg}>{i18n.t("num_jobs")}: </Text>
-              <Text style={TextStyles.primaryLangStyleSmlNoPad}>{this.props.life_t_num_jobs}</Text>
+              <Text style={TextStyles.primaryLangStyleSmlNoPad}>{i18n.t("num_jobs")}: </Text>
+              <Text style={TextStyles.primaryLangStyleLrg}>{this.props.life_t_num_jobs}</Text>
             </View>
 
             <DividerLine />
@@ -97,14 +83,14 @@ class RiderStats extends Component {
 
                 <View style={{ flex: 1 }}>
                   <Image source={
-                    this.props.life_t_distance > 265 ? require('../../assets/nts.png') : require('../../assets/locked_award.png')
+                    this.props.life_t_distance > 165 ? require('../../assets/nts.png') : require('../../assets/locked_award.png')
                     } style={Award.container} />
                   <Text style={TextStyles.primaryLangStyleSmlNoPad}>{i18n.t("nts")}</Text>
                 </View>
 
                 <View style={{ flex: 1 }}>
                   <Image source={
-                    this.props.life_t_distance > 390 ? require('../../assets/etw.png') : require('../../assets/locked_award.png')
+                    this.props.life_t_distance > 250 ? require('../../assets/etw.png') : require('../../assets/locked_award.png')
                     } style={Award.container} />  
                   <Text style={TextStyles.primaryLangStyleSmlNoPad}>{i18n.t("etw")}</Text>
                 </View>
@@ -138,21 +124,21 @@ class RiderStats extends Component {
               <CardSection>
                 <View style={{ flex: 1 }}>
                   <Image source={
-                    this.props.life_t_distance> 1563 ? require('../../assets/oa.png') : require('../../assets/locked_award.png')
+                    this.props.life_t_distance> 975 ? require('../../assets/oa.png') : require('../../assets/locked_award.png')
                     } style={Award.container} />  
                   <Text style={TextStyles.primaryLangStyleSmlNoPad}>{i18n.t("rdo")}</Text>
                 </View>
 
                 <View style={{ flex: 1 }}>
                   <Image source={
-                    this.props.life_t_distance > 40000 ? require('../../assets/oncea.png') : require('../../assets/locked_award.png')
+                    this.props.life_t_distance > 24901 ? require('../../assets/oncea.png') : require('../../assets/locked_award.png')
                     } style={Award.container} />  
                   <Text style={TextStyles.primaryLangStyleSmlNoPad}>{i18n.t("oa")}</Text>
                 </View>
 
                 <View style={{ flex: 1 }}>
                   <Image source={
-                    this.props.life_t_distance > 384400 ? require('../../assets/moon.png') : require('../../assets/locked_award.png')
+                    this.props.life_t_distance > 238900 ? require('../../assets/moon.png') : require('../../assets/locked_award.png')
                     } style={Award.container} />  
                   <Text style={TextStyles.primaryLangStyleSmlNoPad}>{i18n.t("moon")}</Text>
                 </View>

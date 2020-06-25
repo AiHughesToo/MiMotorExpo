@@ -10,7 +10,6 @@ import { TextStyles } from './MainStyleSheet';
 export class JobListItem extends Component {
 
   onButtonPress() {
-    console.log(this.props);
     this.props.setLoading(true);
     this.props.rideMethod({ job_id: this.props.data.id, lat: this.props.data.rider_lat,
             long: this.props.data.rider_long, token: this.props.data.token });
