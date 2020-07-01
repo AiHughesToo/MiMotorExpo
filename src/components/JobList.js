@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import MapView, { Marker } from 'react-native-maps';
 import * as Permissions from 'expo-permissions';
 import * as Location from 'expo-location';
-import { AdMobBanner } from "expo-ads-admob";
 import { requestJobs, rideMethod, checkOutstandingJob } from '../actions/jobs_actions';
 import { logOutUser, setLoading } from '../actions/index';
 import JobListItem from './JobListItem';
@@ -20,15 +19,18 @@ class JobList extends Component {
     locationErrorMessage: null,
     lat: null,
     long: null,
+    count: 0,
   };
 
   interval = 0;
-  intervalTwo = 0;
+
+  onExit() {
+    console.log("I exited **********************************");
+  }
 
   componentWillMount() {
     const { token } = this.props;
     this.props.checkOutstandingJob({ token, userType: 'rider' });
-    
     this.getLocationAsync();
   }
 
@@ -38,6 +40,7 @@ class JobList extends Component {
 
   componentWillUnmount() {
     clearInterval(this.interval);
+    console.log(" job list component did unmount.");
   };
 
   clearIntervals() {
@@ -58,24 +61,31 @@ class JobList extends Component {
      }
 
      let location = await Location.getCurrentPositionAsync({enableHighAccuracy: true});
+     console.log("i set the location");
+     this.setState({count: this.state.count + 1});
+     console.log(this.state.count);
      this.setState({location});
      this.props.setLoading(false);
+     lat = JSON.stringify(this.state.location.coords.latitude);
+     long = JSON.stringify(this.state.location.coords.longitude);
+     lat = parseFloat(lat, 10);
+     long = parseFloat(long, 10);
+     this.setState({lat, long})
      this.sendJobRequest();
    };
 
    // send the lat, long and range off to the backend.
-    sendJobRequest() {
-      if(!this.state.location.coords) {
-        this.getLocationAsync();
-      }
-      lat = JSON.stringify(this.state.location.coords.latitude);
-      long = JSON.stringify(this.state.location.coords.longitude);
-      lat = parseFloat(lat, 10);
-      long = parseFloat(long, 10);
-      this.setState({lat, long})
+    sendJobRequest = async () =>{
+      if (!this.state.lat) { await this.getLocationAsync(); }
+      console.log("evaluating state locatoin coords");
+      // if(!this.state.location.coords) { await this.getLocationAsync(); }
+      // lat = JSON.stringify(this.state.location.coords.latitude);
+      // long = JSON.stringify(this.state.location.coords.longitude);
+      // lat = parseFloat(lat, 10);
+      // long = parseFloat(long, 10);
+      // this.setState({lat, long})
       range = 25      // set the range
       const { token } = this.props;
-      //const { jobsList } = this.props.jobsList;
       this.props.requestJobs({ lat, long, token, range});
      }
 
@@ -137,16 +147,19 @@ class JobList extends Component {
            <Spinner/>
          )
        } else {
-        return(
-          <ScrollView>
-            <FlatList
-              data={this.props.jobsList}
-              keyExtractor={job => `${job.id}`}
-              renderItem={this.renderRow.bind(this)}
-            />
-          </ScrollView> )
+        if(!this.state.lat) { this.getLocationAsync(); 
+        } else {
+          return(
+      
+            <ScrollView>
+              <FlatList
+                data={this.props.jobsList}
+                keyExtractor={job => `${job.id}`}
+                renderItem={this.renderRow.bind(this)}
+              />
+            </ScrollView> )
+        }
        }
-       
      }
 
   render() {

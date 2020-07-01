@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, ImageBackground} from 'react-native';
+import { View, Text, ImageBackground } from 'react-native';
 import { connect } from 'react-redux';
 import MapView from 'react-native-maps';
 import { Marker }  from 'react-native-maps';
@@ -10,73 +10,103 @@ import { requestJobs, rideComplete } from '../actions/jobs_actions';
 import { setLoading } from '../actions/index';
 import i18n from "i18n-js";
 import { Background, TextStyles, redColor } from './MainStyleSheet';
-import { CardSection, CButton } from './common';
+import { CardSection, CButton, Spinner } from './common';
 
 class JobPage extends Component {
+
 
   state = {
     location: {},
     locationErrorMessage: null,
+    loading: false,
+    counter: 0,
+    
   };
 
   interval = 0;
 
   componentDidMount() {
-     this.interval = setInterval(() => this.getLocationAsync(), 1000);
-
+    
+    this.interval = setInterval(() => this.getLocationAsync(), 1000);
+     
      AdMobInterstitial.addEventListener("interstitialDidClose", () => {
+       console.log("im closing out the job ********");
       this.completeJob();
      });
   }
 
   componentWillUnmount() {
     clearInterval(this.interval);
-    AdMobInterstitial.removeAllListeners();
+    console.log("job page did unmount");
+
+    this._isMounted = false;
+
+    if (AdMobInterstitial.getIsReadyAsync()) {
+      console.log('There is an add and its ready');
+      AdMobInterstitial.removeAllListeners();
+    }
+  }
+
+  onExit() {
+    console.log('This is on exit');
   }
 
   onRedButtonPress() {
-    this.props.setLoading(false);
+    this.setState({loading: true});
     this.showInterstitial(); 
   }
 
   showInterstitial = async () => {
-    AdMobInterstitial.setAdUnitID('ca-app-pub-9886916161414347/4930503371'); // iOs id
-    AdMobInterstitial.setTestDeviceID('EMULATOR');
-    AdMobInterstitial.addEventListener("interstitialDidFailToLoad", () => this.completeJob());
-    await AdMobInterstitial.requestAdAsync();
-    await AdMobInterstitial.showAdAsync();
+    
+      AdMobInterstitial.setAdUnitID('ca-app-pub-9886916161414347/4930503371'); // iOs id
+      AdMobInterstitial.setTestDeviceID('EMULATOR');
+      //AdMobInterstitial.addEventListener("interstitialDidClose", () => {this.completeJob();});
+      AdMobInterstitial.addEventListener("interstitialDidFailToLoad", () => this.completeJob());
+      await AdMobInterstitial.requestAdAsync();
+      await AdMobInterstitial.showAdAsync();
+      this.setState({loading: false});
+    
   }
 
   completeJob() {
-    const token = this.props.token;
-    const job_id = this.props.jobDetail.jobDetail.id;
-    this.getLocationAsync();
-    const lat = this.state.location.coords.latitude;
-    const long = this.state.location.coords.longitude;
-    clearInterval(this.interval);
-    this.props.setLoading({loadingState: false });
-    const { accountType } = this.props;
-    this.props.rideComplete({ token, job_id, userType: accountType, rider_lat: lat, rider_long: long });
+    
+      const token = this.props.token;
+      console.log(this.props.jobDetail.jobDetail.id);
+      console.log('why is this blank now?');
+      const job_id = this.props.jobDetail.jobDetail.id;
+      console.log('I knew the job id at one point');
+      this.getLocationAsync();
+      console.log('I got the location');
+      const lat = this.state.location.coords.latitude;
+      const long = this.state.location.coords.longitude;
+      this.props.setLoading({loadingState: false });
+      console.log('I set loading to false');
+      const { accountType } = this.props;
+      console.log("I set the account type");
+      this.props.rideComplete({ token, job_id, userType: accountType, rider_lat: lat, rider_long: long });
+      console.log("after the ride coplete call");
+    
   }
 
   getLocationAsync = async () => {
-     let { status } = await Permissions.askAsync(Permissions.LOCATION);
-     if (status !== 'granted') {
-       this.setState({
-         errorMessage: 'Permission to access location was denied.',
-       });
-     }
-
-     let location = await Location.getCurrentPositionAsync({enableHighAccuracy: true});
-     this.setState({location});
+      let { status } = await Permissions.askAsync(Permissions.LOCATION);
+      if (status !== 'granted') {
+        this.setState({
+          errorMessage: 'Permission to access location was denied.',
+        });
+      }
+ 
+      let location = await Location.getCurrentPositionAsync({enableHighAccuracy: true});
+      this.setState({location});
+    
   };
 
-  sendCompleteJobCall(token, job_id) {
-     const lat = this.state.location.coords.latitude;
-     const long = this.state.location.coords.longitude;
-     const { accountType } = this.props;
-     this.props.rideComplete({ token, job_id, userType: accountType, rider_lat: lat, rider_long: long });
-  }
+  // sendCompleteJobCall(token, job_id) {
+  //    const lat = this.state.location.coords.latitude;
+  //    const long = this.state.location.coords.longitude;
+  //    const { accountType } = this.props;
+  //    this.props.rideComplete({ token, job_id, userType: accountType, rider_lat: lat, rider_long: long });
+  // }
 
   renderAlert(){
     if (this.props.oldJob) {
@@ -86,6 +116,17 @@ class JobPage extends Component {
         </View>
       );
     }
+  }
+
+  renderButton() {
+    if (this.state.loading) {
+      return <Spinner />;
+    }
+
+    return(
+      <CButton onPress={this.onRedButtonPress.bind(this)} bgColor={redColor} text={{primary: i18n.t('job_complete') }} /> 
+    );
+
   }
 
   renderMap(jobDetail) {
@@ -151,7 +192,7 @@ class JobPage extends Component {
             <Text style={TextStyles.SmlNoPad}>{i18n.t("mark_ride_comp_inst")}</Text>
             </CardSection>
             <CardSection>
-              <CButton onPress={this.onRedButtonPress.bind(this)} bgColor={redColor} text={{primary: i18n.t('job_complete') }} />
+              {this.renderButton()}
             </CardSection>
           </View>
         </ ImageBackground>

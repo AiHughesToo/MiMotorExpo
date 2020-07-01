@@ -56,5 +56,7 @@
   "stats": "Mis estadísticas",
   "working": "En el Trabajo",
   "ride_request": "Solicitar un Viaje",
-  "ad_support": "Aplicación compatible con anuncios. Conductores NO empleados por MiMotor"
+  "ad_support": "Aplicación compatible con anuncios. Conductores NO empleados por MiMotor",
+  "rider_reg_error": "Todos la muesca son obligatorios y el número Vin debe ser correcto.",
+  "reg_error": "Todos la muesca son obligatorios."
 }

@@ -14,20 +14,20 @@ const { headerColor, headerText } = styles;
   return (
     <Router navigationBarStyle={ headerColor } titleStyle={{ color: '#fff'}} backTitle=" " navBarButtonColor='#fff' >
       <Scene key='root' hideNavBar>
-        <Scene key='auth'>
-          <Scene key='login' component={LogonForm} title={i18n.t("title")} titleStyle={ headerText } />
-          <Scene key='signUp' component={SignUp} title={i18n.t("register")} />
-          <Scene key='resetPassword' component={ResetPassword} title={i18n.t("re_pass")} />
+        <Scene type="replace" key='auth'>
+          <Scene type="replace" key='login' component={LogonForm} title={i18n.t("title")} titleStyle={ headerText } />
+          <Scene type="replace" key='signUp' component={SignUp} title={i18n.t("register")} />
+          <Scene type="replace" key='resetPassword' component={ResetPassword} title={i18n.t("re_pass")} />
         </Scene>
         <Scene key='rider'>
-          <Scene key='jobList' component={JobList} title={i18n.t("job_list")} /> 
+          <Scene  key='jobList' component={JobList} title={i18n.t("job_list")} /> 
           <Scene key='riderStats' component={RiderStats} title={i18n.t("stats")} /> 
         </Scene>
-        <Scene key='jobMap'>
-          <Scene key='onJob' component={JobPage} title={i18n.t("working")} />
+        <Scene type="replace" key='jobMap'>
+          <Scene type="replace" key='onJob' component={JobPage} title={i18n.t("working")} />
         </Scene>
-        <Scene key='client'>
-          <Scene key='clientMain' component={CustomerMain} title={i18n.t("ride_request")} />
+        <Scene type="replace" key='client'>
+          <Scene type="replace" key='clientMain' component={CustomerMain} title={i18n.t("ride_request")} />
         </Scene>
 
       </Scene>

@@ -23,14 +23,16 @@ class RiderStats extends Component {
         <ImageBackground source={require('../../assets/main_background.png')} style={Background.backgroundImage}>
           <View style={{ flex:1, paddingLeft: 15, paddingRight: 15, paddingTop: 10 }}>
 
-            <View style={{flex: 1, marginBottom: 100}}>
+            <View style={{flex: 1, marginBottom: 80}}>
             <CardSection>
               <Image source={require('../../assets/temp_logo.png')} style={Logo.userImage} />
-              <View style={{ flex: 1 }}> 
+              
                 <CardSection>
+                 <View style={{minHeight: 30}}> 
                   <Text style={[TextStyles.primaryLangStyleLrg, {paddingBottom: 5}]}>{i18n.t("hi")}: {userName}</Text>
+                </View>  
                 </CardSection>
-              </View>              
+                          
             </CardSection>
             </View>
 

@@ -130,8 +130,7 @@ export const registerUser = ({ email, password, name, accountType, vin, plate, b
   } 
   
   if (accountType == 'rider') {
-    let vinLength = vin.length;
-    if (vin == '' || bikeType == '' || vinLength << 10){
+    if (vin == '' || bikeType == '' || vin.length < 10){
       return { type: LOGIN_BLANK_ERROR, payload: {error: i18n.t("rider_reg_error")} };
     }
   }
@@ -139,7 +138,7 @@ export const registerUser = ({ email, password, name, accountType, vin, plate, b
   return (dispatch) => {
   // we dispatch this to set the loading spinner
     dispatch({ type: LOGIN_USER });
-  // lets login the user when you press the button
+  
     fetch('https://memotor-dev.herokuapp.com/user', {
       method: 'POST',
       headers: {
