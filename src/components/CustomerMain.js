@@ -22,7 +22,8 @@ class CustomerMain extends Component {
     location: null,
     locationErrorMessage: null,
     adLoaded: false,
-    readyPress: false
+    readyPress: false,
+    loading: false
   };
   
   interval= 0;
@@ -54,7 +55,7 @@ class CustomerMain extends Component {
     await AdMobInterstitial.requestAdAsync();
     
     await AdMobInterstitial.showAdAsync();
-    this.setState({ adLoaded: true, readyPress: false });
+    this.setState({ adLoaded: true, readyPress: false, loading: false });
   }
 
   onLogoutPress() {
@@ -85,6 +86,7 @@ class CustomerMain extends Component {
   
   //mark ride complete
   onRedButtonPress() {
+    this.setState({loading: true});
      this.showInterstitial();
   };
 
@@ -151,6 +153,27 @@ class CustomerMain extends Component {
     );
   }
 
+  renderCompleteJobButton() {
+    if (this.state.loading) {
+      return <Spinner />;
+    }
+
+    return(
+      <CButton onPress={this.onRedButtonPress.bind(this)} bgColor={redColor} text={{primary: i18n.t("ride_complete") }} /> 
+    );
+  }
+
+  renderCancelJobButton() {
+    let label = this.props.userStage == 3 ? "cancel" : "ride_complete";
+    if (this.state.loading) {
+      return <Spinner />;
+    }
+
+    return(
+      <CButton onPress={this.onRedButtonPress.bind(this)} bgColor={redColor} text={{primary: i18n.t(label) }} />
+    );
+  }
+
   // use state. userReady to display the first step or the second.
   renderSection(){
   const { sectionView } = styles;
@@ -194,7 +217,7 @@ class CustomerMain extends Component {
             <AnimatedPill />
           </ View>
           <CardSection>
-            <CButton onPress={this.onRedButtonPress.bind(this)} bgColor={redColor} text={{primary: i18n.t("cancel") }} />
+            {this.renderCancelJobButton()}
           </CardSection>
         </View>
       );
@@ -229,7 +252,7 @@ class CustomerMain extends Component {
             {this.renderAlert()}
           </CardSection>
           <CardSection>
-            <CButton onPress={this.onRedButtonPress.bind(this)} bgColor={redColor} text={{primary: i18n.t("ride_colmplete") }} />
+            {this.renderCancelJobButton()}
           </CardSection>
         </View>
       );

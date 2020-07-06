@@ -16,7 +16,7 @@
   "bike_type": "Bike Type",
   "name": "Nom",
   "job_complete": "Marquer le travail comme terminé",
-  "ride_colmplete": "Mark Ride Complete",
+  "ride_complete": "Mark Ride Complete",
   "sign_out": "Déconnexion",
   "account_typ_select": "Quel type de compte souhaitez-vous créer?",
   "check_email": "Vérifiez votre email et collez le code dans le champ ci-dessous et créez un nouveau mot de passe.",
