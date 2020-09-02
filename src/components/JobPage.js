@@ -71,16 +71,12 @@ class JobPage extends Component {
   completeJob() {
     
       const token = this.props.token;
-      console.log(this.props.jobDetail.jobDetail.id);
-      console.log('why is this blank now?');
+      console.log("before");
       const job_id = this.props.jobDetail.jobDetail.id;
-      console.log('I knew the job id at one point');
       this.getLocationAsync();
-      console.log('I got the location');
       const lat = this.state.location.coords.latitude;
       const long = this.state.location.coords.longitude;
       this.props.setLoading({loadingState: false });
-      console.log('I set loading to false');
       const { accountType } = this.props;
       console.log("I set the account type");
       this.props.rideComplete({ token, job_id, userType: accountType, rider_lat: lat, rider_long: long });

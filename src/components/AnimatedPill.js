@@ -18,6 +18,7 @@ class AnimatedPill extends Component {
       {
         toValue: 1,
         duration: 2000,
+        useNativeDriver: true,
         easing: Easing.linear
       }
     ).start(() => this.animate())

@@ -84,7 +84,7 @@ class JobList extends Component {
       // lat = parseFloat(lat, 10);
       // long = parseFloat(long, 10);
       // this.setState({lat, long})
-      range = 25      // set the range
+      range = 5      // set the range
       const { token } = this.props;
       this.props.requestJobs({ lat, long, token, range});
      }

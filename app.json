@@ -4,7 +4,7 @@
     "description": "Motor hailing application",
     "slug": "mimotor",
     "privacy": "public",
-    "sdkVersion": "37.0.0",
+    "sdkVersion": "38.0.0",
     "platforms": [
       "ios",
       "android"
@@ -20,8 +20,10 @@
     "android": {
       "package": "com.aihughes.mimotor",
       "config": {
-        "googleMaps": { "apiKey": "AIzaSyBs8G2GE6ZGZ-RyTZVoY5_lQqYyW1W0EyY" },
-        "googleMobileAdsAppId": "ca-app-pub-9886916161414347~9375987175" 
+        "googleMaps": {
+          "apiKey": "AIzaSyBs8G2GE6ZGZ-RyTZVoY5_lQqYyW1W0EyY"
+        },
+        "googleMobileAdsAppId": "ca-app-pub-9886916161414347~9375987175"
       }
     },
     "updates": {
@@ -34,7 +36,7 @@
       "bundleIdentifier": "net.mimotor.app",
       "supportsTablet": true,
       "config": {
-        "googleMobileAdsAppId": "ca-app-pub-9886916161414347~2427435447" 
+        "googleMobileAdsAppId": "ca-app-pub-9886916161414347~2427435447"
       }
     }
   }
