@@ -48,7 +48,7 @@ class CustomerMain extends Component {
   };
 
   showInterstitial = async () => {
-    AdMobInterstitial.setAdUnitID('ca-app-pub-9886916161414347/4930503371'); // iOs id 
+    AdMobInterstitial.setAdUnitID('ca-app-pub-9886916161414347/2311885379'); // android id 
     AdMobInterstitial.setTestDeviceID('EMULATOR');
     AdMobInterstitial.addEventListener("interstitialDidClose", () => this.completeJob());
     AdMobInterstitial.addEventListener("interstitialDidFailToLoad", (event) => this.completeJob());
@@ -271,7 +271,7 @@ class CustomerMain extends Component {
           <BannerAdSection>
             <AdMobBanner
               bannerSize="mediumRectangle"
-              adUnitID="ca-app-pub-9886916161414347/2140688502" 
+              adUnitID="ca-app-pub-9886916161414347/3533661226" 
               servePersonalizedAds // true or false
               onDidFailToReceiveAdWithError={this.bannerError} />
           </BannerAdSection>

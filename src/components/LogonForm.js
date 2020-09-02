@@ -108,7 +108,7 @@ class LoginForm extends Component {
       <BannerAdSection>
         <AdMobBanner
           bannerSize="mediumRectangle"
-          adUnitID="ca-app-pub-9886916161414347/2140688502" 
+          adUnitID="ca-app-pub-9886916161414347/3533661226" 
           servePersonalizedAds // true or false
           onDidFailToReceiveAdWithError={this.bannerError} />
       </BannerAdSection>
