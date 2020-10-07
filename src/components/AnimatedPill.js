@@ -17,7 +17,7 @@ class AnimatedPill extends Component {
       this.animatedValue,
       {
         toValue: 1,
-        duration: 2000,
+        duration: 1000,
         useNativeDriver: true,
         easing: Easing.linear
       }
@@ -29,14 +29,6 @@ class AnimatedPill extends Component {
       inputRange: [0, 0.5, 1],
       outputRange: [1, 0.3, 0]
     })
-    const movingMargin = this.animatedValue.interpolate({
-      inputRange: [0, 0.5, 1],
-      outputRange: [0, 100, 0]
-    })
-    const textSize = this.animatedValue.interpolate({
-      inputRange: [0, 0.5, 1],
-      outputRange: [40, 20, 40]
-    })
   const { buttonStyle, textStyle, animationHolder } = styles;
   return (
     <View style={buttonStyle}>
@@ -44,10 +36,9 @@ class AnimatedPill extends Component {
         <View style={{width: 115}}>
           <Animated.Text
             style={{
-              fontSize: textSize,
+              fontSize: 40,
               opacity,
               marginTop: -2,
-              marginLeft: movingMargin,
               alignSelf: 'center',
               color: 'white'}} >
             (
@@ -57,10 +48,9 @@ class AnimatedPill extends Component {
         <View style={{width: 115}}>
           <Animated.Text
             style={{
-              fontSize: textSize,
+              fontSize: 40,
               opacity,
               marginTop: -2,
-              marginRight: movingMargin,
               alignSelf: 'center',
               color: 'white'}} >
             )
@@ -74,7 +64,6 @@ class AnimatedPill extends Component {
 
 };
 
-// styling goes here
 const styles = {
   buttonStyle: {
     flex: 1,
