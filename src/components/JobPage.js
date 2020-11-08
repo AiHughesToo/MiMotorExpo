@@ -58,7 +58,7 @@ class JobPage extends Component {
 
   showInterstitial = async () => {
     
-      AdMobInterstitial.setAdUnitID('ca-app-pub-9886916161414347/2311885379'); // android id
+      AdMobInterstitial.setAdUnitID('ca-app-pub-9886916161414347/4930503371'); // iOS id
       AdMobInterstitial.setTestDeviceID('EMULATOR');
       //AdMobInterstitial.addEventListener("interstitialDidClose", () => {this.completeJob();});
       AdMobInterstitial.addEventListener("interstitialDidFailToLoad", () => this.completeJob());
@@ -71,16 +71,13 @@ class JobPage extends Component {
   completeJob() {
     
       const token = this.props.token;
-      console.log("before");
       const job_id = this.props.jobDetail.jobDetail.id;
       this.getLocationAsync();
       const lat = this.state.location.coords.latitude;
       const long = this.state.location.coords.longitude;
       this.props.setLoading({loadingState: false });
       const { accountType } = this.props;
-      console.log("I set the account type");
       this.props.rideComplete({ token, job_id, userType: accountType, rider_lat: lat, rider_long: long });
-      console.log("after the ride coplete call");
     
   }
 
@@ -129,9 +126,7 @@ class JobPage extends Component {
      let rider_lat  = jobDetail.rider_lat;
      let rider_long = jobDetail.rider_long;
 
-
     if(Object.keys(this.state.location).length >> 0) {
-
       rider_lat = this.state.location.coords.latitude;
       rider_long = this.state.location.coords.longitude;
     } 

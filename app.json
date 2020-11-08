@@ -9,7 +9,7 @@
       "ios",
       "android"
     ],
-    "version": "2.0.0",
+    "version": "2.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -19,9 +19,14 @@
     },
     "android": {
       "package": "com.aihughes.mimotor",
+      "permissions" : ["ACCESS_COARSE_LOCATION", "ACCESS_FINE_LOCATION", "READ_EXTERNAL_STORAGE", "WRITE_SETTINGS", "VIBRATE", "READ_PHONE_STATE",
+      "com.anddoes.launcher.permission.UPDATE_COUNT", "com.android.launcher.permission.INSTALL_SHORTCUT", "com.google.android.c2dm.permission.RECEIVE", "com.google.android.gms.permission.ACTIVITY_RECOGNITION",
+      "com.google.android.providers.gsf.permission.READ_GSERVICES", "com.htc.launcher.permission.READ_SETTINGS", "com.htc.launcher.permission.UPDATE_SHORTCUT", "com.majeur.launcher.permission.UPDATE_BADGE",
+      "com.sec.android.provider.badge.permission.READ", "com.sec.android.provider.badge.permission.WRITE", "com.sonyericsson.home.permission.BROADCAST_BADGE"],
+      "versionCode": 2,
       "config": {
         "googleMaps": {
-          "apiKey": "AIzaSyBs8G2GE6ZGZ-RyTZVoY5_lQqYyW1W0EyY"
+          "apiKey": "AIzaSyAxLKTDNpG34UWAdaj5JBe-lxp2zjMGJxU"
         },
         "googleMobileAdsAppId": "ca-app-pub-9886916161414347~9375987175"
       }
@@ -36,6 +41,7 @@
       "bundleIdentifier": "net.mimotor.app",
       "supportsTablet": true,
       "config": {
+        "googleMapsApiKey": "AIzaSyC6O7ndHHQfkrUnkb9UGqP1HVHT3Y1vlU8",
         "googleMobileAdsAppId": "ca-app-pub-9886916161414347~2427435447"
       }
     }
