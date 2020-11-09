@@ -81,6 +81,7 @@ class CustomerMain extends Component {
 
   // let the user cancel a ride request.
   onCancelButtonPress() {
+    this.setState({loading:false})
    this.props.clientCancel();
   }; 
   

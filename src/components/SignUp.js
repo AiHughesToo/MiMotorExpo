@@ -5,7 +5,8 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import i18n from "i18n-js";
 import { registerUser, emailChanged, passwordChanged, nameChanged, vinChanged, plateChanged, bikeTypeChanged} from '../actions';
 import { Card, CardSection, Input, Spinner, CButton} from './common';
-import { Background, TextStyles, greenColor } from './MainStyleSheet';
+import { Background, TextStyles, greenColor, redColor } from './MainStyleSheet';
+import { Actions } from 'react-native-router-flux';
 import SelectAccountBar from './SelectAccountBar';
 
 class SignUp extends Component {
@@ -38,12 +39,26 @@ class SignUp extends Component {
       this.props.registerUser({ email, password, accountType, name, vin, plate, bikeType });
   }
 
+  onBackButtonPress() {
+    Actions.login()
+  }
+
   renderError() {
     if (this.props.error) {
         return(
           <Text style={{alignSelf: 'center', color: '#f00f00', fontSize: 20}}>{this.props.error}</Text>
         );
     }
+  }
+
+  renderBackButton() {
+    if (this.props.loading) {
+      return <Spinner />;
+    }
+
+    return(
+      <CButton onPress={this.onBackButtonPress.bind(this)} bgColor={redColor} text={{primary: i18n.t("cancel")}} />
+    );
   }
  
   renderFields() {
@@ -152,6 +167,9 @@ class SignUp extends Component {
            <Text style={TextStyles.primaryLangStyleSml}>{i18n.t("account_typ_select")} </ Text>
            <SelectAccountBar />
            {this.renderForm()}
+           <CardSection>
+            {this.renderBackButton()}
+          </CardSection>
           </View>
       </KeyboardAwareScrollView>
     </ ImageBackground>

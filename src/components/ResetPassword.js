@@ -4,8 +4,9 @@ import { connect } from 'react-redux';
 import { emailChanged, passwordChanged, loginUser, requestPWToken, codeChanged, resetPW } from '../actions';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import i18n from 'i18n-js';
-import { Background, TextStyles, yellowColor, greenColor } from './MainStyleSheet';
+import { Background, TextStyles, yellowColor, greenColor, redColor } from './MainStyleSheet';
 import { Card, CardSection, Input, CButton, DividerLine, Spinner } from './common';
+import { Actions } from 'react-native-router-flux';
 
 class ResetPassword extends Component { 
 
@@ -17,6 +18,10 @@ class ResetPassword extends Component {
   onSubmitPasswordPress() {
     const { password, code } = this.props;
     this.props.resetPW({ password, code });
+  }
+
+  onBackButtonPress() {
+    Actions.login()
   }
 
   onEmailChange(text) {
@@ -51,6 +56,16 @@ class ResetPassword extends Component {
     );
   }
 
+  renderBackButton() {
+    if (this.props.loading) {
+      return <Spinner />;
+    }
+
+    return(
+      <CButton onPress={this.onBackButtonPress.bind(this)} bgColor={redColor} text={{primary: i18n.t("cancel")}} />
+    );
+  }
+
   renderSection() {
     if(this.props.requestSuccess){
       return (
@@ -81,6 +96,9 @@ class ResetPassword extends Component {
           <CardSection>
             {this.renderSetButton()}
           </CardSection>
+          <CardSection>
+            {this.renderBackButton()}
+          </CardSection>
           </Card>
       );
     } else {
@@ -104,6 +122,9 @@ class ResetPassword extends Component {
 
           <CardSection>
             {this.renderRequestButton()}
+          </CardSection>
+          <CardSection>
+            {this.renderBackButton()}
           </CardSection>
           </Card>
       );
