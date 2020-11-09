@@ -48,8 +48,8 @@ class CustomerMain extends Component {
   };
 
   showInterstitial = async () => {
-    AdMobInterstitial.setAdUnitID('ca-app-pub-9886916161414347/4930503371'); // android id 
-    AdMobInterstitial.setTestDeviceID('EMULATOR');
+    console.log("should show ad.");
+    AdMobInterstitial.setAdUnitID('ca-app-pub-9886916161414347/4930503371'); // iOS id 
     AdMobInterstitial.addEventListener("interstitialDidClose", () => this.completeJob());
     AdMobInterstitial.addEventListener("interstitialDidFailToLoad", (event) => this.completeJob());
     await AdMobInterstitial.requestAdAsync();
@@ -87,6 +87,7 @@ class CustomerMain extends Component {
   //mark ride complete
   onRedButtonPress() {
     this.setState({loading: true});
+    console.log("red button press");
      this.showInterstitial();
   };
 
@@ -94,6 +95,7 @@ class CustomerMain extends Component {
     const token = this.props.token;
     const job_id = this.props.jobDetail.jobDetail.id;
     this.props.rideComplete({ token, job_id, userType: 'customer' });
+    this.setState({loading: false});
   }
 
   // this is a helper method that calls the action from the input
@@ -272,7 +274,6 @@ class CustomerMain extends Component {
             <AdMobBanner
               bannerSize="mediumRectangle"
               adUnitID="ca-app-pub-9886916161414347/2140688502" 
-              servePersonalizedAds // true or false
               onDidFailToReceiveAdWithError={this.bannerError} />
           </BannerAdSection>
         </View>

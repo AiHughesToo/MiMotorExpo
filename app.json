@@ -9,13 +9,13 @@
       "ios",
       "android"
     ],
-    "version": "2.0.1",
+    "version": "2.0.3",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/splashscreen.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#28496e"
     },
     "android": {
       "package": "com.aihughes.mimotor",
@@ -41,8 +41,7 @@
       "bundleIdentifier": "net.mimotor.app",
       "supportsTablet": true,
       "config": {
-        "googleMapsApiKey": "AIzaSyC6O7ndHHQfkrUnkb9UGqP1HVHT3Y1vlU8",
-        "googleMobileAdsAppId": "ca-app-pub-9886916161414347~2427435447"
+        "googleMobileAdsAppId": "ca-app-pub-3940256099942544~1458002511"
       }
     }
   }

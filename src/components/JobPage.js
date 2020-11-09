@@ -30,14 +30,12 @@ class JobPage extends Component {
     this.interval = setInterval(() => this.getLocationAsync(), 1000);
      
      AdMobInterstitial.addEventListener("interstitialDidClose", () => {
-       console.log("im closing out the job ********");
       this.completeJob();
      });
   }
 
   componentWillUnmount() {
     clearInterval(this.interval);
-    console.log("job page did unmount");
 
     this._isMounted = false;
 
@@ -59,8 +57,7 @@ class JobPage extends Component {
   showInterstitial = async () => {
     
       AdMobInterstitial.setAdUnitID('ca-app-pub-9886916161414347/4930503371'); // iOS id
-      AdMobInterstitial.setTestDeviceID('EMULATOR');
-      //AdMobInterstitial.addEventListener("interstitialDidClose", () => {this.completeJob();});
+     // AdMobInterstitial.addEventListener("interstitialDidClose", () => {this.completeJob();});
       AdMobInterstitial.addEventListener("interstitialDidFailToLoad", () => this.completeJob());
       await AdMobInterstitial.requestAdAsync();
       await AdMobInterstitial.showAdAsync();
