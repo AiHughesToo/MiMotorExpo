@@ -48,12 +48,12 @@ class CustomerMain extends Component {
   };
 
   showInterstitial = async () => {
-    console.log("should show ad.");
-    AdMobInterstitial.setAdUnitID('ca-app-pub-9886916161414347/4930503371'); // iOS id 
+    
+    AdMobInterstitial.setAdUnitID('ca-app-pub-9886916161414347/1625349382'); // iOS id 
     AdMobInterstitial.addEventListener("interstitialDidClose", () => this.completeJob());
     AdMobInterstitial.addEventListener("interstitialDidFailToLoad", (event) => this.completeJob());
     await AdMobInterstitial.requestAdAsync();
-    
+    this.setState({loading:false})
     await AdMobInterstitial.showAdAsync();
     this.setState({ adLoaded: true, readyPress: false, loading: false });
   }
@@ -81,14 +81,13 @@ class CustomerMain extends Component {
 
   // let the user cancel a ride request.
   onCancelButtonPress() {
-    this.setState({loading:false})
+   this.setState({loading:false})
    this.props.clientCancel();
   }; 
   
   //mark ride complete
   onRedButtonPress() {
     this.setState({loading: true});
-    console.log("red button press");
      this.showInterstitial();
   };
 
@@ -274,7 +273,7 @@ class CustomerMain extends Component {
           <BannerAdSection>
             <AdMobBanner
               bannerSize="mediumRectangle"
-              adUnitID="ca-app-pub-9886916161414347/2140688502" 
+              adUnitID="ca-app-pub-9886916161414347/7189162093" 
               onDidFailToReceiveAdWithError={this.bannerError} />
           </BannerAdSection>
         </View>

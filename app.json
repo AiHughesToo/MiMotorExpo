@@ -9,7 +9,7 @@
       "ios",
       "android"
     ],
-    "version": "2.0.4",
+    "version": "2.0.8",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -41,7 +41,7 @@
       "bundleIdentifier": "net.mimotor.app",
       "supportsTablet": true,
       "config": {
-        "googleMobileAdsAppId": "ca-app-pub-3940256099942544~1458002511"
+        "googleMobileAdsAppId": "ca-app-pub-9886916161414347~1937491959"
       }
     }
   }
