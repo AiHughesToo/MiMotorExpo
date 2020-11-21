@@ -29,9 +29,7 @@ class JobPage extends Component {
     
     this.interval = setInterval(() => this.getLocationAsync(), 1000);
      
-     AdMobInterstitial.addEventListener("interstitialDidClose", () => {
-      this.completeJob();
-     });
+     AdMobInterstitial.addEventListener("interstitialDidClose", () => { this.completeJob(); });
   }
 
   componentWillUnmount() {
@@ -40,7 +38,6 @@ class JobPage extends Component {
     this._isMounted = false;
 
     if (AdMobInterstitial.getIsReadyAsync()) {
-      console.log('There is an add and its ready');
       AdMobInterstitial.removeAllListeners();
     }
   }
@@ -57,12 +54,10 @@ class JobPage extends Component {
   showInterstitial = async () => {
     
       AdMobInterstitial.setAdUnitID('ca-app-pub-9886916161414347/1625349382'); // iOS id
-     // AdMobInterstitial.addEventListener("interstitialDidClose", () => {this.completeJob();});
       AdMobInterstitial.addEventListener("interstitialDidFailToLoad", () => this.completeJob());
       await AdMobInterstitial.requestAdAsync();
       await AdMobInterstitial.showAdAsync();
       this.setState({loading: false});
-    
   }
 
   completeJob() {
@@ -73,6 +68,7 @@ class JobPage extends Component {
       const lat = this.state.location.coords.latitude;
       const long = this.state.location.coords.longitude;
       this.props.setLoading({loadingState: false });
+      this.setState({loading: false});
       const { accountType } = this.props;
       this.props.rideComplete({ token, job_id, userType: accountType, rider_lat: lat, rider_long: long });
     
@@ -90,13 +86,6 @@ class JobPage extends Component {
       this.setState({location});
     
   };
-
-  // sendCompleteJobCall(token, job_id) {
-  //    const lat = this.state.location.coords.latitude;
-  //    const long = this.state.location.coords.longitude;
-  //    const { accountType } = this.props;
-  //    this.props.rideComplete({ token, job_id, userType: accountType, rider_lat: lat, rider_long: long });
-  // }
 
   renderAlert(){
     if (this.props.oldJob) {

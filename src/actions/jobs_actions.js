@@ -77,7 +77,6 @@ export const requestJobs = ({ lat, long, token, range }) => {
 
 // client mark Complete
 export const rideComplete = ({ token, job_id, userType, rider_lat = 0.00, rider_long = 0.00 }) => {
-  console.log("job id: " + job_id);
     return (dispatch) => {
       fetch('https://memotor-dev.herokuapp.com/job/complete/'+ job_id, {
         method: 'PUT',
@@ -98,7 +97,6 @@ const rideCompleteSuccess = (dispatch, response, userType) => {
   dispatch({
     type: RIDE_COMPLETE}); 
   if (userType === 'rider') {
-      //Actions.pop();
       Actions.rider();
     }
 };

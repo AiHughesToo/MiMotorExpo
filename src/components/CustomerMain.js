@@ -48,7 +48,7 @@ class CustomerMain extends Component {
   };
 
   showInterstitial = async () => {
-    
+  
     AdMobInterstitial.setAdUnitID('ca-app-pub-9886916161414347/1625349382'); // iOS id 
     AdMobInterstitial.addEventListener("interstitialDidClose", () => this.completeJob());
     AdMobInterstitial.addEventListener("interstitialDidFailToLoad", (event) => this.completeJob());
@@ -66,6 +66,7 @@ class CustomerMain extends Component {
     this.props.logOutUser();
   }
 
+  // checks if the request for a ride has been taken by a driver and returns the info to update the user.
   check_job_status(){
     if (this.props.userStage === 3){
       const jobId = this.props.jobDetail.jobDetail.id;
@@ -76,6 +77,7 @@ class CustomerMain extends Component {
 
   // the user is ready lets set the userStage to 2 on button press
   onYellowButtonPress() {
+   this.setState({loading: false});
    this.props.clientReady();
   };
 
@@ -88,14 +90,14 @@ class CustomerMain extends Component {
   //mark ride complete
   onRedButtonPress() {
     this.setState({loading: true});
-     this.showInterstitial();
+    this.showInterstitial();
   };
 
   completeJob() {
+    this.setState({loading: false});
     const token = this.props.token;
     const job_id = this.props.jobDetail.jobDetail.id;
     this.props.rideComplete({ token, job_id, userType: 'customer' });
-    this.setState({loading: false});
   }
 
   // this is a helper method that calls the action from the input
