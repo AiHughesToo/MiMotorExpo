@@ -48,14 +48,12 @@ class CustomerMain extends Component {
   };
 
   showInterstitial = async () => {
-  
     AdMobInterstitial.setAdUnitID('ca-app-pub-9886916161414347/1625349382'); // iOS id 
     AdMobInterstitial.addEventListener("interstitialDidClose", () => this.completeJob());
     AdMobInterstitial.addEventListener("interstitialDidFailToLoad", (event) => this.completeJob());
     await AdMobInterstitial.requestAdAsync();
-    this.setState({loading:false})
     await AdMobInterstitial.showAdAsync();
-    this.setState({ adLoaded: true, readyPress: false, loading: false });
+    this.setState({ adLoaded: true, readyPress: false});
   }
 
   onLogoutPress() {
@@ -77,27 +75,28 @@ class CustomerMain extends Component {
 
   // the user is ready lets set the userStage to 2 on button press
   onYellowButtonPress() {
-   this.setState({loading: false});
    this.props.clientReady();
   };
 
   // let the user cancel a ride request.
   onCancelButtonPress() {
-   this.setState({loading:false})
+    this.setState({loading: true, readyPress: false});
    this.props.clientCancel();
   }; 
   
   //mark ride complete
   onRedButtonPress() {
-    this.setState({loading: true});
+    console.log(this.state.loading);
+    this.setState({loading: true})
+    console.log(this.state.loading);
     this.showInterstitial();
   };
 
   completeJob() {
-    this.setState({loading: false});
     const token = this.props.token;
     const job_id = this.props.jobDetail.jobDetail.id;
     this.props.rideComplete({ token, job_id, userType: 'customer' });
+    this.setState({loading: false, readyPress: false});
   }
 
   // this is a helper method that calls the action from the input
@@ -123,7 +122,7 @@ class CustomerMain extends Component {
 
  // handle the button to make the network call sending lat long and the token.
  onButtonPress() {
-  this.setState({ readyPress: true });
+   this.setState({ readyPress: true });
    this.getLocationAsync();
  }
 // send the lat, long and note off to the backend.
@@ -134,6 +133,7 @@ class CustomerMain extends Component {
    long = parseFloat(long, 10);
    const { token, jobNote } = this.props;
    this.props.requestRide({ lat, long, token, jobNote});
+   this.setState({loading: false});
   }
 
   // if there is an old request not marked complete then tell the user
@@ -169,6 +169,8 @@ class CustomerMain extends Component {
 
   renderCancelJobButton() {
     let label = this.props.userStage == 3 ? "cancel" : "ride_complete";
+    console.log(this.state.loading);
+
     if (this.state.loading) {
       return <Spinner />;
     }
